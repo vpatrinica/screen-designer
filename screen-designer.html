@@ -1,221 +1,1322 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 0 1100 650" width="100%" height="100%" id="main-svg"><defs><filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="10" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><style>
-    .panel-container { font-family: sans-serif; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); height: 100%; display: flex; flex-direction: column; font-size: 14px; }
-    .panel-header { padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: center; }
-    .navigation { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 12px; }
-    .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 8px; }
-    .nav-btn, .legend-item { cursor: pointer; padding: 4px 8px; border-radius: 6px; border: 2px solid transparent; background-color: #f9fafb; display: flex; align-items: center; gap: 4px;}
-    .nav-btn.active, .legend-item.active { border-color: #3b82f6; background-color: #dbeafe; }
-    h2 { font-size: 1.125rem; font-weight: 700; }
-    .sensor-list { overflow-y: auto; padding: 8px; flex-grow: 1; }
-    .sensor-list-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #f3f4f6; }
-    .sensor-list-item.highlight { background-color: #ebf8ff; }
-    .sensor-list-item span:first-child { font-weight: 700; }
-    .sensor-list-item span:last-child { color: #4b5563; }
-    .sensor-list-item .text-red-500 { color: #ef4444; }
-    svg { vertical-align: middle; }
-    .alert-glow .sensor-point-group { filter: url(#glow); }</style></defs><g id="region-labels" opacity="0.4" font-family="Inter, sans-serif" font-size="4rem" font-weight="bold" fill="#d9534f" text-anchor="middle">
-    <text x="525" y="190" style="cursor: pointer;" onclick="window.setView('1')">1</text>
-    <text x="525" y="520" style="cursor: pointer;" onclick="window.setView('2')">2</text>
-    <text x="245" y="190" style="cursor: pointer;" onclick="window.setView('3')">3</text>
-    <text x="245" y="520" style="cursor: pointer;" onclick="window.setView('4')">4</text>
-</g><g class="sensor-group alert-glow" id="sensor-group-p1" data-sensor-id="p1"><g class="sensor-point-group">
-                        <path d="M 489 17 L 481 17 A 8 8 0 0 1 489 9 Z" fill="#10b981"/>
-                        <path d="M 489 17 L 489 9 A 8 8 0 0 1 497 17 Z" fill="#ef4444"/>
-                        <path d="M 489 17 L 497 17 A 8 8 0 0 1 489 25 Z" fill="#10b981"/>
-                        <path d="M 489 17 L 489 25 A 8 8 0 0 1 481 17 Z" fill="#ef4444"/>
-                        <circle cx="489" cy="17" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="489" y="17" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">1</text></g><g class="sensor-group" id="sensor-group-p10" data-sensor-id="p10"><g class="sensor-point-group">
-                        <path d="M 419 15 L 411 15 A 8 8 0 0 1 419 7 Z" fill="#10b981"/>
-                        <path d="M 419 15 L 419 7 A 8 8 0 0 1 427 15 Z" fill="#ef4444"/>
-                        <path d="M 419 15 L 427 15 A 8 8 0 0 1 419 23 Z" fill="#10b981"/>
-                        <path d="M 419 15 L 419 23 A 8 8 0 0 1 411 15 Z" fill="#ef4444"/>
-                        <circle cx="419" cy="15" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="419" y="15" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">10</text></g><g class="sensor-group" id="sensor-group-p9" data-sensor-id="p9"><g class="sensor-point-group">
-                        <path d="M 440 232 L 432 232 A 8 8 0 0 1 440 224 Z" fill="#10b981"/>
-                        <path d="M 440 232 L 440 224 A 8 8 0 0 1 448 232 Z" fill="#ef4444"/>
-                        <path d="M 440 232 L 448 232 A 8 8 0 0 1 440 240 Z" fill="#10b981"/>
-                        <path d="M 440 232 L 440 240 A 8 8 0 0 1 432 232 Z" fill="#ef4444"/>
-                        <circle cx="440" cy="232" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="440" y="232" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">9</text></g><g class="sensor-group alert-glow" id="sensor-group-p2" data-sensor-id="p2"><g class="sensor-point-group">
-                        <path d="M 482 370 L 474 370 A 8 8 0 0 1 482 362 Z" fill="#10b981"/>
-                        <path d="M 482 370 L 482 362 A 8 8 0 0 1 490 370 Z" fill="#ef4444"/>
-                        <path d="M 482 370 L 490 370 A 8 8 0 0 1 482 378 Z" fill="#10b981"/>
-                        <path d="M 482 370 L 482 378 A 8 8 0 0 1 474 370 Z" fill="#ef4444"/>
-                        <circle cx="482" cy="370" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="482" y="370" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">2</text></g><g class="sensor-group alert-glow" id="sensor-group-p3" data-sensor-id="p3"><g class="sensor-point-group">
-                        <path d="M 480 421 L 472 421 A 8 8 0 0 1 480 413 Z" fill="#10b981"/>
-                        <path d="M 480 421 L 480 413 A 8 8 0 0 1 488 421 Z" fill="#ef4444"/>
-                        <path d="M 480 421 L 488 421 A 8 8 0 0 1 480 429 Z" fill="#10b981"/>
-                        <path d="M 480 421 L 480 429 A 8 8 0 0 1 472 421 Z" fill="#ef4444"/>
-                        <circle cx="480" cy="421" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="480" y="421" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">3</text></g><g class="sensor-group" id="sensor-group-p8" data-sensor-id="p8"><g class="sensor-point-group">
-                        <path d="M 367 387 L 359 387 A 8 8 0 0 1 367 379 Z" fill="#10b981"/>
-                        <path d="M 367 387 L 367 379 A 8 8 0 0 1 375 387 Z" fill="#ef4444"/>
-                        <path d="M 367 387 L 375 387 A 8 8 0 0 1 367 395 Z" fill="#10b981"/>
-                        <path d="M 367 387 L 367 395 A 8 8 0 0 1 359 387 Z" fill="#ef4444"/>
-                        <circle cx="367" cy="387" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="367" y="387" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">8</text></g><g class="sensor-group alert-glow" id="sensor-group-p7" data-sensor-id="p7"><g class="sensor-point-group">
-                        <path d="M 323 580 L 315 580 A 8 8 0 0 1 323 572 Z" fill="#10b981"/>
-                        <path d="M 323 580 L 323 572 A 8 8 0 0 1 331 580 Z" fill="#ef4444"/>
-                        <path d="M 323 580 L 331 580 A 8 8 0 0 1 323 588 Z" fill="#10b981"/>
-                        <path d="M 323 580 L 323 588 A 8 8 0 0 1 315 580 Z" fill="#ef4444"/>
-                        <circle cx="323" cy="580" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="323" y="580" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">7</text></g><g class="sensor-group alert-glow" id="sensor-group-p6" data-sensor-id="p6"><g class="sensor-point-group">
-                        <path d="M 408 582 L 400 582 A 8 8 0 0 1 408 574 Z" fill="#10b981"/>
-                        <path d="M 408 582 L 408 574 A 8 8 0 0 1 416 582 Z" fill="#ef4444"/>
-                        <path d="M 408 582 L 416 582 A 8 8 0 0 1 408 590 Z" fill="#10b981"/>
-                        <path d="M 408 582 L 408 590 A 8 8 0 0 1 400 582 Z" fill="#ef4444"/>
-                        <circle cx="408" cy="582" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="408" y="582" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">6</text></g><g class="sensor-group alert-glow" id="sensor-group-p5" data-sensor-id="p5"><g class="sensor-point-group">
-                        <path d="M 441 583 L 433 583 A 8 8 0 0 1 441 575 Z" fill="#10b981"/>
-                        <path d="M 441 583 L 441 575 A 8 8 0 0 1 449 583 Z" fill="#ef4444"/>
-                        <path d="M 441 583 L 449 583 A 8 8 0 0 1 441 591 Z" fill="#10b981"/>
-                        <path d="M 441 583 L 441 591 A 8 8 0 0 1 433 583 Z" fill="#ef4444"/>
-                        <circle cx="441" cy="583" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="441" y="583" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">5</text></g><g class="sensor-group alert-glow" id="sensor-group-p4" data-sensor-id="p4"><g class="sensor-point-group">
-                        <path d="M 505 580 L 497 580 A 8 8 0 0 1 505 572 Z" fill="#10b981"/>
-                        <path d="M 505 580 L 505 572 A 8 8 0 0 1 513 580 Z" fill="#ef4444"/>
-                        <path d="M 505 580 L 513 580 A 8 8 0 0 1 505 588 Z" fill="#10b981"/>
-                        <path d="M 505 580 L 505 588 A 8 8 0 0 1 497 580 Z" fill="#ef4444"/>
-                        <circle cx="505" cy="580" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
-                      </g><text x="505" y="580" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">4</text></g><g class="sensor-group" id="sensor-group-f1" data-sensor-id="f1"><g class="sensor-point-group"><circle cx="524" cy="52" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="524" y="52" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">1</text></g><g class="sensor-group" id="sensor-group-f2" data-sensor-id="f2"><g class="sensor-point-group"><circle cx="561" cy="87" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="561" y="87" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">2</text></g><g class="sensor-group" id="sensor-group-f4" data-sensor-id="f4"><g class="sensor-point-group"><circle cx="615" cy="170" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="615" y="170" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">4</text></g><g class="sensor-group" id="sensor-group-f5" data-sensor-id="f5"><g class="sensor-point-group"><circle cx="642" cy="217" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="642" y="217" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">5</text></g><g class="sensor-group" id="sensor-group-f6" data-sensor-id="f6"><g class="sensor-point-group"><circle cx="670" cy="260" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="670" y="260" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">6</text></g><g class="sensor-group" id="sensor-group-f7" data-sensor-id="f7"><g class="sensor-point-group"><circle cx="691" cy="316" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="691" y="316" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">7</text></g><g class="sensor-group" id="sensor-group-f9" data-sensor-id="f9"><g class="sensor-point-group"><circle cx="710" cy="380" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="710" y="380" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">9</text></g><g class="sensor-group" id="sensor-group-f11" data-sensor-id="f11"><g class="sensor-point-group"><circle cx="727" cy="423" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="727" y="423" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">11</text></g><g class="sensor-group" id="sensor-group-f13" data-sensor-id="f13"><g class="sensor-point-group"><circle cx="748" cy="463" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="748" y="463" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">13</text></g><g class="sensor-group" id="sensor-group-f15" data-sensor-id="f15"><g class="sensor-point-group"><circle cx="760" cy="511" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="760" y="511" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">15</text></g><g class="sensor-group" id="sensor-group-f17" data-sensor-id="f17"><g class="sensor-point-group"><circle cx="767" cy="560" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="767" y="560" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">17</text></g><g class="sensor-group" id="sensor-group-f19" data-sensor-id="f19"><g class="sensor-point-group"><circle cx="377" cy="47" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="377" y="47" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">19</text></g><g class="sensor-group" id="sensor-group-f20" data-sensor-id="f20"><g class="sensor-point-group"><circle cx="338" cy="80" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="338" y="80" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">20</text></g><g class="sensor-group" id="sensor-group-f21" data-sensor-id="f21"><g class="sensor-point-group"><circle cx="306" cy="123" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="306" y="123" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">21</text></g><g class="sensor-group" id="sensor-group-f22" data-sensor-id="f22"><g class="sensor-point-group"><circle cx="277" cy="159" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="277" y="159" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">22</text></g><g class="sensor-group" id="sensor-group-f23" data-sensor-id="f23"><g class="sensor-point-group"><circle cx="246" cy="207" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="246" y="207" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">23</text></g><g class="sensor-group" id="sensor-group-f24" data-sensor-id="f24"><g class="sensor-point-group"><circle cx="211" cy="256" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="211" y="256" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">24</text></g><g class="sensor-group" id="sensor-group-f25" data-sensor-id="f25"><g class="sensor-point-group"><circle cx="183" cy="312" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="183" y="312" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">25</text></g><g class="sensor-group" id="sensor-group-f27" data-sensor-id="f27"><g class="sensor-point-group"><circle cx="164" cy="367" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="164" y="367" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">27</text></g><g class="sensor-group" id="sensor-group-f29" data-sensor-id="f29"><g class="sensor-point-group"><circle cx="146" cy="410" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="146" y="410" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">29</text></g><g class="sensor-group" id="sensor-group-f31" data-sensor-id="f31"><g class="sensor-point-group"><circle cx="130" cy="456" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="130" y="456" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">31</text></g><g class="sensor-group" id="sensor-group-f33" data-sensor-id="f33"><g class="sensor-point-group"><circle cx="115" cy="504" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="115" y="504" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">33</text></g><g class="sensor-group" id="sensor-group-f3" data-sensor-id="f3"><g class="sensor-point-group"><circle cx="589" cy="125" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="589" y="125" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">3</text></g><g class="sensor-group" id="sensor-group-f8" data-sensor-id="f8"><g class="sensor-point-group"><circle cx="565" cy="332" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="565" y="332" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">8</text></g><g class="sensor-group" id="sensor-group-f10" data-sensor-id="f10"><g class="sensor-point-group"><circle cx="565" cy="381" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="565" y="381" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">10</text></g><g class="sensor-group" id="sensor-group-f12" data-sensor-id="f12"><g class="sensor-point-group"><circle cx="564" cy="422" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="564" y="422" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">12</text></g><g class="sensor-group" id="sensor-group-f14" data-sensor-id="f14"><g class="sensor-point-group"><circle cx="564" cy="469" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="564" y="469" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">14</text></g><g class="sensor-group" id="sensor-group-f16" data-sensor-id="f16"><g class="sensor-point-group"><circle cx="562" cy="516" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="562" y="516" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">16</text></g><g class="sensor-group" id="sensor-group-f18" data-sensor-id="f18"><g class="sensor-point-group"><circle cx="563" cy="561" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="563" y="561" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">18</text></g><g class="sensor-group" id="sensor-group-f26" data-sensor-id="f26"><g class="sensor-point-group"><circle cx="282" cy="321" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="282" y="321" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">26</text></g><g class="sensor-group" id="sensor-group-f28" data-sensor-id="f28"><g class="sensor-point-group"><circle cx="281" cy="366" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="281" y="366" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">28</text></g><g class="sensor-group" id="sensor-group-f30" data-sensor-id="f30"><g class="sensor-point-group"><circle cx="280" cy="411" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="280" y="411" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">30</text></g><g class="sensor-group" id="sensor-group-f32" data-sensor-id="f32"><g class="sensor-point-group"><circle cx="280" cy="460" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="280" y="460" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">32</text></g><g class="sensor-group" id="sensor-group-f34" data-sensor-id="f34"><g class="sensor-point-group"><circle cx="280" cy="514" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="280" y="514" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">34</text></g><g class="sensor-group" id="sensor-group-f35" data-sensor-id="f35"><g class="sensor-point-group"><circle cx="113" cy="550" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="113" y="550" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">35</text></g><g class="sensor-group" id="sensor-group-f36" data-sensor-id="f36"><g class="sensor-point-group"><circle cx="277" cy="561" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></g><text x="277" y="561" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">36</text></g><g class="sensor-group" id="sensor-group-s1" data-sensor-id="s1"><g class="sensor-point-group"><circle cx="632" cy="82" r="8" fill="black" stroke="white" stroke-width="1.5"/><circle cx="632" cy="82" r="1.5" fill="white"/></g><text x="632" y="82" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">1</text></g><g class="sensor-group" id="sensor-group-s2" data-sensor-id="s2"><g class="sensor-point-group"><circle cx="544" cy="592" r="8" fill="black" stroke="white" stroke-width="1.5"/><circle cx="544" cy="592" r="1.5" fill="white"/></g><text x="544" y="592" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">2</text></g><g class="sensor-group" id="sensor-group-s3" data-sensor-id="s3"><g class="sensor-point-group"><circle cx="187" cy="591" r="8" fill="black" stroke="white" stroke-width="1.5"/><circle cx="187" cy="591" r="1.5" fill="white"/></g><text x="187" y="591" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">8</text></g><circle id="sensor-highlight" r="14" fill="none" stroke="#2563eb" stroke-width="3" style="visibility: hidden;"/><foreignObject id="standalone-tooltip-fo" x="0" y="0" width="180" height="120" style="visibility: hidden; pointer-events: none;">
-        <div xmlns="http://www.w3.org/1999/xhtml" id="standalone-tooltip-div" style="padding: 0.75rem; background-color: rgba(0, 0, 0, 0.85); color: white; border-radius: 0.375rem; font-size: 0.875rem;"></div>
-    </foreignObject><foreignObject x="800" y="0" width="300" height="100%">
-    <div xmlns="http://www.w3.org/1999/xhtml" class="panel-container">
-        <div class="panel-header">
-            <div id="standalone-navigation-container" class="navigation">
-    <button id="nav-btn-full" class="nav-btn active">Full View</button>
-    <button id="nav-btn-1" class="nav-btn">Region 1</button>
-    <button id="nav-btn-2" class="nav-btn">Region 2</button>
-    <button id="nav-btn-3" class="nav-btn">Region 3</button>
-    <button id="nav-btn-4" class="nav-btn">Region 4</button>
-</div>
-            <h2 id="standalone-sensor-list-title">Pressure Sensors</h2>
-            <div id="standalone-legend-container" class="legend">
-    <div class="legend-item flex items-center gap-1" data-type="all">
-        <span>All</span>
-    </div>
-    <div class="legend-item flex items-center gap-1 active" data-type="pressure">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><g><path d="M 8 8 L 0 8 A 8 8 0 0 1 8 0 Z" fill="#10b981"/><path d="M 8 8 L 8 0 A 8 8 0 0 1 16 8 Z" fill="#ef4444"/><path d="M 8 8 L 16 8 A 8 8 0 0 1 8 16 Z" fill="#10b981"/><path d="M 8 8 L 8 16 A 8 8 0 0 1 0 8 Z" fill="#ef4444"/><circle cx="8" cy="8" r="8" fill="none" stroke="#1a202c" stroke-width="1"/></g></svg>
-        <span>Druck</span>
-    </div>
-    <div class="legend-item flex items-center gap-1" data-type="flow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/></svg>
-        <span>Durchfluss</span>
-    </div>
-    <div class="legend-item flex items-center gap-1" data-type="snow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><g><circle cx="8" cy="8" r="7" fill="black" stroke="white" stroke-width="1"/><circle cx="8" cy="8" r="1" fill="white"/></g></svg>
-        <span>Schnee</span>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Roof Sensor Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root { --toolbar-height: 76px; }
+        
+        body {
+            font-family: Inter, sans-serif;
+            background: #f8fafc;
+            overflow-x: hidden;
+        }
+        
+        .app-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            padding-bottom: var(--toolbar-height); /* keep content clear of sticky toolbar */
+        }
+        
+        .screens-container {
+            display: flex;
+            height: 100vh;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+        
+        .screen {
+            min-width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: var(--toolbar-height); /* ensure bottom content not covered */
+        }
+        
+        .screen-header {
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .screen-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .map-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .map-area {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+        
+        .sensor-panel {
+            width: 300px;
+            background: white;
+            border-left: 1px solid #e5e7eb;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @media (max-width: 768px) {
+            .map-container {
+                flex-direction: column;
+            }
+            
+            .sensor-panel {
+                width: 100%;
+                max-height: 40vh;
+                border-left: none;
+                border-top: 1px solid #e5e7eb;
+            }
+        }
+        
+        .panel-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .panel-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            border: 2px solid transparent;
+            border-radius: 0.375rem;
+            background: #f9fafb;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .legend-item.active {
+            border-color: #3b82f6;
+            background: #dbeafe;
+        }
+        
+        .sensor-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+            padding-bottom: calc(var(--toolbar-height) + 12px); /* allow list to scroll above toolbar on mobile */
+        }
+        
+        .sensor-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .sensor-list-item:hover,
+        .sensor-list-item.highlight {
+            background: #ebf8ff;
+        }
+        
+        .sensor-list-item .name {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .sensor-list-item .value {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        .sensor-list-item .value.alert {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        
+        .toolbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 2px solid #e5e7eb;
+            height: var(--toolbar-height);
+            padding: 0 1rem;
+            z-index: 50;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .toolbar-nav {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: nowrap;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .nav-label { color: #6b7280; font-size: 0.875rem; margin: 0 0.25rem 0 0.5rem; white-space: nowrap; }
+        
+        .nav-btn {
+            padding: 0.4rem 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background: white;
+            color: #374151;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        
+        .nav-btn.active {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .nav-btn:hover:not(.active) {
+            border-color: #9ca3af;
+            background: #f9fafb;
+        }
+        
+        .rocket-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 1rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s;
+            z-index: 40;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .rocket-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        .map-svg {
+            width: 100%;
+            height: 100%;
+            max-height: calc(100vh - 160px);
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            pointer-events: none;
+            z-index: 30;
+            opacity: 0;
+            transition: opacity 0.2s;
+            max-width: 200px;
+        }
+        
+        .tooltip.visible {
+            opacity: 1;
+        }
+        
+        .tooltip .title {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        /* SVG specific styles */
+        .sensor-group {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .sensor-group:hover {
+            filter: brightness(1.1);
+        }
+        
+        .alert-glow .sensor-point-group {
+            filter: url(#glow);
+        }
+        
+        .region-label {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .region-label:hover {
+            fill: #3b82f6;
+            transform: scale(1.05);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .alert-glow {
+            animation: pulse 2s infinite;
+        }
+
+        /* Small action buttons in panel header */
+        .actions { display: flex; flex-wrap: wrap; gap: 0.375rem; justify-content: center; margin-top: 0.5rem; }
+        .action-btn { padding: 0.375rem 0.625rem; font-size: 0.8rem; border: 1px solid #e5e7eb; border-radius: 0.375rem; background: #f9fafb; cursor: pointer; }
+        .action-btn:hover { background: #eef2f7; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="screens-container" id="screensContainer">
+            <!-- Full View Screen -->
+            <div class="screen" id="screen-full">
+                <div class="screen-header">
+                    <h1>Interactive Roof Sensor Map - Gesamtübersicht</h1>
+                </div>
+                <div class="map-container">
+                    <div class="map-area">
+                        <svg class="map-svg" viewBox="100 0 700 650" id="fullMapSvg">
+                            <defs>
+                                <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+                                    <feGaussianBlur stdDeviation="10" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <!-- Region Labels -->
+                            <g id="region-labels" opacity="0.4" font-family="Inter, sans-serif" font-size="4rem" font-weight="bold" fill="#d9534f" text-anchor="middle">
+                                <text x="525" y="190" class="region-label" data-region="1">1</text>
+                                <text x="525" y="520" class="region-label" data-region="2">2</text>
+                                <text x="245" y="190" class="region-label" data-region="3">3</text>
+                                <text x="245" y="520" class="region-label" data-region="4">4</text>
+                            </g>
+                            <!-- Sensors will be inserted here -->
+                        </svg>
+                    </div>
+                    <div class="sensor-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title" id="sensorListTitle">Alle Sensoren</h2>
+                            <div class="legend" id="legendContainer">
+                                <div class="legend-item active" data-type="all">
+                                    <span>All</span>
+                                </div>
+                                <div class="legend-item" data-type="pressure">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M 8 8 L 0 8 A 8 8 0 0 1 8 0 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 0 A 8 8 0 0 1 16 8 Z" fill="#ef4444"/>
+                                        <path d="M 8 8 L 16 8 A 8 8 0 0 1 8 16 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 16 A 8 8 0 0 1 0 8 Z" fill="#ef4444"/>
+                                        <circle cx="8" cy="8" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Druck</span>
+                                </div>
+                                <div class="legend-item" data-type="flow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Durchfluss</span>
+                                </div>
+                                <div class="legend-item" data-type="snow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="black" stroke="white" stroke-width="1"/>
+                                        <circle cx="8" cy="8" r="1" fill="white"/>
+                                    </svg>
+                                    <span>Schnee</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="action-btn" data-action="save-config">Save Config</button>
+                                <button class="action-btn" data-action="load-config">Load Config</button>
+                                <button class="action-btn" data-action="export-svg">Save SVG Map</button>
+                                <button class="action-btn" data-action="export-standalone">Save Standalone SVG</button>
+                            </div>
+                        </div>
+                        <div class="sensor-list" id="sensorList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Region Screens -->
+            <div class="screen" id="screen-1">
+                <div class="screen-header">
+                    <h1>Region 1 - Sensor Map</h1>
+                </div>
+                <div class="map-container">
+                    <div class="map-area">
+                        <svg class="map-svg" viewBox="400 20 400 400" id="region1MapSvg">
+                            <use href="#sensorDefs"/>
+                        </svg>
+                    </div>
+                    <div class="sensor-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title" id="region1Title">Region 1 Sensors</h2>
+                            <div class="legend" id="region1Legend">
+                                <div class="legend-item active" data-type="all">
+                                    <span>All</span>
+                                </div>
+                                <div class="legend-item" data-type="pressure">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M 8 8 L 0 8 A 8 8 0 0 1 8 0 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 0 A 8 8 0 0 1 16 8 Z" fill="#ef4444"/>
+                                        <path d="M 8 8 L 16 8 A 8 8 0 0 1 8 16 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 16 A 8 8 0 0 1 0 8 Z" fill="#ef4444"/>
+                                        <circle cx="8" cy="8" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Druck</span>
+                                </div>
+                                <div class="legend-item" data-type="flow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Durchfluss</span>
+                                </div>
+                                <div class="legend-item" data-type="snow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="black" stroke="white" stroke-width="1"/>
+                                        <circle cx="8" cy="8" r="1" fill="white"/>
+                                    </svg>
+                                    <span>Schnee</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="action-btn" data-action="save-config">Save Config</button>
+                                <button class="action-btn" data-action="load-config">Load Config</button>
+                                <button class="action-btn" data-action="export-svg">Save SVG Map</button>
+                                <button class="action-btn" data-action="export-standalone">Save Standalone SVG</button>
+                            </div>
+                        </div>
+                        <div class="sensor-list" id="region1List"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screen" id="screen-2">
+                <div class="screen-header">
+                    <h1>Region 2 - Sensor Map</h1>
+                </div>
+                <div class="map-container">
+                    <div class="map-area">
+                        <svg class="map-svg" viewBox="400 340 400 300" id="region2MapSvg">
+                            <use href="#sensorDefs"/>
+                        </svg>
+                    </div>
+                    <div class="sensor-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title" id="region2Title">Region 2 Sensors</h2>
+                            <div class="legend" id="region2Legend">
+                                <div class="legend-item active" data-type="all">
+                                    <span>All</span>
+                                </div>
+                                <div class="legend-item" data-type="pressure">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M 8 8 L 0 8 A 8 8 0 0 1 8 0 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 0 A 8 8 0 0 1 16 8 Z" fill="#ef4444"/>
+                                        <path d="M 8 8 L 16 8 A 8 8 0 0 1 8 16 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 16 A 8 8 0 0 1 0 8 Z" fill="#ef4444"/>
+                                        <circle cx="8" cy="8" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Druck</span>
+                                </div>
+                                <div class="legend-item" data-type="flow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Durchfluss</span>
+                                </div>
+                                <div class="legend-item" data-type="snow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="black" stroke="white" stroke-width="1"/>
+                                        <circle cx="8" cy="8" r="1" fill="white"/>
+                                    </svg>
+                                    <span>Schnee</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="action-btn" data-action="save-config">Save Config</button>
+                                <button class="action-btn" data-action="load-config">Load Config</button>
+                                <button class="action-btn" data-action="export-svg">Save SVG Map</button>
+                                <button class="action-btn" data-action="export-standalone">Save Standalone SVG</button>
+                            </div>
+                        </div>
+                        <div class="sensor-list" id="region2List"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screen" id="screen-3">
+                <div class="screen-header">
+                    <h1>Region 3 - Sensor Map</h1>
+                </div>
+                <div class="map-container">
+                    <div class="map-area">
+                        <svg class="map-svg" viewBox="100 20 400 400" id="region3MapSvg">
+                            <use href="#sensorDefs"/>
+                        </svg>
+                    </div>
+                    <div class="sensor-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title" id="region3Title">Region 3 Sensors</h2>
+                            <div class="legend" id="region3Legend">
+                                <div class="legend-item active" data-type="all">
+                                    <span>All</span>
+                                </div>
+                                <div class="legend-item" data-type="pressure">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M 8 8 L 0 8 A 8 8 0 0 1 8 0 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 0 A 8 8 0 0 1 16 8 Z" fill="#ef4444"/>
+                                        <path d="M 8 8 L 16 8 A 8 8 0 0 1 8 16 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 16 A 8 8 0 0 1 0 8 Z" fill="#ef4444"/>
+                                        <circle cx="8" cy="8" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Druck</span>
+                                </div>
+                                <div class="legend-item" data-type="flow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Durchfluss</span>
+                                </div>
+                                <div class="legend-item" data-type="snow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="black" stroke="white" stroke-width="1"/>
+                                        <circle cx="8" cy="8" r="1" fill="white"/>
+                                    </svg>
+                                    <span>Schnee</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="action-btn" data-action="save-config">Save Config</button>
+                                <button class="action-btn" data-action="load-config">Load Config</button>
+                                <button class="action-btn" data-action="export-svg">Save SVG Map</button>
+                                <button class="action-btn" data-action="export-standalone">Save Standalone SVG</button>
+                            </div>
+                        </div>
+                        <div class="sensor-list" id="region3List"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="screen" id="screen-4">
+                <div class="screen-header">
+                    <h1>Region 4 - Sensor Map</h1>
+                </div>
+                <div class="map-container">
+                    <div class="map-area">
+                        <svg class="map-svg" viewBox="100 340 400 300" id="region4MapSvg">
+                            <use href="#sensorDefs"/>
+                        </svg>
+                    </div>
+                    <div class="sensor-panel">
+                        <div class="panel-header">
+                            <h2 class="panel-title" id="region4Title">Region 4 Sensors</h2>
+                            <div class="legend" id="region4Legend">
+                                <div class="legend-item active" data-type="all">
+                                    <span>All</span>
+                                </div>
+                                <div class="legend-item" data-type="pressure">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <path d="M 8 8 L 0 8 A 8 8 0 0 1 8 0 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 0 A 8 8 0 0 1 16 8 Z" fill="#ef4444"/>
+                                        <path d="M 8 8 L 16 8 A 8 8 0 0 1 8 16 Z" fill="#10b981"/>
+                                        <path d="M 8 8 L 8 16 A 8 8 0 0 1 0 8 Z" fill="#ef4444"/>
+                                        <circle cx="8" cy="8" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Druck</span>
+                                </div>
+                                <div class="legend-item" data-type="flow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/>
+                                    </svg>
+                                    <span>Durchfluss</span>
+                                </div>
+                                <div class="legend-item" data-type="snow">
+                                    <svg width="16" height="16" viewBox="0 0 16 16">
+                                        <circle cx="8" cy="8" r="7" fill="black" stroke="white" stroke-width="1"/>
+                                        <circle cx="8" cy="8" r="1" fill="white"/>
+                                    </svg>
+                                    <span>Schnee</span>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <button class="action-btn" data-action="save-config">Save Config</button>
+                                <button class="action-btn" data-action="load-config">Load Config</button>
+                                <button class="action-btn" data-action="export-svg">Save SVG Map</button>
+                                <button class="action-btn" data-action="export-standalone">Save Standalone SVG</button>
+                            </div>
+                        </div>
+                        <div class="sensor-list" id="region4List"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="standalone-sensor-list" class="sensor-list"><div id="list-item-p1" data-sensor-id="p1" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 1</span><span class="text-xs text-red-500">1030 Pa</span></div><div id="list-item-p2" data-sensor-id="p2" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 2</span><span class="text-xs text-red-500">1028 Pa</span></div><div id="list-item-p3" data-sensor-id="p3" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 3</span><span class="text-xs text-red-500">1028 Pa</span></div><div id="list-item-p4" data-sensor-id="p4" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 4</span><span class="text-xs text-red-500">980 Pa</span></div><div id="list-item-p5" data-sensor-id="p5" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 5</span><span class="text-xs text-red-500">982 Pa</span></div><div id="list-item-p6" data-sensor-id="p6" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 6</span><span class="text-xs text-red-500">979 Pa</span></div><div id="list-item-p7" data-sensor-id="p7" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 7</span><span class="text-xs text-red-500">981 Pa</span></div><div id="list-item-p8" data-sensor-id="p8" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 8</span><span class="text-xs text-gray-600">1012 Pa</span></div><div id="list-item-p9" data-sensor-id="p9" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 9</span><span class="text-xs text-gray-600">1010 Pa</span></div><div id="list-item-p10" data-sensor-id="p10" class="sensor-list-item flex justify-between items-center p-2 border-b"><span class="font-bold text-sm">Pressure 10</span><span class="text-xs text-gray-600">1008 Pa</span></div></div>
-    </div></foreignObject><script>//&lt;![CDATA[
-    (function() {
-        const sensorData = [{"id":"p1","displayId":"1","type":"pressure","x":489,"y":17,"region":1,"status":"red","data":{"Pressure":"1030 Pa"}},{"id":"p10","displayId":"10","type":"pressure","x":419,"y":15,"region":3,"status":"green","data":{"Pressure":"1008 Pa"}},{"id":"p9","displayId":"9","type":"pressure","x":440,"y":232,"region":1,"status":"green","data":{"Pressure":"1010 Pa"}},{"id":"p2","displayId":"2","type":"pressure","x":482,"y":370,"region":1,"status":"red","data":{"Pressure":"1028 Pa"}},{"id":"p3","displayId":"3","type":"pressure","x":480,"y":421,"region":1,"status":"red","data":{"Pressure":"1028 Pa"}},{"id":"p8","displayId":"8","type":"pressure","x":367,"y":387,"region":4,"status":"green","data":{"Pressure":"1012 Pa"}},{"id":"p7","displayId":"7","type":"pressure","x":323,"y":580,"region":4,"status":"red","data":{"Pressure":"981 Pa"}},{"id":"p6","displayId":"6","type":"pressure","x":408,"y":582,"region":4,"status":"red","data":{"Pressure":"979 Pa"}},{"id":"p5","displayId":"5","type":"pressure","x":441,"y":583,"region":4,"status":"red","data":{"Pressure":"982 Pa"}},{"id":"p4","displayId":"4","type":"pressure","x":505,"y":580,"region":2,"status":"red","data":{"Pressure":"980 Pa"}},{"id":"f1","displayId":"1","type":"flow","x":524,"y":52,"region":1,"data":{"Flow":"1.2 m/s"}},{"id":"f2","displayId":"2","type":"flow","x":561,"y":87,"region":1,"data":{"Flow":"1.1 m/s"}},{"id":"f4","displayId":"4","type":"flow","x":615,"y":170,"region":1,"data":{"Flow":"1.2 m/s"}},{"id":"f5","displayId":"5","type":"flow","x":642,"y":217,"region":1,"data":{"Flow":"1.4 m/s"}},{"id":"f6","displayId":"6","type":"flow","x":670,"y":260,"region":1,"data":{"Flow":"1.1 m/s"}},{"id":"f7","displayId":"7","type":"flow","x":691,"y":316,"region":1,"data":{"Flow":"1.0 m/s"}},{"id":"f9","displayId":"9","type":"flow","x":710,"y":380,"region":2,"data":{"Flow":"1.3 m/s"}},{"id":"f11","displayId":"11","type":"flow","x":727,"y":423,"region":2,"data":{"Flow":"1.2 m/s"}},{"id":"f13","displayId":"13","type":"flow","x":748,"y":463,"region":2,"data":{"Flow":"1.1 m/s"}},{"id":"f15","displayId":"15","type":"flow","x":760,"y":511,"region":2,"data":{"Flow":"1.2 m/s"}},{"id":"f17","displayId":"17","type":"flow","x":767,"y":560,"region":2,"data":{"Flow":"1.1 m/s"}},{"id":"f19","displayId":"19","type":"flow","x":377,"y":47,"region":3,"data":{"Flow":"1.2 m/s"}},{"id":"f20","displayId":"20","type":"flow","x":338,"y":80,"region":3,"data":{"Flow":"1.1 m/s"}},{"id":"f21","displayId":"21","type":"flow","x":306,"y":123,"region":3,"data":{"Flow":"1.2 m/s"}},{"id":"f22","displayId":"22","type":"flow","x":277,"y":159,"region":3,"data":{"Flow":"1.4 m/s"}},{"id":"f23","displayId":"23","type":"flow","x":246,"y":207,"region":3,"data":{"Flow":"1.1 m/s"}},{"id":"f24","displayId":"24","type":"flow","x":211,"y":256,"region":3,"data":{"Flow":"1.0 m/s"}},{"id":"f25","displayId":"25","type":"flow","x":183,"y":312,"region":3,"data":{"Flow":"1.3 m/s"}},{"id":"f27","displayId":"27","type":"flow","x":164,"y":367,"region":4,"data":{"Flow":"1.2 m/s"}},{"id":"f29","displayId":"29","type":"flow","x":146,"y":410,"region":4,"data":{"Flow":"1.1 m/s"}},{"id":"f31","displayId":"31","type":"flow","x":130,"y":456,"region":4,"data":{"Flow":"1.2 m/s"}},{"id":"f33","displayId":"33","type":"flow","x":115,"y":504,"region":4,"data":{"Flow":"1.1 m/s"}},{"id":"f3","displayId":"3","type":"flow","x":589,"y":125,"region":2,"data":{"Flow":"1.3 m/s"}},{"id":"f8","displayId":"8","type":"flow","x":565,"y":332,"region":1,"data":{"Flow":"1.2 m/s"}},{"id":"f10","displayId":"10","type":"flow","x":565,"y":381,"region":1,"data":{"Flow":"1.1 m/s"}},{"id":"f12","displayId":"12","type":"flow","x":564,"y":422,"region":2,"data":{"Flow":"1.0 m/s"}},{"id":"f14","displayId":"14","type":"flow","x":564,"y":469,"region":2,"data":{"Flow":"1.3 m/s"}},{"id":"f16","displayId":"16","type":"flow","x":562,"y":516,"region":2,"data":{"Flow":"1.4 m/s"}},{"id":"f18","displayId":"18","type":"flow","x":563,"y":561,"region":2,"data":{"Flow":"1.0 m/s"}},{"id":"f26","displayId":"26","type":"flow","x":282,"y":321,"region":3,"data":{"Flow":"1.2 m/s"}},{"id":"f28","displayId":"28","type":"flow","x":281,"y":366,"region":3,"data":{"Flow":"1.1 m/s"}},{"id":"f30","displayId":"30","type":"flow","x":280,"y":411,"region":4,"data":{"Flow":"1.0 m/s"}},{"id":"f32","displayId":"32","type":"flow","x":280,"y":460,"region":4,"data":{"Flow":"1.3 m/s"}},{"id":"f34","displayId":"34","type":"flow","x":280,"y":514,"region":4,"data":{"Flow":"1.4 m/s"}},{"id":"f35","displayId":"35","type":"flow","x":113,"y":550,"region":4,"data":{"Flow":"1.0 m/s"}},{"id":"f36","displayId":"36","type":"flow","x":277,"y":561,"region":4,"data":{"Flow":"1.0 m/s"}},{"id":"s1","displayId":"1","type":"snow","x":632,"y":82,"region":1,"data":{"Snow Load":"5 kg/m²"}},{"id":"s2","displayId":"2","type":"snow","x":544,"y":592,"region":2,"data":{"Snow Load":"4 kg/m²"}},{"id":"s3","displayId":"8","type":"snow","x":187,"y":591,"region":4,"data":{"Snow Load":"6 kg/m²"}}];
-        const viewBoxes = {"1":"400 20 400 400","2":"400 340 400 300","3":"100 20 400 400","4":"100 340 400 300","full":"100 0 700 650"};
-        let currentView = 'full';
-        let currentFilter = 'all';
-        const svgRoot = document.documentElement;
 
-        const navigationContainer = document.getElementById('standalone-navigation-container');
-        const sensorListTitle = document.getElementById('standalone-sensor-list-title');
-        const legendContainer = document.getElementById('standalone-legend-container');
-        const sensorListContainer = document.getElementById('standalone-sensor-list');
-        const tooltipFO = document.getElementById('standalone-tooltip-fo');
-        const tooltipDiv = document.getElementById('standalone-tooltip-div');
-        
-        function getSVGPoint(clientX, clientY) {
-            const pt = svgRoot.createSVGPoint();
-            pt.x = clientX;
-            pt.y = clientY;
-            return pt.matrixTransform(svgRoot.getScreenCTM().inverse());
+        <!-- Rocket Button -->
+        <button class="rocket-btn visible" id="rocketBtn">🚀</button>
+
+        <!-- Bottom Toolbar -->
+        <div class="toolbar">
+            <div class="toolbar-nav">
+                <button class="nav-btn active" data-screen="full">Gesamtübersicht</button>
+                <span class="nav-label">Regionen:</span>
+                <button class="nav-btn" data-screen="1">1</button>
+                <button class="nav-btn" data-screen="2">2</button>
+                <button class="nav-btn" data-screen="3">3</button>
+                <button class="nav-btn" data-screen="4">4</button>
+            </div>
+        </div>
+
+        <!-- Tooltip -->
+        <div class="tooltip" id="tooltip">
+            <div class="title" id="tooltipTitle"></div>
+            <div id="tooltipContent"></div>
+        </div>
+    </div>
+
+    <!-- Hidden file input for Load Config -->
+    <input type="file" id="fileInput" accept="application/json" style="display:none" />
+
+    <!-- Hidden SVG definitions -->
+    <svg style="display: none;">
+        <defs id="sensorDefs">
+            <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="10" result="coloredBlur"/>
+                <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+        </defs>
+    </svg>
+
+    <script>
+        // Sensor data
+        const sensorData = [
+            {"id":"p1","displayId":"1","type":"pressure","x":489,"y":17,"region":1,"status":"red","data":{"Pressure":"1030 Pa"}},
+            {"id":"p10","displayId":"10","type":"pressure","x":419,"y":15,"region":3,"status":"green","data":{"Pressure":"1008 Pa"}},
+            {"id":"p9","displayId":"9","type":"pressure","x":440,"y":232,"region":1,"status":"green","data":{"Pressure":"1010 Pa"}},
+            {"id":"p2","displayId":"2","type":"pressure","x":482,"y":370,"region":1,"status":"red","data":{"Pressure":"1028 Pa"}},
+            {"id":"p3","displayId":"3","type":"pressure","x":480,"y":421,"region":1,"status":"red","data":{"Pressure":"1028 Pa"}},
+            {"id":"p8","displayId":"8","type":"pressure","x":367,"y":387,"region":4,"status":"green","data":{"Pressure":"1012 Pa"}},
+            {"id":"p7","displayId":"7","type":"pressure","x":323,"y":580,"region":4,"status":"red","data":{"Pressure":"981 Pa"}},
+            {"id":"p6","displayId":"6","type":"pressure","x":408,"y":582,"region":4,"status":"red","data":{"Pressure":"979 Pa"}},
+            {"id":"p5","displayId":"5","type":"pressure","x":441,"y":583,"region":4,"status":"red","data":{"Pressure":"982 Pa"}},
+            {"id":"p4","displayId":"4","type":"pressure","x":505,"y":580,"region":2,"status":"red","data":{"Pressure":"980 Pa"}},
+            {"id":"f1","displayId":"1","type":"flow","x":524,"y":52,"region":1,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f2","displayId":"2","type":"flow","x":561,"y":87,"region":1,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f4","displayId":"4","type":"flow","x":615,"y":170,"region":1,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f5","displayId":"5","type":"flow","x":642,"y":217,"region":1,"data":{"Flow":"1.4 m/s"}},
+            {"id":"f6","displayId":"6","type":"flow","x":670,"y":260,"region":1,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f7","displayId":"7","type":"flow","x":691,"y":316,"region":1,"data":{"Flow":"1.0 m/s"}},
+            {"id":"f9","displayId":"9","type":"flow","x":710,"y":380,"region":2,"data":{"Flow":"1.3 m/s"}},
+            {"id":"f11","displayId":"11","type":"flow","x":727,"y":423,"region":2,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f13","displayId":"13","type":"flow","x":748,"y":463,"region":2,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f15","displayId":"15","type":"flow","x":760,"y":511,"region":2,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f17","displayId":"17","type":"flow","x":767,"y":560,"region":2,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f19","displayId":"19","type":"flow","x":377,"y":47,"region":3,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f20","displayId":"20","type":"flow","x":338,"y":80,"region":3,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f21","displayId":"21","type":"flow","x":306,"y":123,"region":3,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f22","displayId":"22","type":"flow","x":277,"y":159,"region":3,"data":{"Flow":"1.4 m/s"}},
+            {"id":"f23","displayId":"23","type":"flow","x":246,"y":207,"region":3,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f24","displayId":"24","type":"flow","x":211,"y":256,"region":3,"data":{"Flow":"1.0 m/s"}},
+            {"id":"f25","displayId":"25","type":"flow","x":183,"y":312,"region":3,"data":{"Flow":"1.3 m/s"}},
+            {"id":"f27","displayId":"27","type":"flow","x":164,"y":367,"region":4,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f29","displayId":"29","type":"flow","x":146,"y":410,"region":4,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f31","displayId":"31","type":"flow","x":130,"y":456,"region":4,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f33","displayId":"33","type":"flow","x":115,"y":504,"region":4,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f3","displayId":"3","type":"flow","x":589,"y":125,"region":2,"data":{"Flow":"1.3 m/s"}},
+            {"id":"f8","displayId":"8","type":"flow","x":565,"y":332,"region":1,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f10","displayId":"10","type":"flow","x":565,"y":381,"region":1,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f12","displayId":"12","type":"flow","x":564,"y":422,"region":2,"data":{"Flow":"1.0 m/s"}},
+            {"id":"f14","displayId":"14","type":"flow","x":564,"y":469,"region":2,"data":{"Flow":"1.3 m/s"}},
+            {"id":"f16","displayId":"16","type":"flow","x":562,"y":516,"region":2,"data":{"Flow":"1.4 m/s"}},
+            {"id":"f18","displayId":"18","type":"flow","x":563,"y":561,"region":2,"data":{"Flow":"1.0 m/s"}},
+            {"id":"f26","displayId":"26","type":"flow","x":282,"y":321,"region":3,"data":{"Flow":"1.2 m/s"}},
+            {"id":"f28","displayId":"28","type":"flow","x":281,"y":366,"region":3,"data":{"Flow":"1.1 m/s"}},
+            {"id":"f30","displayId":"30","type":"flow","x":280,"y":411,"region":4,"data":{"Flow":"1.0 m/s"}},
+            {"id":"f32","displayId":"32","type":"flow","x":280,"y":460,"region":4,"data":{"Flow":"1.3 m/s"}},
+            {"id":"f34","displayId":"34","type":"flow","x":280,"y":514,"region":4,"data":{"Flow":"1.4 m/s"}},
+            {"id":"f35","displayId":"35","type":"flow","x":113,"y":550,"region":4,"data":{"Flow":"1.0 m/s"}},
+            {"id":"f36","displayId":"36","type":"flow","x":277,"y":561,"region":4,"data":{"Flow":"1.0 m/s"}},
+            {"id":"s1","displayId":"1","type":"snow","x":632,"y":82,"region":1,"data":{"Snow Load":"5 kg/m²"}},
+            {"id":"s2","displayId":"2","type":"snow","x":544,"y":592,"region":2,"data":{"Snow Load":"4 kg/m²"}},
+            {"id":"s3","displayId":"3","type":"snow","x":187,"y":591,"region":4,"data":{"Snow Load":"6 kg/m²"}}
+        ];
+
+        // App state
+        let currentScreen = 'full';
+        let currentFilters = {
+            'full': 'all',
+            '1': 'all',
+            '2': 'all',
+            '3': 'all',
+            '4': 'all'
+        };
+
+        // DOM elements
+        const screensContainer = document.getElementById('screensContainer');
+        const rocketBtn = document.getElementById('rocketBtn');
+        const tooltip = document.getElementById('tooltip');
+        const tooltipTitle = document.getElementById('tooltipTitle');
+        const tooltipContent = document.getElementById('tooltipContent');
+
+        // Initialize the app
+        function init() {
+            createSensorElements();
+            setupEventListeners();
+            updateSensorList('full');
+            updateNavigation();
         }
 
-        function setView(view) {
-            currentView = view;
-            svgRoot.setAttribute('viewBox', viewBoxes[view]);
-            updateNavActiveState();
-            renderSensorList();
-        }
-        
-        function updateNavActiveState() {
-            navigationContainer.querySelectorAll('.nav-btn').forEach(b =&gt; b.classList.remove('active'));
-            navigationContainer.querySelector(`#nav-btn-${currentView}`).classList.add('active');
-        }
-        
-        function renderSensorList() {
-            let baseData = (currentView === 'full') ? [...sensorData] : sensorData.filter(s =&gt; s.region == currentView);
-            let data = (currentFilter === 'all') ? baseData : baseData.filter(s =&gt; s.type === currentFilter);
+        // Create sensor SVG elements
+        function createSensorElement(sensor) {
+            const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            group.classList.add('sensor-group');
+            group.setAttribute('id', `sensor-group-${sensor.id}`);
+            group.setAttribute('data-sensor-id', sensor.id);
+            
+            if (sensor.status === 'red') {
+                group.classList.add('alert-glow');
+            }
 
-            data.sort((a,b) =&gt; {
-                if (a.type &lt; b.type) return -1; if (a.type &gt; b.type) return 1;
-                const aId = parseInt(a.displayId); const bId = parseInt(b.displayId);
-                if (!isNaN(aId) &amp;&amp; !isNaN(bId)) return aId - bId;
+            const pointGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            pointGroup.classList.add('sensor-point-group');
+
+            if (sensor.type === 'pressure') {
+                // Pressure sensor (quarter-circle segments)
+                const paths = [
+                    `M ${sensor.x} ${sensor.y} L ${sensor.x - 8} ${sensor.y} A 8 8 0 0 1 ${sensor.x} ${sensor.y - 8} Z`,
+                    `M ${sensor.x} ${sensor.y} L ${sensor.x} ${sensor.y - 8} A 8 8 0 0 1 ${sensor.x + 8} ${sensor.y} Z`,
+                    `M ${sensor.x} ${sensor.y} L ${sensor.x + 8} ${sensor.y} A 8 8 0 0 1 ${sensor.x} ${sensor.y + 8} Z`,
+                    `M ${sensor.x} ${sensor.y} L ${sensor.x} ${sensor.y + 8} A 8 8 0 0 1 ${sensor.x - 8} ${sensor.y} Z`
+                ];
+                const colors = ['#10b981', '#ef4444', '#10b981', '#ef4444'];
+                
+                paths.forEach((d, i) => {
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    path.setAttribute('d', d);
+                    path.setAttribute('fill', colors[i]);
+                    pointGroup.appendChild(path);
+                });
+
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', sensor.x);
+                circle.setAttribute('cy', sensor.y);
+                circle.setAttribute('r', '8');
+                circle.setAttribute('fill', 'none');
+                circle.setAttribute('stroke', '#1a202c');
+                circle.setAttribute('stroke-width', '1');
+                pointGroup.appendChild(circle);
+            } else if (sensor.type === 'flow') {
+                // Flow sensor (solid circle)
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', sensor.x);
+                circle.setAttribute('cy', sensor.y);
+                circle.setAttribute('r', '8');
+                circle.setAttribute('fill', '#2dd4bf');
+                circle.setAttribute('stroke', '#1a202c');
+                circle.setAttribute('stroke-width', '1');
+                pointGroup.appendChild(circle);
+            } else if (sensor.type === 'snow') {
+                // Snow sensor (black circle with white dot)
+                const outerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                outerCircle.setAttribute('cx', sensor.x);
+                outerCircle.setAttribute('cy', sensor.y);
+                outerCircle.setAttribute('r', '8');
+                outerCircle.setAttribute('fill', 'black');
+                outerCircle.setAttribute('stroke', 'white');
+                outerCircle.setAttribute('stroke-width', '1.5');
+                pointGroup.appendChild(outerCircle);
+
+                const innerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                innerCircle.setAttribute('cx', sensor.x);
+                innerCircle.setAttribute('cy', sensor.y);
+                innerCircle.setAttribute('r', '1.5');
+                innerCircle.setAttribute('fill', 'white');
+                pointGroup.appendChild(innerCircle);
+            }
+
+            group.appendChild(pointGroup);
+
+            // Add text label
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', sensor.x);
+            text.setAttribute('y', sensor.y);
+            text.setAttribute('font-size', sensor.displayId.length > 1 ? '8' : '9');
+            text.setAttribute('fill', 'white');
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('dominant-baseline', 'central');
+            text.style.pointerEvents = 'none';
+            text.style.fontWeight = 'bold';
+            text.textContent = sensor.displayId;
+            group.appendChild(text);
+
+            return group;
+        }
+
+        function createSensorElements() {
+            // Add sensors to all SVGs
+            const svgs = ['fullMapSvg', 'region1MapSvg', 'region2MapSvg', 'region3MapSvg', 'region4MapSvg'];
+            
+            svgs.forEach(svgId => {
+                const svg = document.getElementById(svgId);
+                const isRegionSvg = svgId !== 'fullMapSvg';
+                const regionNumber = isRegionSvg ? parseInt(svgId.replace('region', '').replace('MapSvg', '')) : null;
+
+                sensorData.forEach(sensor => {
+                    if (isRegionSvg && sensor.region !== regionNumber) return;
+                    
+                    const sensorElement = createSensorElement(sensor);
+                    svg.appendChild(sensorElement);
+                });
+            });
+        }
+
+        // Navigation functions
+        function navigateToScreen(screenId) {
+            if (currentScreen === screenId) return;
+            
+            currentScreen = screenId;
+            const screenIndex = ['full', '1', '2', '3', '4'].indexOf(screenId);
+            const translateX = -screenIndex * 100;
+            
+            screensContainer.style.transform = `translateX(${translateX}vw)`;
+            updateNavigation();
+            updateSensorList(screenId);
+            updateRocketButton();
+        }
+
+        function updateNavigation() {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.screen === currentScreen);
+            });
+        }
+
+        function updateRocketButton() {
+            rocketBtn.classList.add('visible');
+        }
+
+        // Sensor list functions
+        function updateSensorList(screenId) {
+            const isRegion = screenId !== 'full';
+            const regionNumber = isRegion ? parseInt(screenId) : null;
+            const filter = currentFilters[screenId];
+            
+            let filteredData = sensorData;
+            if (isRegion) {
+                filteredData = sensorData.filter(s => s.region === regionNumber);
+            }
+            if (filter !== 'all') {
+                filteredData = filteredData.filter(s => s.type === filter);
+            }
+
+            // Sort sensors
+            filteredData.sort((a, b) => {
+                if (a.type < b.type) return -1;
+                if (a.type > b.type) return 1;
+                const aId = parseInt(a.displayId);
+                const bId = parseInt(b.displayId);
+                if (!isNaN(aId) && !isNaN(bId)) return aId - bId;
                 return a.displayId.localeCompare(b.displayId);
             });
-            sensorListTitle.textContent = currentFilter === 'all' ? 'All Sensors' : `${currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1)} Sensors`;
-            if (currentView !== 'full') sensorListTitle.textContent += ` (Region ${currentView})`;
 
-            sensorListContainer.innerHTML = data.map(s =&gt; {
-                let colorClass = s.status === 'red' ? 'text-red-500' : '';
-                let value = Object.values(s.data)[0];
-                let typeLabel = s.type.charAt(0).toUpperCase() + s.type.slice(1);
-                return `&lt;div class="sensor-list-item" data-sensor-id="${s.id}"&gt;&lt;span class="font-bold"&gt;${typeLabel} ${s.displayId}&lt;/span&gt;&lt;span class="${colorClass}"&gt;${value}&lt;/span&gt;&lt;/div&gt;`;
-            }).join('');
-            addListInteractionListeners();
+            // Update title
+            const titleElement = document.getElementById(screenId === 'full' ? 'sensorListTitle' : `region${screenId}Title`);
+            let title = filter === 'all' ? 'All Sensors' : `${filter.charAt(0).toUpperCase() + filter.slice(1)} Sensors`;
+            if (isRegion) title += ` (Region ${screenId})`;
+            if (titleElement) titleElement.textContent = title;
+
+            // Update list
+            const listElement = document.getElementById(screenId === 'full' ? 'sensorList' : `region${screenId}List`);
+            if (listElement) {
+                listElement.innerHTML = filteredData.map(sensor => {
+                    const value = Object.values(sensor.data)[0];
+                    const isAlert = sensor.status === 'red';
+                    const typeLabel = sensor.type.charAt(0).toUpperCase() + sensor.type.slice(1);
+                    
+                    return `
+                        <div class="sensor-list-item" data-sensor-id="${sensor.id}">
+                            <span class="name">${typeLabel} ${sensor.displayId}</span>
+                            <span class="value ${isAlert ? 'alert' : ''}">${value}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                // Add list interaction
+                listElement.querySelectorAll('.sensor-list-item').forEach(item => {
+                    item.addEventListener('mouseenter', () => highlightSensor(item.dataset.sensorId));
+                    item.addEventListener('mouseleave', () => unhighlightSensor());
+                });
+            }
         }
 
-        function addMapInteractionListeners() {
-            svgRoot.querySelectorAll('.sensor-group').forEach(group =&gt; {
-                group.addEventListener('mouseenter', e =&gt; {
-                    const sensor = sensorData.find(s =&gt; s.id === e.currentTarget.dataset.sensorId);
-                    if (!sensor) return;
-                    let content = `&lt;div style="font-weight: 700; margin-bottom: 4px;"&gt;${sensor.type.charAt(0).toUpperCase() + sensor.type.slice(1)} Sensor #${sensor.displayId}&lt;/div&gt;`;
-                    Object.entries(sensor.data).forEach(([key, value]) =&gt; content += `&lt;div&gt;&lt;strong&gt;${key}:&lt;/strong&gt; ${value}&lt;/div&gt;`);
-                    tooltipDiv.innerHTML = content;
-                    tooltipFO.style.visibility = 'visible';
-                });
-                group.addEventListener('mouseleave', () =&gt; { tooltipFO.style.visibility = 'hidden'; });
-                group.addEventListener('mousemove', e =&gt; {
-                    const svgPoint = getSVGPoint(e.clientX, e.clientY);
-                    tooltipFO.setAttribute('x', svgPoint.x + 15);
-                    tooltipFO.setAttribute('y', svgPoint.y + 15);
+        function highlightSensor(sensorId) {
+            // Highlight list item
+            document.querySelectorAll('.sensor-list-item').forEach(item => {
+                item.classList.toggle('highlight', item.dataset.sensorId === sensorId);
+            });
+
+            // Highlight sensor on map
+            document.querySelectorAll('.sensor-group').forEach(group => {
+                group.style.opacity = group.dataset.sensorId === sensorId ? '1' : '0.3';
+            });
+        }
+
+        function unhighlightSensor() {
+            document.querySelectorAll('.sensor-list-item').forEach(item => {
+                item.classList.remove('highlight');
+            });
+            document.querySelectorAll('.sensor-group').forEach(group => {
+                group.style.opacity = '1';
+            });
+        }
+
+        // Filter functions
+        function setupLegendFilters() {
+            ['full', '1', '2', '3', '4'].forEach(screenId => {
+                const legendContainer = document.getElementById(screenId === 'full' ? 'legendContainer' : `region${screenId}Legend`);
+                legendContainer.querySelectorAll('.legend-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const filterType = item.dataset.type;
+                        currentFilters[screenId] = filterType;
+                        
+                        // Update active state
+                        legendContainer.querySelectorAll('.legend-item').forEach(legendItem => {
+                            legendItem.classList.toggle('active', legendItem.dataset.type === filterType);
+                        });
+                        
+                        updateSensorList(screenId);
+                    });
                 });
             });
         }
-        
-        function addListInteractionListeners() {
-             sensorListContainer.querySelectorAll('.sensor-list-item').forEach(item =&gt; {
-                item.addEventListener('mouseenter', () =&gt; { 
-                    svgRoot.querySelectorAll('.sensor-list-item').forEach(i =&gt; i.classList.remove('highlight'));
-                    item.classList.add('highlight');
-                    svgRoot.querySelectorAll('.sensor-group').forEach(g =&gt; g.style.opacity = '0.3');
-                    svgRoot.querySelector(`#sensor-group-${item.dataset.sensorId}`).style.opacity = '1';
-                });
-                item.addEventListener('mouseleave', () =&gt; {
-                    item.classList.remove('highlight');
-                    svgRoot.querySelectorAll('.sensor-group').forEach(g =&gt; g.style.opacity = '1');
-                });
-             });
+
+        // Tooltip functions
+        function showTooltip(event, sensor) {
+            const typeLabel = sensor.type.charAt(0).toUpperCase() + sensor.type.slice(1);
+            tooltipTitle.textContent = `${typeLabel} Sensor #${sensor.displayId}`;
+            tooltipContent.innerHTML = Object.entries(sensor.data)
+                .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+                .join('<br>');
+            
+            tooltip.style.left = `${event.clientX + 15}px`;
+            tooltip.style.top = `${event.clientY + 15}px`;
+            tooltip.classList.add('visible');
         }
 
-        navigationContainer.querySelector('#nav-btn-full').addEventListener('click', () =&gt; setView('full'));
-        navigationContainer.querySelector('#nav-btn-1').addEventListener('click', () =&gt; setView('1'));
-        navigationContainer.querySelector('#nav-btn-2').addEventListener('click', () =&gt; setView('2'));
-        navigationContainer.querySelector('#nav-btn-3').addEventListener('click', () =&gt; setView('3'));
-        navigationContainer.querySelector('#nav-btn-4').addEventListener('click', () =&gt; setView('4'));
-        updateNavActiveState();
-        
-        legendContainer.querySelectorAll('.legend-item').forEach(item =&gt; {
-            item.addEventListener('click', () =&gt; {
-                currentFilter = item.dataset.type;
-                renderSensorList();
-                legendContainer.querySelectorAll('.legend-item').forEach(i =&gt; i.classList.toggle('active', i.dataset.type === currentFilter));
+        function hideTooltip() {
+            tooltip.classList.remove('visible');
+        }
+
+        // Event listeners setup
+        function setupEventListeners() {
+            // Navigation buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navigateToScreen(btn.dataset.screen);
+                });
             });
-        });
-        
-        addMapInteractionListeners();
-        renderSensorList(); // Initial render for standalone
-    })();
-//]]&gt;</script></svg>
+
+            // Region labels (clickable)
+            document.querySelectorAll('.region-label').forEach(label => {
+                label.addEventListener('click', () => {
+                    navigateToScreen(label.dataset.region);
+                });
+            });
+
+            // Rocket button
+            rocketBtn.addEventListener('click', () => {
+                navigateToScreen('full');
+            });
+
+            // Sensor tooltips
+            document.querySelectorAll('.sensor-group').forEach(group => {
+                const sensorId = group.dataset.sensorId;
+                const sensor = sensorData.find(s => s.id === sensorId);
+                
+                group.addEventListener('mouseenter', (e) => showTooltip(e, sensor));
+                group.addEventListener('mouseleave', hideTooltip);
+                group.addEventListener('mousemove', (e) => {
+                    if (tooltip.classList.contains('visible')) {
+                        tooltip.style.left = `${e.clientX + 15}px`;
+                        tooltip.style.top = `${e.clientY + 15}px`;
+                    }
+                });
+            });
+
+            // Legend filters
+            setupLegendFilters();
+
+            // Prevent scroll on mobile
+            document.addEventListener('touchmove', (e) => {
+                if (e.target.closest('.sensor-list')) return;
+                e.preventDefault();
+            }, { passive: false });
+
+            // Hide tooltip on scroll
+            document.addEventListener('scroll', hideTooltip);
+
+            // Bind actions
+            document.body.addEventListener('click', (e) => {
+                const btn = e.target.closest('.action-btn');
+                if (!btn) return;
+                const action = btn.dataset.action;
+                if (action === 'save-config') return saveConfig();
+                if (action === 'export-svg') return saveSvgMap();
+                if (action === 'export-standalone') return exportStandaloneSvg();
+                if (action === 'load-config') {
+                    document.getElementById('fileInput').click();
+                }
+            });
+            document.getElementById('fileInput').addEventListener('change', (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (file) loadConfigFromFile(file);
+                e.target.value = '';
+            });
+        }
+
+        // Download helper
+        function triggerDownload(filename, content, mime = 'application/octet-stream') {
+            const blob = new Blob([content], { type: mime });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
+        }
+
+        // Save configuration
+        function saveConfig() {
+            const json = JSON.stringify(sensorData, null, 2);
+            triggerDownload('sensor-config.json', json, 'application/json');
+        }
+
+        // Load configuration
+        function loadConfigFromFile(file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const parsed = JSON.parse(reader.result);
+                    if (!Array.isArray(parsed)) throw new Error('Invalid format');
+                    // Replace data
+                    sensorData.length = 0;
+                    parsed.forEach(o => sensorData.push(o));
+                    // Re-render sensors
+                    ['fullMapSvg', 'region1MapSvg', 'region2MapSvg', 'region3MapSvg', 'region4MapSvg']
+                      .forEach(id => {
+                          const svg = document.getElementById(id);
+                          if (!svg) return;
+                          svg.querySelectorAll('.sensor-group').forEach(n => n.remove());
+                      });
+                    createSensorElements();
+                    // Rebind map tooltips
+                    setupSensorGroupTooltips();
+                    // Refresh lists
+                    updateSensorList(currentScreen);
+                } catch (e) {
+                    alert('Invalid configuration file.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Save SVG map
+        function saveSvgMap() {
+            const view = currentScreen;
+            const vb = { full: '100 0 700 650', '1': '400 20 400 400', '2': '400 340 400 300', '3': '100 20 400 400', '4': '100 340 400 300' }[view];
+            let data = (view === 'full') ? sensorData.slice() : sensorData.filter(function(s){ return s.region === parseInt(view); });
+            const filter = currentFilters[view];
+            if (filter && filter !== 'all') data = data.filter(function(s){ return s.type === filter; });
+
+            const sensorsMarkup = data.map(buildSensorSVGShape).join('\n');
+            var regionLabels = '';
+            if (view === 'full') {
+                regionLabels = [
+                    '<g id="region-labels" opacity="0.4" font-family="Inter, sans-serif" font-size="4rem" font-weight="bold" fill="#d9534f" text-anchor="middle">',
+                    '  <text x="525" y="190">1</text>',
+                    '  <text x="525" y="520">2</text>',
+                    '  <text x="245" y="190">3</text>',
+                    '  <text x="245" y="520">4</text>',
+                    '</g>'
+                ].join('\n');
+            }
+
+            var svg = [
+                '<?xml version="1.0" encoding="UTF-8"?>',
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'" width="100%" height="100%">',
+                '  <defs>',
+                '    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">',
+                '      <feGaussianBlur stdDeviation="10" result="coloredBlur"/>',
+                '      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>',
+                '    </filter>',
+                '    <style><![CDATA[',
+                '      .alert-glow .sensor-point-group { filter: url(#glow); }',
+                '      .sensor-group { cursor: pointer; }',
+                '    ]]></style>',
+                '  </defs>',
+                regionLabels,
+                sensorsMarkup,
+                '</svg>'
+            ].join('\n');
+            triggerDownload('roof-map-'+view+'.svg', svg, 'image/svg+xml;charset=utf-8');
+        }
+
+        // Serialize sensors to minimal SVG shapes
+        function buildSensorSVGShape(sensor) {
+            var x = sensor.x, y = sensor.y, type = sensor.type, displayId = sensor.displayId, status = sensor.status;
+            var alertClass = status === 'red' ? ' alert-glow' : '';
+            if (type === 'pressure') {
+                return [
+                    '<g class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
+                    '  <g class="sensor-point-group">',
+                    '    <path d="M '+x+' '+y+' L '+(x-8)+' '+y+' A 8 8 0 0 1 '+x+' '+(y-8)+' Z" fill="#10b981"/>',
+                    '    <path d="M '+x+' '+y+' L '+x+' '+(y-8)+' A 8 8 0 0 1 '+(x+8)+' '+y+' Z" fill="#ef4444"/>',
+                    '    <path d="M '+x+' '+y+' L '+(x+8)+' '+y+' A 8 8 0 0 1 '+x+' '+(y+8)+' Z" fill="#10b981"/>',
+                    '    <path d="M '+x+' '+y+' L '+x+' '+(y+8)+' A 8 8 0 0 1 '+(x-8)+' '+y+' Z" fill="#ef4444"/>',
+                    '    <circle cx="'+x+'" cy="'+y+'" r="8" fill="none" stroke="#1a202c" stroke-width="1"/>',
+                    '  </g>',
+                    '  <text x="'+x+'" y="'+y+'" font-size="'+(String(displayId).length > 1 ? 8 : 9)+'" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">'+displayId+'</text>',
+                    '</g>'
+                ].join('\n');
+            }
+            if (type === 'flow') {
+                return [
+                    '<g class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
+                    '  <g class="sensor-point-group">',
+                    '    <circle cx="'+x+'" cy="'+y+'" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/>',
+                    '  </g>',
+                    '  <text x="'+x+'" y="'+y+'" font-size="'+(String(displayId).length > 1 ? 8 : 9)+'" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">'+displayId+'</text>',
+                    '</g>'
+                ].join('\n');
+            }
+            // snow
+            return [
+                '<g class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
+                '  <g class="sensor-point-group">',
+                '    <circle cx="'+x+'" cy="'+y+'" r="8" fill="black" stroke="white" stroke-width="1.5"/>',
+                '    <circle cx="'+x+'" cy="'+y+'" r="1.5" fill="white"/>',
+                '  </g>',
+                '  <text x="'+x+'" y="'+y+'" font-size="'+(String(displayId).length > 1 ? 8 : 9)+'" fill="white" text-anchor="middle" dominant-baseline="central" style="pointer-events:none; font-weight: bold;">'+displayId+'</text>',
+                '</g>'
+            ].join('\n');
+        }
+
+        // Export standalone SVG
+        function exportStandaloneSvg() {
+            const data = JSON.stringify(sensorData);
+            const vbMap = JSON.stringify({ full: '100 0 700 650', '1': '400 20 400 400', '2': '400 340 400 300', '3': '100 20 400 400', '4': '100 340 400 300' });
+            var parts = [];
+            parts.push('<?xml version="1.0" encoding="UTF-8"?>');
+            parts.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 650" width="100%" height="100%" id="main-svg">');
+            parts.push('  <defs>');
+            parts.push('    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">');
+            parts.push('      <feGaussianBlur stdDeviation="10" result="coloredBlur"/>');
+            parts.push('      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>');
+            parts.push('    </filter>');
+            parts.push('    <style>');
+            parts.push('      .panel-container { font-family: sans-serif; background-color: #fff; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); height: 100%; display: flex; flex-direction: column; font-size: 14px; }');
+            parts.push('      .panel-header { padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: center; }');
+            parts.push('      .navigation { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 12px; }');
+            parts.push('      .legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 8px; }');
+            parts.push('      .nav-btn, .legend-item { cursor: pointer; padding: 6px 10px; border-radius: 6px; border: 2px solid transparent; background-color: #f9fafb; display: flex; align-items: center; gap: 4px;}');
+            parts.push('      .nav-btn.active, .legend-item.active { border-color: #3b82f6; background-color: #dbeafe; }');
+            parts.push('      h2 { font-size: 1.125rem; font-weight: 700; }');
+            parts.push('      .sensor-list { overflow-y: auto; padding: 8px; flex-grow: 1; }');
+            parts.push('      .sensor-list-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #f3f4f6; }');
+            parts.push('      .sensor-list-item.highlight { background-color: #ebf8ff; }');
+            parts.push('      .sensor-list-item span:first-child { font-weight: 700; }');
+            parts.push('      .sensor-list-item span:last-child { color: #4b5563; }');
+            parts.push('      .sensor-list-item .text-red-500 { color: #ef4444; }');
+            parts.push('      .alert-glow .sensor-point-group { filter: url(#glow); }');
+            parts.push('      .region-label { cursor: pointer; }');
+            parts.push('      #mapLayer { transition: transform .45s cubic-bezier(0.22, 1, 0.36, 1); }');
+            parts.push('      .bottom-toolbar { height: 72px; background: #fff; border-top: 1px solid #e5e7eb; box-shadow: 0 -2px 6px rgba(0,0,0,0.06); display:flex; align-items:center; justify-content:center; }');
+            parts.push('      .toolbar-nav { display:flex; gap:8px; flex-wrap:nowrap; align-items:center; }');
+            parts.push('      .nav-label { color:#6b7280; font-size:14px; }');
+            parts.push('    </style>');
+            parts.push('  </defs>');
+            // Map layer wraps labels and sensors so we can transform instead of changing viewBox
+            parts.push('  <g id="mapLayer">');
+            parts.push('    <g id="region-labels" opacity="0.4" font-family="Inter, sans-serif" font-size="4rem" font-weight="bold" fill="#d9534f" text-anchor="middle">');
+            parts.push('      <text x="525" y="190" class="region-label" onclick="window.setView(\'1\')">1</text>');
+            parts.push('      <text x="525" y="520" class="region-label" onclick="window.setView(\'2\')">2</text>');
+            parts.push('      <text x="245" y="190" class="region-label" onclick="window.setView(\'3\')">3</text>');
+            parts.push('      <text x="245" y="520" class="region-label" onclick="window.setView(\'4\')">4</text>');
+            parts.push('    </g>');
+            parts.push(sensorData.map(buildSensorSVGShape).join(''));
+            parts.push('  </g>');
+            // Right panel (legend + list)
+            parts.push('  <foreignObject x="800" y="0" width="300" height="650">');
+            parts.push('    <div xmlns="http://www.w3.org/1999/xhtml" class="panel-container">');
+            parts.push('      <div class="panel-header">');
+            parts.push('        <div id="standalone-navigation-container" class="navigation">');
+            parts.push('          <button id="nav-btn-full" class="nav-btn active">Gesamtübersicht</button>');
+            parts.push('          <span class="nav-label">Regionen:</span>');
+            parts.push('          <button id="nav-btn-1" class="nav-btn">1</button>');
+            parts.push('          <button id="nav-btn-2" class="nav-btn">2</button>');
+            parts.push('          <button id="nav-btn-3" class="nav-btn">3</button>');
+            parts.push('          <button id="nav-btn-4" class="nav-btn">4</button>');
+            parts.push('        </div>');
+            parts.push('        <h2 id="standalone-sensor-list-title">All Sensors</h2>');
+            parts.push('        <div id="standalone-legend-container" class="legend">');
+            parts.push('          <div class="legend-item" data-type="all"><span>All</span></div>');
+            parts.push('          <div class="legend-item active" data-type="pressure"><span>Druck</span></div>');
+            parts.push('          <div class="legend-item" data-type="flow"><span>Durchfluss</span></div>');
+            parts.push('          <div class="legend-item" data-type="snow"><span>Schnee</span></div>');
+            parts.push('        </div>');
+            parts.push('      </div>');
+            parts.push('      <div id="standalone-sensor-list" class="sensor-list"></div>');
+            parts.push('    </div>');
+            parts.push('  </foreignObject>');
+            // Tooltip
+            parts.push('  <foreignObject id="standalone-tooltip-fo" x="0" y="0" width="180" height="120" style="visibility: hidden; pointer-events: none;">');
+            parts.push('    <div xmlns="http://www.w3.org/1999/xhtml" id="standalone-tooltip-div" style="padding: 0.75rem; background-color: rgba(0, 0, 0, 0.85); color: white; border-radius: 0.375rem; font-size: 0.875rem;"></div>');
+            parts.push('  </foreignObject>');
+            // Bottom sticky toolbar
+            parts.push('  <foreignObject x="0" y="578" width="1100" height="72">');
+            parts.push('    <div xmlns="http://www.w3.org/1999/xhtml" class="bottom-toolbar">');
+            parts.push('      <div id="bottom-toolbar-nav" class="toolbar-nav">');
+            parts.push('        <button class="nav-btn" data-view="full">Gesamtübersicht</button>');
+            parts.push('        <span class="nav-label">Regionen:</span>');
+            parts.push('        <button class="nav-btn" data-view="1">1</button>');
+            parts.push('        <button class="nav-btn" data-view="2">2</button>');
+            parts.push('        <button class="nav-btn" data-view="3">3</button>');
+            parts.push('        <button class="nav-btn" data-view="4">4</button>');
+            parts.push('      </div>');
+            parts.push('    </div>');
+            parts.push('  </foreignObject>');
+            // Inline script
+            parts.push('  <script><![CDATA[(function(){');
+            parts.push('    const sensorData = '+data+';');
+            parts.push('    const viewBoxes = '+vbMap+';');
+            parts.push('    let currentView = "full";');
+            parts.push('    let currentFilter = "all";');
+            parts.push('    const svgRoot = document.documentElement;');
+            parts.push('    const mapLayer = document.getElementById("mapLayer");');
+            parts.push('    const navigationContainer = document.getElementById("standalone-navigation-container");');
+            parts.push('    const bottomNav = document.getElementById("bottom-toolbar-nav");');
+            parts.push('    const sensorListTitle = document.getElementById("standalone-sensor-list-title");');
+            parts.push('    const legendContainer = document.getElementById("standalone-legend-container");');
+            parts.push('    const sensorListContainer = document.getElementById("standalone-sensor-list");');
+            parts.push('    const tooltipFO = document.getElementById("standalone-tooltip-fo");');
+            parts.push('    const tooltipDiv = document.getElementById("standalone-tooltip-div");');
+            parts.push('    const mapViewport = { x: 0, y: 0, w: 800, h: 578 };');
+            parts.push('    function parseBox(str){ var a=str.split(/\s+/).map(parseFloat); return {x:a[0],y:a[1],w:a[2],h:a[3]}; }');
+            parts.push('    function setMapTransform(view){ var box = parseBox(viewBoxes[view]); var sx = mapViewport.w/box.w; var sy = mapViewport.h/box.h; var s = Math.min(sx, sy); var tx = mapViewport.x - box.x*s + (mapViewport.w - box.w*s)/2; var ty = mapViewport.y - box.y*s + (mapViewport.h - box.h*s)/2; mapLayer.setAttribute("transform", "translate("+tx+","+ty+") scale("+s+")"); }');
+            parts.push('    function getSVGPoint(clientX, clientY) { const pt = svgRoot.createSVGPoint(); pt.x = clientX; pt.y = clientY; return pt.matrixTransform(svgRoot.getScreenCTM().inverse()); }');
+            parts.push('    window.setView = function(view){ currentView = view; setMapTransform(view==="full"?"full":String(view)); updateNavActiveState(); renderSensorList(); };');
+            parts.push('    function updateNavActiveState(){');
+            parts.push('      navigationContainer && navigationContainer.querySelectorAll(".nav-btn").forEach(function(b){ b.classList.remove("active"); });');
+            parts.push('      var panelBtn = navigationContainer && navigationContainer.querySelector("#nav-btn-"+(currentView==="full"?"full":currentView)); if (panelBtn) panelBtn.classList.add("active");');
+            parts.push('      bottomNav && bottomNav.querySelectorAll(".nav-btn").forEach(function(b){ b.classList.remove("active"); if ((b.dataset.view||"") === (currentView==="full"?"full":String(currentView))) b.classList.add("active"); });');
+            parts.push('    }');
+            parts.push('    function renderSensorList(){');
+            parts.push('      var base = currentView==="full"? sensorData.slice(): sensorData.filter(function(s){ return String(s.region)===String(currentView); });');
+            parts.push('      var data = currentFilter==="all"? base: base.filter(function(s){ return s.type===currentFilter; });');
+            parts.push('      data.sort(function(a,b){ if (a.type<b.type) return -1; if (a.type>b.type) return 1; var ai=parseInt(a.displayId), bi=parseInt(b.displayId); if(!isNaN(ai)&&!isNaN(bi)) return ai-bi; return String(a.displayId).localeCompare(String(b.displayId)); });');
+            parts.push('      var title = (currentFilter==="all"?"All Sensors":(currentFilter.charAt(0).toUpperCase()+currentFilter.slice(1)+" Sensors")) + (currentView==="full"?"":(" (Region "+currentView+")"));');
+            parts.push('      sensorListTitle.textContent = title;');
+            parts.push('      sensorListContainer.innerHTML = data.map(function(s){ var val = (s.data && Object.values(s.data)[0]) || ""; var red = s.status==="red"; var typeLabel = s.type.charAt(0).toUpperCase()+s.type.slice(1); return "<div class=\"sensor-list-item\" data-sensor-id=\""+s.id+"\"><span class=\"font-bold\">"+typeLabel+" "+s.displayId+"</span><span class=\""+(red?"text-red-500":"")+"\">"+val+"</span></div>"; }).join("");');
+            parts.push('      sensorListContainer.querySelectorAll(".sensor-list-item").forEach(function(item){');
+            parts.push('        item.addEventListener("mouseenter", function(){ svgRoot.querySelectorAll(".sensor-group").forEach(function(g){ g.style.opacity="0.3"; }); var g = svgRoot.querySelector("#sensor-group-"+item.dataset.sensorId); if(g) g.style.opacity="1"; item.classList.add("highlight"); });');
+            parts.push('        item.addEventListener("mouseleave", function(){ svgRoot.querySelectorAll(".sensor-group").forEach(function(g){ g.style.opacity="1"; }); item.classList.remove("highlight"); });');
+            parts.push('      });');
+            parts.push('    }');
+            parts.push('    function addMapInteractionListeners(){');
+            parts.push('      svgRoot.querySelectorAll(".sensor-group").forEach(function(group){');
+            parts.push('        var id = group.getAttribute("data-sensor-id");');
+            parts.push('        var sensor = sensorData.find(function(s){ return s.id===id; });');
+            parts.push('        group.addEventListener("mouseenter", function(e){ var html = "<div style=\"font-weight:700; margin-bottom:4px;\">"+sensor.type.charAt(0).toUpperCase()+sensor.type.slice(1)+" Sensor #"+sensor.displayId+"</div>"; Object.entries(sensor.data||{}).forEach(function(entry){ var k=entry[0], v=entry[1]; html += "<div><strong>"+k+":</strong> "+v+"</div>"; }); tooltipDiv.innerHTML = html; tooltipFO.style.visibility = "visible"; });');
+            parts.push('        group.addEventListener("mouseleave", function(){ tooltipFO.style.visibility = "hidden"; });');
+            parts.push('        group.addEventListener("mousemove", function(e){ var p = getSVGPoint(e.clientX, e.clientY); tooltipFO.setAttribute("x", p.x+15); tooltipFO.setAttribute("y", p.y+15); });');
+            parts.push('      });');
+            parts.push('    }');
+            parts.push('    // Panel nav');
+            parts.push('    navigationContainer && navigationContainer.querySelector("#nav-btn-full").addEventListener("click",function(){window.setView("full")});');
+            parts.push('    navigationContainer && navigationContainer.querySelector("#nav-btn-1").addEventListener("click",function(){window.setView("1")});');
+            parts.push('    navigationContainer && navigationContainer.querySelector("#nav-btn-2").addEventListener("click",function(){window.setView("2")});');
+            parts.push('    navigationContainer && navigationContainer.querySelector("#nav-btn-3").addEventListener("click",function(){window.setView("3")});');
+            parts.push('    navigationContainer && navigationContainer.querySelector("#nav-btn-4").addEventListener("click",function(){window.setView("4")});');
+            parts.push('    // Bottom toolbar nav');
+            parts.push('    bottomNav && bottomNav.querySelectorAll(".nav-btn").forEach(function(b){ b.addEventListener("click", function(){ window.setView(b.dataset.view); }); });');
+            parts.push('    // Legend filters');
+            parts.push('    legendContainer.querySelectorAll(".legend-item").forEach(function(i){ i.addEventListener("click",function(){ currentFilter=i.dataset.type; legendContainer.querySelectorAll(".legend-item").forEach(function(el){ el.classList.toggle("active", el.dataset.type===currentFilter); }); renderSensorList(); }); });');
+            parts.push('    // Init');
+            parts.push('    addMapInteractionListeners();');
+            parts.push('    setMapTransform("full");');
+            parts.push('    updateNavActiveState();');
+            parts.push('    renderSensorList();');
+            parts.push('  })();]]>' + '</' + 'script>');
+            parts.push('</svg>');
+            triggerDownload('roof-sensors-standalone.svg', parts.join('\n'), 'image/svg+xml;charset=utf-8');
+        }
+
+        // Attach tooltip listeners to sensor groups after first render
+        function setupSensorGroupTooltips() {
+            document.querySelectorAll('.sensor-group').forEach(group => {
+                const sensorId = group.dataset.sensorId;
+                const sensor = sensorData.find(s => s.id === sensorId);
+                group.addEventListener('mouseenter', (e) => showTooltip(e, sensor));
+                group.addEventListener('mouseleave', hideTooltip);
+                group.addEventListener('mousemove', (e) => {
+                    if (tooltip.classList.contains('visible')) {
+                        tooltip.style.left = `${e.clientX + 15}px`;
+                        tooltip.style.top = `${e.clientY + 15}px`;
+                    }
+                });
+            });
+        }
+
+        // Ensure initial state
+        setupSensorGroupTooltips();
+        updateRocketButton();
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
