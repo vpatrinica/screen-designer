@@ -1111,7 +1111,7 @@
             var alertClass = status === 'red' ? ' alert-glow' : '';
             if (type === 'pressure') {
                 return [
-                    '<g class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
+                    '<g id="sensor-group-'+sensor.id+'" class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
                     '  <g class="sensor-point-group">',
                     '    <path d="M '+x+' '+y+' L '+(x-8)+' '+y+' A 8 8 0 0 1 '+x+' '+(y-8)+' Z" fill="#10b981"/>',
                     '    <path d="M '+x+' '+y+' L '+x+' '+(y-8)+' A 8 8 0 0 1 '+(x+8)+' '+y+' Z" fill="#ef4444"/>',
@@ -1125,7 +1125,7 @@
             }
             if (type === 'flow') {
                 return [
-                    '<g class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
+                    '<g id="sensor-group-'+sensor.id+'" class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
                     '  <g class="sensor-point-group">',
                     '    <circle cx="'+x+'" cy="'+y+'" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1"/>',
                     '  </g>',
@@ -1135,7 +1135,7 @@
             }
             // snow
             return [
-                '<g class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
+                '<g id="sensor-group-'+sensor.id+'" class="sensor-group'+alertClass+'" data-sensor-id="'+sensor.id+'">',
                 '  <g class="sensor-point-group">',
                 '    <circle cx="'+x+'" cy="'+y+'" r="8" fill="black" stroke="white" stroke-width="1.5"/>',
                 '    <circle cx="'+x+'" cy="'+y+'" r="1.5" fill="white"/>',
@@ -1148,7 +1148,7 @@
         // Export standalone SVG
         function exportStandaloneSvg() {
             const data = JSON.stringify(sensorData);
-            const vbMap = JSON.stringify({ full: '100 0 700 650', '1': '400 20 400 400', '2': '400 340 400 300', '3': '100 20 400 400', '4': '100 340 400 300' });
+            const vbArr = JSON.stringify({ full: [100, 0, 700, 650], '1': [400, 20, 400, 400], '2': [400, 340, 400, 300], '3': [100, 20, 400, 400], '4': [100, 340, 400, 300] });
             var parts = [];
             parts.push('<?xml version="1.0" encoding="UTF-8"?>');
             parts.push('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 650" width="100%" height="100%" id="main-svg">');
@@ -1171,6 +1171,7 @@
             parts.push('      .sensor-list-item span:first-child { font-weight: 700; }');
             parts.push('      .sensor-list-item span:last-child { color: #4b5563; }');
             parts.push('      .sensor-list-item .text-red-500 { color: #ef4444; }');
+            parts.push('      .sensor-list-item .value.alert { color: #ef4444; font-weight: 600; }');
             parts.push('      .alert-glow .sensor-point-group { filter: url(#glow); }');
             parts.push('      .region-label { cursor: pointer; }');
             parts.push('      #mapLayer { transition: transform .45s cubic-bezier(0.22, 1, 0.36, 1); }');
@@ -1190,7 +1191,7 @@
             parts.push(sensorData.map(buildSensorSVGShape).join(''));
             parts.push('  </g>');
             // Right panel (legend + list)
-            parts.push('  <foreignObject x="800" y="0" width="300" height="650">');
+            parts.push('  <foreignObject id="panelFO" x="800" y="0" width="300" height="578">');
             parts.push('    <div xmlns="http://www.w3.org/1999/xhtml" class="panel-container">');
             parts.push('      <div class="panel-header">');
             parts.push('        <div id="standalone-navigation-container" class="navigation">');
@@ -1203,8 +1204,8 @@
             parts.push('        </div>');
             parts.push('        <h2 id="standalone-sensor-list-title">All Sensors</h2>');
             parts.push('        <div id="standalone-legend-container" class="legend">');
-            parts.push('          <div class="legend-item" data-type="all"><span>All</span></div>');
-            parts.push('          <div class="legend-item active" data-type="pressure"><span>Druck</span></div>');
+            parts.push('          <div class="legend-item active" data-type="all"><span>All</span></div>');
+            parts.push('          <div class="legend-item" data-type="pressure"><span>Druck</span></div>');
             parts.push('          <div class="legend-item" data-type="flow"><span>Durchfluss</span></div>');
             parts.push('          <div class="legend-item" data-type="snow"><span>Schnee</span></div>');
             parts.push('        </div>');
@@ -1217,7 +1218,7 @@
             parts.push('    <div xmlns="http://www.w3.org/1999/xhtml" id="standalone-tooltip-div" style="padding: 0.75rem; background-color: rgba(0, 0, 0, 0.85); color: white; border-radius: 0.375rem; font-size: 0.875rem;"></div>');
             parts.push('  </foreignObject>');
             // Bottom sticky toolbar
-            parts.push('  <foreignObject x="0" y="578" width="1100" height="72">');
+            parts.push('  <foreignObject id="toolbarFO" x="0" y="578" width="1100" height="72">');
             parts.push('    <div xmlns="http://www.w3.org/1999/xhtml" class="bottom-toolbar">');
             parts.push('      <div id="bottom-toolbar-nav" class="toolbar-nav">');
             parts.push('        <button class="nav-btn" data-view="full">Gesamtübersicht</button>');
@@ -1232,7 +1233,7 @@
             // Inline script
             parts.push('  <script><![CDATA[(function(){');
             parts.push('    const sensorData = '+data+';');
-            parts.push('    const viewBoxes = '+vbMap+';');
+            parts.push('    const viewBoxes = '+vbArr+';');
             parts.push('    let currentView = "full";');
             parts.push('    let currentFilter = "all";');
             parts.push('    const svgRoot = document.documentElement;');
@@ -1244,10 +1245,30 @@
             parts.push('    const sensorListContainer = document.getElementById("standalone-sensor-list");');
             parts.push('    const tooltipFO = document.getElementById("standalone-tooltip-fo");');
             parts.push('    const tooltipDiv = document.getElementById("standalone-tooltip-div");');
-            parts.push('    const mapViewport = { x: 0, y: 0, w: 800, h: 578 };');
-            parts.push('    function parseBox(str){ var a=str.split(/\s+/).map(parseFloat); return {x:a[0],y:a[1],w:a[2],h:a[3]}; }');
-            parts.push('    function setMapTransform(view){ var box = parseBox(viewBoxes[view]); var sx = mapViewport.w/box.w; var sy = mapViewport.h/box.h; var s = Math.min(sx, sy); var tx = mapViewport.x - box.x*s + (mapViewport.w - box.w*s)/2; var ty = mapViewport.y - box.y*s + (mapViewport.h - box.h*s)/2; mapLayer.setAttribute("transform", "translate("+tx+","+ty+") scale("+s+")"); }');
+            parts.push('    const panelFO = document.getElementById("panelFO");');
+            parts.push('    const toolbarFO = document.getElementById("toolbarFO");');
+            parts.push('    let mapViewport = { x: 0, y: 0, w: 800, h: 578 };');
+            parts.push('    function setMapTransform(view){ var box=viewBoxes[view]||viewBoxes.full; var bx=box[0], by=box[1], bw=box[2], bh=box[3]; var sx = mapViewport.w/bw; var sy = mapViewport.h/bh; var s = Math.min(sx, sy); var tx = mapViewport.x - bx*s + (mapViewport.w - bw*s)/2; var ty = mapViewport.y - by*s + (mapViewport.h - bh*s)/2; mapLayer.setAttribute("transform", "translate("+tx+","+ty+") scale("+s+")"); }');
             parts.push('    function getSVGPoint(clientX, clientY) { const pt = svgRoot.createSVGPoint(); pt.x = clientX; pt.y = clientY; return pt.matrixTransform(svgRoot.getScreenCTM().inverse()); }');
+            parts.push('    function applyLayout(){');
+            parts.push('      var isMobile = (window.innerWidth || 0) <= 900;');
+            parts.push('      var docH = 650;');
+            parts.push('      if(isMobile){');
+            parts.push('        // Stack: map (0-400), panel (400-578), toolbar (578-650)');
+            parts.push('        svgRoot.setAttribute("viewBox", "0 0 800 "+docH);');
+            parts.push('        if (panelFO) { panelFO.setAttribute("x", "0"); panelFO.setAttribute("y", "400"); panelFO.setAttribute("width", "800"); panelFO.setAttribute("height", "178"); }');
+            parts.push('        if (toolbarFO) { toolbarFO.setAttribute("x", "0"); toolbarFO.setAttribute("y", "578"); toolbarFO.setAttribute("width", "800"); toolbarFO.setAttribute("height", "72"); }');
+            parts.push('        mapViewport = { x: 0, y: 0, w: 800, h: 400 };');
+            parts.push('      } else {');
+            parts.push('        // Side-by-side: map (0-800 x 0-578), panel (800-1100 x 0-578), toolbar (0-1100 x 578-650)');
+            parts.push('        svgRoot.setAttribute("viewBox", "0 0 1100 "+docH);');
+            parts.push('        if (panelFO) { panelFO.setAttribute("x", "800"); panelFO.setAttribute("y", "0"); panelFO.setAttribute("width", "300"); panelFO.setAttribute("height", "578"); }');
+            parts.push('        if (toolbarFO) { toolbarFO.setAttribute("x", "0"); toolbarFO.setAttribute("y", "578"); toolbarFO.setAttribute("width", "1100"); toolbarFO.setAttribute("height", "72"); }');
+            parts.push('        mapViewport = { x: 0, y: 0, w: 800, h: 578 };');
+            parts.push('      }');
+            parts.push('      // Re-apply transform for current view');
+            parts.push('      setMapTransform(currentView==="full"?"full":String(currentView));');
+            parts.push('    }');
             parts.push('    window.setView = function(view){ currentView = view; setMapTransform(view==="full"?"full":String(view)); updateNavActiveState(); renderSensorList(); };');
             parts.push('    function updateNavActiveState(){');
             parts.push('      navigationContainer && navigationContainer.querySelectorAll(".nav-btn").forEach(function(b){ b.classList.remove("active"); });');
@@ -1260,17 +1281,50 @@
             parts.push('      data.sort(function(a,b){ if (a.type<b.type) return -1; if (a.type>b.type) return 1; var ai=parseInt(a.displayId), bi=parseInt(b.displayId); if(!isNaN(ai)&&!isNaN(bi)) return ai-bi; return String(a.displayId).localeCompare(String(b.displayId)); });');
             parts.push('      var title = (currentFilter==="all"?"All Sensors":(currentFilter.charAt(0).toUpperCase()+currentFilter.slice(1)+" Sensors")) + (currentView==="full"?"":(" (Region "+currentView+")"));');
             parts.push('      sensorListTitle.textContent = title;');
-            parts.push('      sensorListContainer.innerHTML = data.map(function(s){ var val = (s.data && Object.values(s.data)[0]) || ""; var red = s.status==="red"; var typeLabel = s.type.charAt(0).toUpperCase()+s.type.slice(1); return "<div class=\"sensor-list-item\" data-sensor-id=\""+s.id+"\"><span class=\"font-bold\">"+typeLabel+" "+s.displayId+"</span><span class=\""+(red?"text-red-500":"")+"\">"+val+"</span></div>"; }).join("");');
-            parts.push('      sensorListContainer.querySelectorAll(".sensor-list-item").forEach(function(item){');
-            parts.push('        item.addEventListener("mouseenter", function(){ svgRoot.querySelectorAll(".sensor-group").forEach(function(g){ g.style.opacity="0.3"; }); var g = svgRoot.querySelector("#sensor-group-"+item.dataset.sensorId); if(g) g.style.opacity="1"; item.classList.add("highlight"); });');
-            parts.push('        item.addEventListener("mouseleave", function(){ svgRoot.querySelectorAll(".sensor-group").forEach(function(g){ g.style.opacity="1"; }); item.classList.remove("highlight"); });');
+            parts.push('      // Build list using DOM to avoid HTML string escaping issues');
+            parts.push('      var XHTML = "http://www.w3.org/1999/xhtml";');
+            parts.push('      while (sensorListContainer.firstChild) sensorListContainer.removeChild(sensorListContainer.firstChild);');
+            parts.push('      data.forEach(function(s){');
+            parts.push('        var row = document.createElementNS(XHTML, "div");');
+            parts.push('        row.setAttribute("class", "sensor-list-item");');
+            parts.push('        row.setAttribute("data-sensor-id", s.id);');
+            parts.push('        var left = document.createElementNS(XHTML, "span"); left.setAttribute("class", "name"); left.textContent = s.type.charAt(0).toUpperCase()+s.type.slice(1) + " " + s.displayId;');
+            parts.push('        var right = document.createElementNS(XHTML, "span"); right.setAttribute("class", "value" + (s.status==="red"?" alert":"")); right.textContent = (s.data && Object.values(s.data)[0]) || "";');
+            parts.push('        row.appendChild(left); row.appendChild(right);');
+            parts.push('        row.addEventListener("mouseenter", function(){');
+            parts.push('          svgRoot.querySelectorAll(".sensor-group").forEach(function(g){ g.style.opacity="0.3"; });');
+            parts.push('          var g = svgRoot.querySelector("#sensor-group-"+s.id); if (g) g.style.opacity = "1";');
+            parts.push('          row.classList.add("highlight");');
+            parts.push('        });');
+            parts.push('        row.addEventListener("mouseleave", function(){');
+            parts.push('          svgRoot.querySelectorAll(".sensor-group").forEach(function(g){ g.style.opacity="1"; });');
+            parts.push('          row.classList.remove("highlight");');
+            parts.push('        });');
+            parts.push('        sensorListContainer.appendChild(row);');
             parts.push('      });');
             parts.push('    }');
             parts.push('    function addMapInteractionListeners(){');
             parts.push('      svgRoot.querySelectorAll(".sensor-group").forEach(function(group){');
             parts.push('        var id = group.getAttribute("data-sensor-id");');
             parts.push('        var sensor = sensorData.find(function(s){ return s.id===id; });');
-            parts.push('        group.addEventListener("mouseenter", function(e){ var html = "<div style=\"font-weight:700; margin-bottom:4px;\">"+sensor.type.charAt(0).toUpperCase()+sensor.type.slice(1)+" Sensor #"+sensor.displayId+"</div>"; Object.entries(sensor.data||{}).forEach(function(entry){ var k=entry[0], v=entry[1]; html += "<div><strong>"+k+":</strong> "+v+"</div>"; }); tooltipDiv.innerHTML = html; tooltipFO.style.visibility = "visible"; });');
+            parts.push('        group.addEventListener("mouseenter", function(e){');
+            parts.push('          while (tooltipDiv.firstChild) tooltipDiv.removeChild(tooltipDiv.firstChild);');
+            parts.push('          var XHTML = "http://www.w3.org/1999/xhtml";');
+            parts.push('          var titleEl = document.createElementNS(XHTML, "div");');
+            parts.push('          titleEl.style.fontWeight = "700";');
+            parts.push('          titleEl.style.marginBottom = "4px";');
+            parts.push('          titleEl.textContent = sensor.type.charAt(0).toUpperCase()+sensor.type.slice(1)+" Sensor #"+sensor.displayId;');
+            parts.push('          tooltipDiv.appendChild(titleEl);');
+            parts.push('          Object.entries(sensor.data||{}).forEach(function(entry){');
+            parts.push('            var row = document.createElementNS(XHTML, "div");');
+            parts.push('            var strong = document.createElementNS(XHTML, "strong");');
+            parts.push('            strong.textContent = entry[0] + ": ";');
+            parts.push('            row.appendChild(strong);');
+            parts.push('            row.appendChild(document.createTextNode(String(entry[1])));');
+            parts.push('            tooltipDiv.appendChild(row);');
+            parts.push('          });');
+            parts.push('          tooltipFO.style.visibility = "visible";');
+            parts.push('        });');
             parts.push('        group.addEventListener("mouseleave", function(){ tooltipFO.style.visibility = "hidden"; });');
             parts.push('        group.addEventListener("mousemove", function(e){ var p = getSVGPoint(e.clientX, e.clientY); tooltipFO.setAttribute("x", p.x+15); tooltipFO.setAttribute("y", p.y+15); });');
             parts.push('      });');
@@ -1287,9 +1341,10 @@
             parts.push('    legendContainer.querySelectorAll(".legend-item").forEach(function(i){ i.addEventListener("click",function(){ currentFilter=i.dataset.type; legendContainer.querySelectorAll(".legend-item").forEach(function(el){ el.classList.toggle("active", el.dataset.type===currentFilter); }); renderSensorList(); }); });');
             parts.push('    // Init');
             parts.push('    addMapInteractionListeners();');
-            parts.push('    setMapTransform("full");');
+            parts.push('    applyLayout();');
             parts.push('    updateNavActiveState();');
             parts.push('    renderSensorList();');
+            parts.push('    window.addEventListener("resize", function(){ applyLayout(); });');
             parts.push('  })();]]>' + '</' + 'script>');
             parts.push('</svg>');
             triggerDownload('roof-sensors-standalone.svg', parts.join('\n'), 'image/svg+xml;charset=utf-8');
