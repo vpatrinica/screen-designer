@@ -1,0 +1,2 @@
+[console_scripts]
+query-influxdb = query_influxdb:main

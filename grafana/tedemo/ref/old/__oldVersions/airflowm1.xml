@@ -1,0 +1,1565 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="60mm" height="120mm">
+  <script type="text/javascript">
+    <![CDATA[
+    
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+/**
+ * Global state for no errors indicator
+ */
+let no_errors = 0;
+
+// Attach window.addEventListener to options for use in render
+options.addEventListener = window.addEventListener;
+
+/**
+ * Creates a parametric power button and appends it to a container.
+ */
+function createFan(containerId, params) {
+  const { x, y, size, strokeWidth, id, initialState, signal } = params;
+  
+  const cx = x + size / 2;
+  const cy = y + size / 2;
+  const r_bg = size / 2;
+  
+  const rect = {
+    x: cx - (strokeWidth / 2),
+    y: y,
+    width: strokeWidth,
+    height: size / 2,
+    rx: strokeWidth / 2
+  };
+  
+  const r_arc = (size / 2) - (strokeWidth / 2);
+  const startAngleRad = -135 * (Math.PI / 180);
+  const endAngleRad = -45 * (Math.PI / 180);
+  
+  const startX = cx + r_arc * Math.cos(endAngleRad);
+  const startY = cy + r_arc * Math.sin(endAngleRad);
+  const endX = cx + r_arc * Math.cos(startAngleRad);
+  const endY = cy + r_arc * Math.sin(startAngleRad);
+  
+  const arcPathD = `M ${startX.toFixed(3)} ${startY.toFixed(3)} A ${r_arc} ${r_arc} 0 1 1 ${endX.toFixed(3)} ${endY.toFixed(3)}`;
+
+  const container = svgnode.getElementById(containerId);
+  if (!container) { return; }
+
+  const mainGroup = svgnode.createElementNS(SVG_NS, "g");
+  mainGroup.setAttribute("id", id);
+  
+  // ** NOTE: The .power-button-component class is no longer added. **
+  
+  // We still use the 'power-on' class for state toggling
+  if (initialState === 'on') {
+    mainGroup.classList.add("power-on");
+  }
+
+  // Child elements (still use classes for styling)
+  const bgAnimatedDisk = svgnode.createElementNS(SVG_NS, "circle");
+  bgAnimatedDisk.setAttribute("class", "bg-animated-disk");
+  bgAnimatedDisk.setAttribute("cx", cx);
+  bgAnimatedDisk.setAttribute("cy", cy);
+  bgAnimatedDisk.setAttribute("r", 10); // 10 SVG units radius
+
+  const rotorDisk = svgnode.createElementNS(SVG_NS, "circle");
+  rotorDisk.setAttribute("class", "rotor-disk");
+  rotorDisk.setAttribute("cx", cx);
+  rotorDisk.setAttribute("cy", cy);
+  rotorDisk.setAttribute("r", 5); // 3mm physical radius
+
+  const intermediateDisk = svgnode.createElementNS(SVG_NS, "circle");
+  intermediateDisk.setAttribute("class", "intermediate-disk");
+  intermediateDisk.setAttribute("cx", cx);
+  intermediateDisk.setAttribute("cy", cy);
+  intermediateDisk.setAttribute("r", 6); // 1 unit bigger than power symbol (power symbol ~5 units)
+
+  const bgDisk = svgnode.createElementNS(SVG_NS, "circle");
+  bgDisk.setAttribute("class", "power-bg-disk");
+  bgDisk.setAttribute("cx", cx);
+  bgDisk.setAttribute("cy", cy);
+  bgDisk.setAttribute("r", 11); // 11 SVG units radius
+
+  const lineRect = svgnode.createElementNS(SVG_NS, "rect");
+  lineRect.setAttribute("class", "power-line");
+  lineRect.setAttribute("x", rect.x);
+  lineRect.setAttribute("y", rect.y);
+  lineRect.setAttribute("width", rect.width);
+  lineRect.setAttribute("height", rect.height);
+  lineRect.setAttribute("rx", rect.rx);
+
+  const arcPath = svgnode.createElementNS(SVG_NS, "path");
+  arcPath.setAttribute("class", "power-arc");
+  arcPath.setAttribute("d", arcPathD);
+
+  // Create fan blades (5 blades, diameter 21, radius 10.5 - extended by 3)
+  const bladesGroup = svgnode.createElementNS(SVG_NS, "g");
+  bladesGroup.setAttribute("class", "fan-blades");
+  
+  const bladeRadius = 10.5; // diameter 21 = radius 10.5 (original 9 + 3)
+  const bladeAngle = 360 / 5; // 72 degrees per blade
+  
+  for (let i = 0; i < 5; i++) {
+    const angle = (i * bladeAngle) * (Math.PI / 180);
+    
+    // Create blade as a curved path
+    const bladeStartAngle = angle - 0.3; // small angle for blade width
+    const bladeEndAngle = angle + 0.3;
+    
+    const innerRadius = 2; // inner radius of blade
+    const outerRadius = bladeRadius;
+    
+    // Calculate blade path points
+    const x1 = cx + innerRadius * Math.cos(bladeStartAngle);
+    const y1 = cy + innerRadius * Math.sin(bladeStartAngle);
+    const x2 = cx + outerRadius * Math.cos(bladeStartAngle);
+    const y2 = cy + outerRadius * Math.sin(bladeStartAngle);
+    const x3 = cx + outerRadius * Math.cos(bladeEndAngle);
+    const y3 = cy + outerRadius * Math.sin(bladeEndAngle);
+    const x4 = cx + innerRadius * Math.cos(bladeEndAngle);
+    const y4 = cy + innerRadius * Math.sin(bladeEndAngle);
+    
+    const bladePath = `M ${x1} ${y1} L ${x2} ${y2} L ${x3} ${y3} L ${x4} ${y4} Z`;
+    
+    const blade = svgnode.createElementNS(SVG_NS, "path");
+    blade.setAttribute("d", bladePath);
+    blade.setAttribute("class", "fan-blade");
+    bladesGroup.appendChild(blade);
+  }
+
+  mainGroup.appendChild(bgDisk);
+  mainGroup.appendChild(bgAnimatedDisk);
+  mainGroup.appendChild(bladesGroup);
+  mainGroup.appendChild(intermediateDisk);
+  mainGroup.appendChild(rotorDisk);
+  mainGroup.appendChild(lineRect);
+  mainGroup.appendChild(arcPath);
+
+  container.appendChild(mainGroup);
+}
+
+function createGauge(containerId, params) {
+  const { cx, cy, id } = params;
+  const gaugeGroup = svgnode.createElementNS(SVG_NS, "g");
+  gaugeGroup.setAttribute("class", "rpm-gauge");
+  gaugeGroup.setAttribute("id", id);
+  gaugeGroup.setAttribute("data-cx", cx);
+  gaugeGroup.setAttribute("data-cy", cy);
+  
+  // Gauge arc (semi-circle, radius 15)
+  const gaugeArc = svgnode.createElementNS(SVG_NS, "path");
+  const gaugeRadius = 15;
+  // --- Filled sector using radial gradient (radius 22.5) ---
+  // Draw a filled sector starting at (π + 22.5°) and expanding by 40° to
+  // the left and the right (i.e. both ends extended by 40°). Use radius 22.5
+  // and fill with the radial gradient defined in <defs> (#disk-gradient).
+  const diskRadius = 22.5;
+  const diskStart = Math.PI + (22.5 * Math.PI / 180);
+  let diskEnd = -22.5 * Math.PI / 180;
+  // expand both ends by 40 degrees (in radians) — 5° less than before
+  const expand = 40 * Math.PI / 180;
+  const diskStartExpanded = diskStart - expand;
+  const diskEndExpanded = diskEnd + expand;
+  // Normalize end so it's greater than start for positive span
+  let diskEndNorm = diskEndExpanded;
+  while (diskEndNorm < diskStartExpanded) {
+    diskEndNorm += 2 * Math.PI;
+  }
+  const diskAngleSpan = diskEndNorm - diskStartExpanded;
+  const diskLargeArc = (diskAngleSpan > Math.PI) ? 1 : 0;
+  const diskSweep = 1;
+  const diskStartX = (cx + diskRadius * Math.cos(diskStartExpanded)).toFixed(3);
+  const diskStartY = (cy + diskRadius * Math.sin(diskStartExpanded)).toFixed(3);
+  const diskEndX = (cx + diskRadius * Math.cos(diskEndNorm)).toFixed(3);
+  const diskEndY = (cy + diskRadius * Math.sin(diskEndNorm)).toFixed(3);
+  const diskPathD = `M ${cx} ${cy} L ${diskStartX} ${diskStartY} A ${diskRadius} ${diskRadius} 0 ${diskLargeArc} ${diskSweep} ${diskEndX} ${diskEndY} Z`;
+  const diskPath = svgnode.createElementNS(SVG_NS, "path");
+  diskPath.setAttribute("d", diskPathD);
+  diskPath.setAttribute("fill", "url(#disk-gradient)");
+  diskPath.setAttribute("class", "gauge-disk");
+  // append disk before the gauge arc so it sits beneath the arcs
+  gaugeGroup.appendChild(diskPath);
+  const gaugeStartAngle = 0; // 0°
+  const gaugeEndAngle = Math.PI; // 180°
+  // compute arc flags so arcs always follow the same direction and use the
+  // correct large-arc flag for the angle span
+  const angleSpan = Math.abs(gaugeEndAngle - gaugeStartAngle);
+  const largeArcFlag = (angleSpan > Math.PI) ? 1 : 0;
+  const sweepFlag = 1; // clockwise
+  // rotate the gauge arcs 180° (π radians) so they are reflected around the center
+  const rotatedStart = gaugeStartAngle + Math.PI;
+  const rotatedEnd = gaugeEndAngle + Math.PI;
+  const gaugeArcPath = `M ${ (cx + gaugeRadius * Math.cos(rotatedStart)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(rotatedStart)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${largeArcFlag} ${sweepFlag} ${ (cx + gaugeRadius * Math.cos(rotatedEnd)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(rotatedEnd)).toFixed(3) }`;
+  gaugeArc.setAttribute("d", gaugeArcPath);
+  gaugeArc.setAttribute("class", "gauge-arc");
+  gaugeGroup.appendChild(gaugeArc);
+  
+  // Value arc (radius 20, shows current RPM)
+  const valueArc = svgnode.createElementNS(SVG_NS, "path");
+  const currentRPM = 900;
+  const maxRPM = 4000;
+  // Draw the value arc starting from gaugeEndAngle (π = 180°) inward to
+  // gaugeEndAngle - alpha so it appears from 180° toward the left by alpha,
+  // then rotate by π so the arc is reflected 180° around the center.
+  const rpmRatio = currentRPM / maxRPM;
+  const deltaAngle = rpmRatio * (gaugeEndAngle - gaugeStartAngle);
+  // Start the value arc at the rotated gauge-start (rotated by π) and draw it
+  // along the same curved path as the gauge arc by sweeping forward by deltaAngle.
+  const valueStartAngle = gaugeStartAngle + Math.PI; // rotated start (other end)
+  const valueEndAngle = valueStartAngle + deltaAngle; // sweep forward along arc
+  // Use sweepFlag = 1 to match the gauge arc direction (clockwise rotated arc)
+  const valueSweepFlag = 1;
+  const valueAngleSpan = Math.abs(valueStartAngle - valueEndAngle);
+  const valueLargeArc = (valueAngleSpan > Math.PI) ? 1 : 0;
+  const valueArcPath = `M ${ (cx + gaugeRadius * Math.cos(valueStartAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueStartAngle)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${valueLargeArc} ${valueSweepFlag} ${ (cx + gaugeRadius * Math.cos(valueEndAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueEndAngle)).toFixed(3) }`;
+  valueArc.setAttribute("d", valueArcPath);
+  valueArc.setAttribute("class", "gauge-value-arc");
+  gaugeGroup.appendChild(valueArc);
+  
+  // Gauge tick marks and numbers
+  const numTicks = 4; // 0, 1000, 2000, 3000, 4000
+  
+  for (let i = 0; i <= numTicks; i++) {
+    const rpm = (i * maxRPM) / numTicks;
+    const angle = gaugeStartAngle + (i * (gaugeEndAngle - gaugeStartAngle)) / numTicks;
+    
+    // Tick mark
+    const tickInnerRadius = gaugeRadius - 4;
+    const tickOuterRadius = gaugeRadius - 2;
+    let tickX1 = cx + tickInnerRadius * Math.cos(angle);
+    let tickY1 = cy + tickInnerRadius * Math.sin(angle);
+    let tickX2 = cx + tickOuterRadius * Math.cos(angle);
+    let tickY2 = cy + tickOuterRadius * Math.sin(angle);
+    
+    // Symmetric with respect to the center
+    tickX1 = 2 * cx - tickX1;
+    tickY1 = 2 * cy - tickY1;
+    tickX2 = 2 * cx - tickX2;
+    tickY2 = 2 * cy - tickY2;
+    
+    const tick = svgnode.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", tickX1);
+    tick.setAttribute("y1", tickY1);
+    tick.setAttribute("x2", tickX2);
+    tick.setAttribute("y2", tickY2);
+    tick.setAttribute("class", "gauge-tick");
+    gaugeGroup.appendChild(tick);
+    
+    // Number label
+    if (i >= 0 && i <= 4) {
+      const labelRadius = gaugeRadius + 3;
+      let labelX = cx + labelRadius * Math.cos(angle);
+      let labelY = cy + labelRadius * Math.sin(angle);
+      
+      // Symmetric with respect to the center
+      labelX = 2 * cx - labelX;
+      labelY = 2 * cy - labelY;
+      
+      const label = svgnode.createElementNS(SVG_NS, "text");
+      label.setAttribute("x", labelX);
+      label.setAttribute("y", labelY);
+      label.setAttribute("class", "gauge-label");
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("dominant-baseline", "middle");
+      
+      // Align along the arc (tangent orientation)
+      const radialAngle = Math.atan2(labelY - cy, labelX - cx) * 180 / Math.PI;
+      const tangentAngle = radialAngle + 90;
+      label.setAttribute("transform", `rotate(${tangentAngle}, ${labelX}, ${labelY})`);
+      
+      label.textContent = rpm.toString();
+      gaugeGroup.appendChild(label);
+    }
+  }
+  
+  // RPM indicator triangle
+  const indicatorGroup = svgnode.createElementNS(SVG_NS, "g");
+  indicatorGroup.setAttribute("class", "rpm-indicator");
+  
+  // Triangle pointing to current RPM (start at 0)
+  const indicatorAngle = gaugeStartAngle; // Start at 0 RPM
+  const indicatorRadius = gaugeRadius - 3;
+  // Original small triangle depth (kept as base reference)
+  const triangleSize = 2.25;
+  // Keep the base at (indicatorRadius - triangleSize) and extend the tip
+  // outward so the triangle height becomes 3x while the base points stay
+  // at the same radius.
+  const baseRadius = indicatorRadius - triangleSize;
+  const newTriangleHeight = triangleSize * 3; // 3x taller
+  const tipRadius = baseRadius + newTriangleHeight;
+  // Move the whole triangle inward by another half of its height (total = full height)
+  // previously shifted by newTriangleHeight/2; add another half so full shift = newTriangleHeight
+  const halfShift = newTriangleHeight;
+  const baseRadiusShifted = baseRadius - halfShift;
+  const tipRadiusShifted = tipRadius - halfShift;
+
+  const trianglePoints = [
+    // Tip: pushed outward from base to increase height, then shifted inward
+    [cx + tipRadiusShifted * Math.cos(indicatorAngle), cy + tipRadiusShifted * Math.sin(indicatorAngle)],
+    // Base points: shifted inward by same halfShift
+    [cx + baseRadiusShifted * Math.cos(indicatorAngle - 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle - 0.2)],
+    [cx + baseRadiusShifted * Math.cos(indicatorAngle + 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle + 0.2)]
+  ];
+  
+  const triangle = svgnode.createElementNS(SVG_NS, "polygon");
+  triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+  triangle.setAttribute("class", "gauge-indicator");
+  indicatorGroup.appendChild(triangle);
+  
+  gaugeGroup.appendChild(indicatorGroup);
+  
+  // Center RPM value and unit (value centered at gauge center, unit below)
+  const rpmValue = svgnode.createElementNS(SVG_NS, "text");
+  rpmValue.setAttribute("x", cx);
+  // move the numeric value 3.75 units lower (adjusted)
+  rpmValue.setAttribute("y", cy + 3.75);
+  rpmValue.setAttribute("class", "rpm-value");
+  rpmValue.setAttribute("text-anchor", "middle");
+  rpmValue.setAttribute("dominant-baseline", "middle");
+  rpmValue.textContent = currentRPM.toString();
+  gaugeGroup.appendChild(rpmValue);
+
+  const rpmUnit = svgnode.createElementNS(SVG_NS, "text");
+  rpmUnit.setAttribute("x", cx);
+  // place unit slightly below the numeric value
+  rpmUnit.setAttribute("y", cy + 7.5);
+  rpmUnit.setAttribute("class", "rpm-unit");
+  rpmUnit.setAttribute("text-anchor", "middle");
+  rpmUnit.setAttribute("dominant-baseline", "middle");
+  rpmUnit.textContent = "RPM";
+  gaugeGroup.appendChild(rpmUnit);
+
+  const container = svgnode.getElementById(containerId);
+  if (!container) { return; }
+  container.appendChild(gaugeGroup);
+}
+
+/**
+ * Update the RPM gauge for a specific fan
+ */
+function updateRPMGauge(gaugeId, rpm) {
+  const gaugeGroup = svgnode.getElementById(gaugeId);
+  if (!gaugeGroup) return;
+  const maxRPM = 4000;
+  const gaugeStartAngle = 0; // 0°
+  const gaugeEndAngle = Math.PI; // 180°
+  const cx = parseFloat(gaugeGroup.getAttribute("data-cx"));
+  const cy = parseFloat(gaugeGroup.getAttribute("data-cy"));
+  const gaugeRadius = 15;
+  
+  // Update RPM numeric value (unit stays static)
+  const rpmValue = gaugeGroup.querySelector('.rpm-value');
+  if (rpmValue) {
+    rpmValue.textContent = rpm.toString();
+  }
+  
+  // Update value arc
+  const valueArc = gaugeGroup.querySelector('.gauge-value-arc');
+  if (valueArc) {
+    const rpmRatio = Math.min(rpm / maxRPM, 1); // Clamp to max
+  // Draw value arc from π inward: start at gaugeEndAngle and go to gaugeEndAngle - delta,
+  // then rotate by π so the arc is reflected 180° around the gauge center.
+  const deltaAngle = rpmRatio * (gaugeEndAngle - gaugeStartAngle);
+    // Align runtime update with the same logic: start at the rotated gauge-start
+    // and sweep forward by deltaAngle so the arc follows the gauge's curve.
+    const valueStartAngle = gaugeStartAngle + Math.PI;
+    const valueEndAngle = valueStartAngle + deltaAngle;
+    // sweep clockwise to follow the gauge arc direction
+    const valueSweepFlag = 1;
+    const valueAngleSpan = Math.abs(valueStartAngle - valueEndAngle);
+    const valueLargeArc = (valueAngleSpan > Math.PI) ? 1 : 0;
+    const valueArcPath = `M ${ (cx + gaugeRadius * Math.cos(valueStartAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueStartAngle)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${valueLargeArc} ${valueSweepFlag} ${ (cx + gaugeRadius * Math.cos(valueEndAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueEndAngle)).toFixed(3) }`;
+    valueArc.setAttribute("d", valueArcPath);
+  }
+  
+  // Update indicator triangle position
+  const indicatorGroup = gaugeGroup.querySelector('.rpm-indicator');
+  if (indicatorGroup) {
+    // Remove existing triangle
+    const existingTriangle = indicatorGroup.querySelector('.gauge-indicator');
+    if (existingTriangle) {
+      indicatorGroup.removeChild(existingTriangle);
+    }
+    
+    // Calculate new angle based on RPM
+    const rpmRatio = Math.min(rpm / maxRPM, 1); // Clamp to max
+    const indicatorAngle = gaugeStartAngle + (rpmRatio * (gaugeEndAngle - gaugeStartAngle));
+    
+    // Create new triangle
+    const indicatorRadius = gaugeRadius - 3;
+    // Original small triangle depth (kept as base reference)
+    const triangleSize = 2.25;
+    // Keep the base at (indicatorRadius - triangleSize) and extend the tip
+    // outward so the triangle height becomes 3x while the base points stay
+    // at the same radius.
+    const baseRadius = indicatorRadius - triangleSize;
+    const newTriangleHeight = triangleSize * 3; // 3x taller
+    const tipRadius = baseRadius + newTriangleHeight;
+  // Move the whole triangle inward by another half of its height (total = full height)
+  // previously shifted by newTriangleHeight/2; add another half so full shift = newTriangleHeight
+  const halfShift = newTriangleHeight;
+    const baseRadiusShifted = baseRadius - halfShift;
+    const tipRadiusShifted = tipRadius - halfShift;
+
+    let trianglePoints = [
+      // Tip: pushed outward from base to increase height, then shifted inward
+      [cx + tipRadiusShifted * Math.cos(indicatorAngle), cy + tipRadiusShifted * Math.sin(indicatorAngle)],
+      // Base points: shifted inward by same halfShift
+      [cx + baseRadiusShifted * Math.cos(indicatorAngle - 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle - 0.2)],
+      [cx + baseRadiusShifted * Math.cos(indicatorAngle + 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle + 0.2)]
+    ];
+    
+    // Symmetric with respect to the center
+    trianglePoints = trianglePoints.map(([px, py]) => [2 * cx - px, 2 * cy - py]);
+    
+    const triangle = svgnode.createElementNS(SVG_NS, "polygon");
+    triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+    triangle.setAttribute("class", "gauge-indicator");
+    indicatorGroup.appendChild(triangle);
+  }
+}
+
+function createPressureGauge(containerId, params) {
+  const { cx, cy, id } = params;
+  const gaugeGroup = svgnode.createElementNS(SVG_NS, "g");
+  gaugeGroup.setAttribute("class", "pressure-gauge");
+  gaugeGroup.setAttribute("id", id);
+  gaugeGroup.setAttribute("data-cx", cx);
+  gaugeGroup.setAttribute("data-cy", cy);
+  
+  // Gauge arc (semi-circle, radius 15)
+  const gaugeRadius = 15;
+  // Extra arcs: 10mm bigger (25) and 15mm bigger (30)
+  const extraRadius1 = 25;
+  const extraRadius2 = 30;
+  
+  // Disk radius
+  const diskRadius = 36.5;
+  const diskStart = Math.PI + (22.5 * Math.PI / 180);
+  let diskEnd = -22.5 * Math.PI / 180;
+  const expand = 57.5 * Math.PI / 180;
+  const diskStartExpanded = diskStart - expand;
+  const diskEndExpanded = diskEnd + expand;
+  let diskEndNorm = diskEndExpanded;
+  while (diskEndNorm < diskStartExpanded) {
+    diskEndNorm += 2 * Math.PI;
+  }
+  const diskAngleSpan = diskEndNorm - diskStartExpanded;
+  const diskLargeArc = (diskAngleSpan > Math.PI) ? 1 : 0;
+  const diskSweep = 1;
+  const diskStartX = (cx + diskRadius * Math.cos(diskStartExpanded)).toFixed(3);
+  const diskStartY = (cy + diskRadius * Math.sin(diskStartExpanded)).toFixed(3);
+  const diskEndX = (cx + diskRadius * Math.cos(diskEndNorm)).toFixed(3);
+  const diskEndY = (cy + diskRadius * Math.sin(diskEndNorm)).toFixed(3);
+  const diskPathD = `M ${cx} ${cy} L ${diskStartX} ${diskStartY} A ${diskRadius} ${diskRadius} 0 ${diskLargeArc} ${diskSweep} ${diskEndX} ${diskEndY} Z`;
+  const diskPath = svgnode.createElementNS(SVG_NS, "path");
+  diskPath.setAttribute("d", diskPathD);
+  diskPath.setAttribute("fill", "url(#disk-gradient)");
+  diskPath.setAttribute("class", "gauge-disk");
+  gaugeGroup.appendChild(diskPath);
+  
+  // Extra arcs behind
+  const gaugeStartAngle = -24.5 * Math.PI / 180;
+  const gaugeEndAngle = Math.PI + 24.5 * Math.PI / 180;
+  const angleSpan = Math.abs(gaugeEndAngle - gaugeStartAngle);
+  const largeArcFlag = (angleSpan > Math.PI) ? 1 : 0;
+  const sweepFlag = 1;
+  const rotatedStart = gaugeStartAngle + Math.PI;
+  const rotatedEnd = gaugeEndAngle + Math.PI;
+  
+  // Extra arc 2 (20mm bigger, radius 35)
+  //const extraArc2 = svgnode.createElementNS(SVG_NS, "path");
+  //const extraArcPath2 = `M ${ (cx + extraRadius2 * Math.cos(rotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(rotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${largeArcFlag} ${sweepFlag} ${ (cx + extraRadius2 * Math.cos(rotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(rotatedEnd)).toFixed(3) }`;
+  //extraArc2.setAttribute("d", extraArcPath2);
+  //extraArc2.setAttribute("class", "gauge-arc-extra");
+  //extraArc2.setAttribute("stroke", "#AAAAAA");
+  //extraArc2.setAttribute("stroke-width", "1.5");
+  //extraArc2.setAttribute("fill", "none");
+  //extraArc2.setAttribute("stroke-linecap", "round");
+  //gaugeGroup.appendChild(extraArc2);
+  
+  // Extra arc 1 (10mm bigger, radius 25)
+  const extraArc1 = svgnode.createElementNS(SVG_NS, "path");
+  const extraArcPath1 = `M ${ (cx + extraRadius1 * Math.cos(rotatedStart)).toFixed(3) } ${ (cy + extraRadius1 * Math.sin(rotatedStart)).toFixed(3) } A ${extraRadius1} ${extraRadius1} 0 ${largeArcFlag} ${sweepFlag} ${ (cx + extraRadius1 * Math.cos(rotatedEnd)).toFixed(3) } ${ (cy + extraRadius1 * Math.sin(rotatedEnd)).toFixed(3) }`;
+  extraArc1.setAttribute("d", extraArcPath1);
+  extraArc1.setAttribute("class", "gauge-arc-extra");
+  extraArc1.setAttribute("stroke", "#888888");
+  extraArc1.setAttribute("stroke-width", "1.5");
+  extraArc1.setAttribute("fill", "none");
+  extraArc1.setAttribute("stroke-linecap", "round");
+  //gaugeGroup.appendChild(extraArc1);
+  
+  // Main gauge arc
+  const gaugeArc = svgnode.createElementNS(SVG_NS, "path");
+  const gaugeArcPath = `M ${ (cx + gaugeRadius * Math.cos(rotatedStart)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(rotatedStart)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${largeArcFlag} ${sweepFlag} ${ (cx + gaugeRadius * Math.cos(rotatedEnd)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(rotatedEnd)).toFixed(3) }`;
+  gaugeArc.setAttribute("d", gaugeArcPath);
+  gaugeArc.setAttribute("class", "gauge-arc");
+  gaugeGroup.appendChild(gaugeArc);
+  
+  // Value arc
+  const valueArc = svgnode.createElementNS(SVG_NS, "path");
+  const currentPressure = 200;
+  const maxPressure = 500;
+  const pressureRatio = currentPressure / maxPressure;
+  const deltaAngle = pressureRatio * (gaugeEndAngle - gaugeStartAngle);
+  const valueStartAngle = gaugeStartAngle + Math.PI;
+  const valueEndAngle = valueStartAngle + deltaAngle;
+  const valueSweepFlag = 1;
+  const valueAngleSpan = Math.abs(valueStartAngle - valueEndAngle);
+  const valueLargeArc = (valueAngleSpan > Math.PI) ? 1 : 0;
+  const valueArcPath = `M ${ (cx + gaugeRadius * Math.cos(valueStartAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueStartAngle)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${valueLargeArc} ${valueSweepFlag} ${ (cx + gaugeRadius * Math.cos(valueEndAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueEndAngle)).toFixed(3) }`;
+  valueArc.setAttribute("d", valueArcPath);
+  valueArc.setAttribute("class", "gauge-value-arc");
+  gaugeGroup.appendChild(valueArc);
+  
+  // Colored segments on outer arc
+  const lowStart = gaugeStartAngle;
+  const lowEnd = gaugeStartAngle + (100 / maxPressure) * (gaugeEndAngle - gaugeStartAngle);
+  const yellowEnd = gaugeStartAngle + (150 / maxPressure) * (gaugeEndAngle - gaugeStartAngle);
+  const greenEnd = gaugeStartAngle + (350 / maxPressure) * (gaugeEndAngle - gaugeStartAngle);
+  const highEnd = gaugeStartAngle + (500 / maxPressure) * (gaugeEndAngle - gaugeStartAngle);
+  
+  
+  // YELLOW segment (yellow) 100-150
+  const yellowArc = svgnode.createElementNS(SVG_NS, "path");
+  const yellowAngleSpan = Math.abs(yellowEnd - lowEnd);
+  const yellowLargeArc = (yellowAngleSpan > Math.PI) ? 1 : 0;
+  const yellowRotatedStart = lowEnd + Math.PI;
+  const yellowRotatedEnd = yellowEnd + Math.PI;
+  const yellowArcPath = `M ${ (cx + extraRadius2 * Math.cos(yellowRotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(yellowRotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${yellowLargeArc} 1 ${ (cx + extraRadius2 * Math.cos(yellowRotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(yellowRotatedEnd)).toFixed(3) }`;
+  yellowArc.setAttribute("d", yellowArcPath);
+  yellowArc.setAttribute("stroke", "yellow");
+  yellowArc.setAttribute("stroke-width", "11");
+  yellowArc.setAttribute("fill", "none");
+  yellowArc.setAttribute("stroke-linecap", "round");
+  gaugeGroup.appendChild(yellowArc);
+
+
+  // LOW segment (red) 0-100
+  const lowArc = svgnode.createElementNS(SVG_NS, "path");
+  const lowAngleSpan = Math.abs(lowEnd - lowStart);
+  const lowLargeArc = (lowAngleSpan > Math.PI) ? 1 : 0;
+  const lowRotatedStart = lowStart + Math.PI;
+  const lowRotatedEnd = lowEnd + Math.PI;
+  const lowArcPath = `M ${ (cx + extraRadius2 * Math.cos(lowRotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(lowRotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${lowLargeArc} 1 ${ (cx + extraRadius2 * Math.cos(lowRotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(lowRotatedEnd)).toFixed(3) }`;
+  lowArc.setAttribute("d", lowArcPath);
+  lowArc.setAttribute("stroke", "red");
+  lowArc.setAttribute("stroke-width", "11");
+  lowArc.setAttribute("fill", "none");
+  lowArc.setAttribute("stroke-linecap", "round");
+  gaugeGroup.appendChild(lowArc);
+  
+  // Text path for LOW label (inwards by 2 units)
+  const lowPath = svgnode.createElementNS(SVG_NS, "path");
+  const lowTextArcPath = `M ${ (cx + (extraRadius2 - 2) * Math.cos(lowRotatedStart)).toFixed(3) } ${ (cy + (extraRadius2 - 2) * Math.sin(lowRotatedStart)).toFixed(3) } A ${extraRadius2 - 2} ${extraRadius2 - 2} 0 ${lowLargeArc} 1 ${ (cx + (extraRadius2 - 2) * Math.cos(lowRotatedEnd)).toFixed(3) } ${ (cy + (extraRadius2 - 2) * Math.sin(lowRotatedEnd)).toFixed(3) }`;
+  lowPath.setAttribute("d", lowTextArcPath);
+  lowPath.setAttribute("id", "low-text-path");
+  lowPath.setAttribute("opacity", "0");
+  gaugeGroup.appendChild(lowPath);
+  
+  
+  // GREEN segment (green) 150-350
+  const greenArc = svgnode.createElementNS(SVG_NS, "path");
+  const greenAngleSpan = Math.abs(greenEnd - yellowEnd);
+  const greenLargeArc = (greenAngleSpan > Math.PI) ? 1 : 0;
+  const greenRotatedStart = yellowEnd + Math.PI;
+  const greenRotatedEnd = greenEnd + Math.PI;
+  const greenArcPath = `M ${ (cx + extraRadius2 * Math.cos(greenRotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(greenRotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${greenLargeArc} 1 ${ (cx + extraRadius2 * Math.cos(greenRotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(greenRotatedEnd)).toFixed(3) }`;
+  greenArc.setAttribute("d", greenArcPath);
+  greenArc.setAttribute("stroke", "green");
+  greenArc.setAttribute("stroke-width", "11");
+  greenArc.setAttribute("fill", "none");
+  greenArc.setAttribute("stroke-linecap", "round");
+  gaugeGroup.appendChild(greenArc);
+  
+  // Text path for NORMAL label (inwards by 2 units)
+  const normalPath = svgnode.createElementNS(SVG_NS, "path");
+  const normalTextArcPath = `M ${ (cx + (extraRadius2 + 1.0) * Math.cos(greenRotatedStart)).toFixed(3) } ${ (cy + (extraRadius2 + 1.0) * Math.sin(greenRotatedStart)).toFixed(3) } A ${extraRadius2 + 1.0} ${extraRadius2 + 1.0} 0 ${greenLargeArc} 1 ${ (cx + (extraRadius2 + 1.0) * Math.cos(greenRotatedEnd)).toFixed(3) } ${ (cy + (extraRadius2 + 1.0) * Math.sin(greenRotatedEnd)).toFixed(3) }`;
+  normalPath.setAttribute("d", normalTextArcPath);
+  normalPath.setAttribute("id", "normal-text-path");
+  normalPath.setAttribute("opacity", "0");
+  gaugeGroup.appendChild(normalPath);
+  
+  // HIGH segment (yellow) 350-500
+  const highArc = svgnode.createElementNS(SVG_NS, "path");
+  const highAngleSpan = Math.abs(highEnd - greenEnd);
+  const highLargeArc = (highAngleSpan > Math.PI) ? 1 : 0;
+  const highRotatedStart = greenEnd + Math.PI;
+  const highRotatedEnd = highEnd + Math.PI;
+  const highArcPath = `M ${ (cx + extraRadius2 * Math.cos(highRotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(highRotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${highLargeArc} 1 ${ (cx + extraRadius2 * Math.cos(highRotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(highRotatedEnd)).toFixed(3) }`;
+  highArc.setAttribute("d", highArcPath);
+  highArc.setAttribute("stroke", "yellow");
+  highArc.setAttribute("stroke-width", "11");
+  highArc.setAttribute("fill", "none");
+  highArc.setAttribute("stroke-linecap", "round");
+  gaugeGroup.appendChild(highArc);
+  
+  // Text path for HIGH label (inwards by 2 units)
+  const highPath = svgnode.createElementNS(SVG_NS, "path");
+  const highTextArcPath = `M ${ (cx + (extraRadius2 - 2) * Math.cos(highRotatedStart)).toFixed(3) } ${ (cy + (extraRadius2 - 2) * Math.sin(highRotatedStart)).toFixed(3) } A ${extraRadius2 - 2} ${extraRadius2 - 2} 0 ${highLargeArc} 1 ${ (cx + (extraRadius2 - 2) * Math.cos(highRotatedEnd)).toFixed(3) } ${ (cy + (extraRadius2 - 2) * Math.sin(highRotatedEnd)).toFixed(3) }`;
+  highPath.setAttribute("d", highTextArcPath);
+  highPath.setAttribute("id", "high-text-path");
+  highPath.setAttribute("opacity", "0");
+  gaugeGroup.appendChild(highPath);
+  
+  // Labels in the arc itself
+  const labelRadius = extraRadius1 - 2 + 10 - 5; // Moved outwards by 10, then inwards by 5
+  
+  // LOW 100 label
+  const lowLabel = svgnode.createElementNS(SVG_NS, "text");
+  lowLabel.setAttribute("fill", "black");
+  lowLabel.setAttribute("font-size", "4px");
+  const lowTextPath = svgnode.createElementNS(SVG_NS, "textPath");
+  lowTextPath.setAttribute("href", "#low-text-path");
+  lowTextPath.setAttribute("startOffset", "50%");
+  lowTextPath.setAttribute("text-anchor", "middle");
+  lowTextPath.textContent = "LOW 100";
+  lowLabel.appendChild(lowTextPath);
+  gaugeGroup.appendChild(lowLabel);
+  
+  // NORMAL 250 label
+  const normalLabel = svgnode.createElementNS(SVG_NS, "text");
+  normalLabel.setAttribute("fill", "black");
+  normalLabel.setAttribute("font-size", "4px");
+  const normalTextPath = svgnode.createElementNS(SVG_NS, "textPath");
+  normalTextPath.setAttribute("href", "#normal-text-path");
+  normalTextPath.setAttribute("startOffset", "50%");
+  normalTextPath.setAttribute("text-anchor", "middle");
+  normalTextPath.textContent = "NORMAL 250";
+  normalLabel.appendChild(normalTextPath);
+  gaugeGroup.appendChild(normalLabel);
+  
+  // SET 250 label (below normal, between 200 and 300)
+  const setStartRatio = 200 / maxPressure;
+  const setEndRatio = 300 / maxPressure;
+  const setStartAngle = gaugeStartAngle + setStartRatio * (gaugeEndAngle - gaugeStartAngle) + Math.PI;
+  const setEndAngle = gaugeStartAngle + setEndRatio * (gaugeEndAngle - gaugeStartAngle) + Math.PI;
+  const setAngleSpan = Math.abs(setEndAngle - setStartAngle);
+  const setLargeArc = (setAngleSpan > Math.PI) ? 1 : 0;
+  const setPath = svgnode.createElementNS(SVG_NS, "path");
+  const setTextArcPath = `M ${ (cx + (extraRadius2 - 4.5) * Math.cos(setStartAngle)).toFixed(3) } ${ (cy + (extraRadius2 - 4.5) * Math.sin(setStartAngle)).toFixed(3) } A ${extraRadius2 - 4.5} ${extraRadius2 - 4.5} 0 ${setLargeArc} 1 ${ (cx + (extraRadius2 - 4.5) * Math.cos(setEndAngle)).toFixed(3) } ${ (cy + (extraRadius2 - 4.5) * Math.sin(setEndAngle)).toFixed(3) }`;
+  setPath.setAttribute("d", setTextArcPath);
+  setPath.setAttribute("id", "set-text-path");
+  setPath.setAttribute("opacity", "0");
+  gaugeGroup.appendChild(setPath);
+  
+  const setLabel = svgnode.createElementNS(SVG_NS, "text");
+  setLabel.setAttribute("fill", "black");
+  setLabel.setAttribute("font-size", "4px");
+  const setTextPath = svgnode.createElementNS(SVG_NS, "textPath");
+  setTextPath.setAttribute("href", "#set-text-path");
+  setTextPath.setAttribute("startOffset", "50%");
+  setTextPath.setAttribute("text-anchor", "middle");
+  setTextPath.textContent = "SET 250";
+  setLabel.appendChild(setTextPath);
+  gaugeGroup.appendChild(setLabel);
+  
+  // HIGH 350 label
+  const highLabel = svgnode.createElementNS(SVG_NS, "text");
+  highLabel.setAttribute("fill", "black");
+  highLabel.setAttribute("font-size", "4px");
+  const highTextPath = svgnode.createElementNS(SVG_NS, "textPath");
+  highTextPath.setAttribute("href", "#high-text-path");
+  highTextPath.setAttribute("startOffset", "50%");
+  highTextPath.setAttribute("text-anchor", "middle");
+  highTextPath.textContent = "HIGH 350";
+  highLabel.appendChild(highTextPath);
+  gaugeGroup.appendChild(highLabel);
+  
+  // Gauge tick marks and numbers
+  const numTicks = 5;
+  for (let i = 0; i <= numTicks; i++) {
+    const pressure = (i * maxPressure) / numTicks;
+    const angle = gaugeStartAngle + (i * (gaugeEndAngle - gaugeStartAngle)) / numTicks;
+    const tickInnerRadius = gaugeRadius - 4;
+    const tickOuterRadius = gaugeRadius - 2;
+    let tickX1 = cx + tickInnerRadius * Math.cos(angle);
+    let tickY1 = cy + tickInnerRadius * Math.sin(angle);
+    let tickX2 = cx + tickOuterRadius * Math.cos(angle);
+    let tickY2 = cy + tickOuterRadius * Math.sin(angle);
+    tickX1 = 2 * cx - tickX1;
+    tickY1 = 2 * cy - tickY1;
+    tickX2 = 2 * cx - tickX2;
+    tickY2 = 2 * cy - tickY2;
+    const tick = svgnode.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", tickX1);
+    tick.setAttribute("y1", tickY1);
+    tick.setAttribute("x2", tickX2);
+    tick.setAttribute("y2", tickY2);
+    tick.setAttribute("class", "gauge-tick");
+    gaugeGroup.appendChild(tick);
+    
+    if (i >= 0 && i <= 5) {
+      const labelRadius = gaugeRadius + 3;
+      let labelX = cx + labelRadius * Math.cos(angle);
+      let labelY = cy + labelRadius * Math.sin(angle);
+      labelX = 2 * cx - labelX;
+      labelY = 2 * cy - labelY;
+      const label = svgnode.createElementNS(SVG_NS, "text");
+      label.setAttribute("x", labelX);
+      label.setAttribute("y", labelY);
+      label.setAttribute("class", "gauge-label");
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("dominant-baseline", "middle");
+      const radialAngle = Math.atan2(labelY - cy, labelX - cx) * 180 / Math.PI;
+      const tangentAngle = radialAngle + 90;
+      label.setAttribute("transform", `rotate(${tangentAngle}, ${labelX}, ${labelY})`);
+      label.textContent = pressure.toString();
+      gaugeGroup.appendChild(label);
+    }
+  }
+  
+  // Minor ticks
+  for (let i = 0.5; i < numTicks; i += 1) {
+    const angle = gaugeStartAngle + (i * (gaugeEndAngle - gaugeStartAngle)) / numTicks;
+    const tickInnerRadius = gaugeRadius - 4;
+    const tickOuterRadius = gaugeRadius - 3;
+    let tickX1 = cx + tickInnerRadius * Math.cos(angle);
+    let tickY1 = cy + tickInnerRadius * Math.sin(angle);
+    let tickX2 = cx + tickOuterRadius * Math.cos(angle);
+    let tickY2 = cy + tickOuterRadius * Math.sin(angle);
+    tickX1 = 2 * cx - tickX1;
+    tickY1 = 2 * cy - tickY1;
+    tickX2 = 2 * cx - tickX2;
+    tickY2 = 2 * cy - tickY2;
+    const tick = svgnode.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", tickX1);
+    tick.setAttribute("y1", tickY1);
+    tick.setAttribute("x2", tickX2);
+    tick.setAttribute("y2", tickY2);
+    tick.setAttribute("class", "gauge-tick");
+    gaugeGroup.appendChild(tick);
+  }
+  
+  // Indicator
+  const indicatorGroup = svgnode.createElementNS(SVG_NS, "g");
+  indicatorGroup.setAttribute("class", "pressure-indicator");
+  const indicatorAngle = gaugeStartAngle;
+  const indicatorRadius = gaugeRadius - 3;
+  const triangleSize = 2.25;
+  const baseRadius = indicatorRadius - triangleSize;
+  const newTriangleHeight = triangleSize * 3;
+  const tipRadius = baseRadius + newTriangleHeight;
+  const halfShift = newTriangleHeight;
+  const baseRadiusShifted = baseRadius - halfShift;
+  const tipRadiusShifted = tipRadius - halfShift;
+  const trianglePoints = [
+    [cx + tipRadiusShifted * Math.cos(indicatorAngle), cy + tipRadiusShifted * Math.sin(indicatorAngle)],
+    [cx + baseRadiusShifted * Math.cos(indicatorAngle - 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle - 0.2)],
+    [cx + baseRadiusShifted * Math.cos(indicatorAngle + 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle + 0.2)]
+  ];
+  const triangle = svgnode.createElementNS(SVG_NS, "polygon");
+  triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+  triangle.setAttribute("class", "gauge-indicator");
+  indicatorGroup.appendChild(triangle);
+  gaugeGroup.appendChild(indicatorGroup);
+  
+  // Center value and unit
+  const pressureValue = svgnode.createElementNS(SVG_NS, "text");
+  pressureValue.setAttribute("x", cx);
+  pressureValue.setAttribute("y", cy + 5.25);
+  pressureValue.setAttribute("class", "rpm-value");
+  pressureValue.setAttribute("text-anchor", "middle");
+  pressureValue.setAttribute("dominant-baseline", "middle");
+  pressureValue.textContent = currentPressure.toString();
+  gaugeGroup.appendChild(pressureValue);
+
+  const pressureUnit = svgnode.createElementNS(SVG_NS, "text");
+  pressureUnit.setAttribute("x", cx);
+  pressureUnit.setAttribute("y", cy - 0.5);
+  pressureUnit.setAttribute("class", "pressure-unit");
+  pressureUnit.setAttribute("text-anchor", "middle");
+  pressureUnit.setAttribute("dominant-baseline", "middle");
+  pressureUnit.textContent = "Pa";
+  gaugeGroup.appendChild(pressureUnit);
+
+  const container = svgnode.getElementById(containerId);
+  if (!container) { return; }
+  container.appendChild(gaugeGroup);
+}
+
+function updatePressureGauge(gaugeId, pressure) {
+  const gaugeGroup = svgnode.getElementById(gaugeId);
+  if (!gaugeGroup) return;
+  const maxPressure = 500;
+  const gaugeStartAngle = -24.5 * Math.PI / 180;
+  const gaugeEndAngle = Math.PI + 24.5 * Math.PI / 180;
+  const cx = parseFloat(gaugeGroup.getAttribute("data-cx"));
+  const cy = parseFloat(gaugeGroup.getAttribute("data-cy"));
+  const gaugeRadius = 15;
+  
+  const pressureValue = gaugeGroup.querySelector('.rpm-value');
+  if (pressureValue) {
+    pressureValue.textContent = pressure.toString();
+  }
+  
+  const valueArc = gaugeGroup.querySelector('.gauge-value-arc');
+  if (valueArc) {
+    const pressureRatio = Math.min(pressure / maxPressure, 1);
+    const deltaAngle = pressureRatio * (gaugeEndAngle - gaugeStartAngle);
+    const valueStartAngle = gaugeStartAngle + Math.PI;
+    const valueEndAngle = valueStartAngle + deltaAngle;
+    const valueSweepFlag = 1;
+    const valueAngleSpan = Math.abs(valueStartAngle - valueEndAngle);
+    const valueLargeArc = (valueAngleSpan > Math.PI) ? 1 : 0;
+    const valueArcPath = `M ${ (cx + gaugeRadius * Math.cos(valueStartAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueStartAngle)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${valueLargeArc} ${valueSweepFlag} ${ (cx + gaugeRadius * Math.cos(valueEndAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueEndAngle)).toFixed(3) }`;
+    valueArc.setAttribute("d", valueArcPath);
+  }
+  
+  const indicatorGroup = gaugeGroup.querySelector('.pressure-indicator');
+  if (indicatorGroup) {
+    const existingTriangle = indicatorGroup.querySelector('.gauge-indicator');
+    if (existingTriangle) {
+      indicatorGroup.removeChild(existingTriangle);
+    }
+    
+    const pressureRatio = Math.min(pressure / maxPressure, 1);
+    const indicatorAngle = gaugeStartAngle + (pressureRatio * (gaugeEndAngle - gaugeStartAngle));
+    const indicatorRadius = gaugeRadius - 3;
+    const triangleSize = 2.25;
+    const baseRadius = indicatorRadius - triangleSize;
+    const newTriangleHeight = triangleSize * 3;
+    const tipRadius = baseRadius + newTriangleHeight;
+    const halfShift = newTriangleHeight;
+    const baseRadiusShifted = baseRadius - halfShift;
+    const tipRadiusShifted = tipRadius - halfShift;
+    let trianglePoints = [
+      [cx + tipRadiusShifted * Math.cos(indicatorAngle), cy + tipRadiusShifted * Math.sin(indicatorAngle)],
+      [cx + baseRadiusShifted * Math.cos(indicatorAngle - 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle - 0.2)],
+      [cx + baseRadiusShifted * Math.cos(indicatorAngle + 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle + 0.2)]
+    ];
+    trianglePoints = trianglePoints.map(([px, py]) => [2 * cx - px, 2 * cy - py]);
+    const triangle = svgnode.createElementNS(SVG_NS, "polygon");
+    triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+    triangle.setAttribute("class", "gauge-indicator");
+    indicatorGroup.appendChild(triangle);
+  }
+  
+  // Conditional low pressure indicator
+  let existingIndicator = gaugeGroup.querySelector('.low-pressure-indicator');
+  if (pressure < 100) {
+    if (existingIndicator) {
+      gaugeGroup.removeChild(existingIndicator);
+    }
+    let lowLabelX = cx - 3.5;
+    let lowLabelY = cy - 10.5;
+    const lowIndicatorGroup = createLowPressureIndicator(gaugeGroup, { className: "low-pressure-indicator", transform: `translate(${lowLabelX}, ${lowLabelY}) scale(0.5)` });
+    // Make disk red pulsating
+    const diskPath = gaugeGroup.querySelector('.gauge-disk');
+    if (diskPath) {
+      diskPath.setAttribute("fill", "url(#red-gradient)");
+      diskPath.classList.add("pulsating-disk");
+    }
+  } else {
+    if (existingIndicator) {
+      gaugeGroup.removeChild(existingIndicator);
+    }
+    // Reset disk to normal
+    const diskPath = gaugeGroup.querySelector('.gauge-disk');
+    if (diskPath) {
+      diskPath.setAttribute("fill", "url(#disk-gradient)");
+      diskPath.classList.remove("pulsating-disk");
+    }
+  }
+}
+
+function createLowPressureIndicator(container, params) {
+  const { className, transform } = params;
+  const lowIndicatorGroup = svgnode.createElementNS(SVG_NS, "g");
+  lowIndicatorGroup.setAttribute("class", className);
+  lowIndicatorGroup.setAttribute("transform", transform);
+  const path1 = svgnode.createElementNS(SVG_NS, "path");
+  path1.setAttribute("d", "M 4 2 C 3 4, 5 6, 4 8 C 3 10, 5 12, 4 14");
+  path1.setAttribute("marker-end", "url(#arrowhead)");
+  path1.setAttribute("stroke", "black");
+  path1.setAttribute("stroke-width", "1");
+  path1.setAttribute("fill", "none");
+  lowIndicatorGroup.appendChild(path1);
+  const path2 = svgnode.createElementNS(SVG_NS, "path");
+  path2.setAttribute("d", "M 7 2 C 6 4, 8 6, 7 8 C 6 10, 8 12, 7 14");
+  path2.setAttribute("marker-end", "url(#arrowhead)");
+  path2.setAttribute("stroke", "black");
+  path2.setAttribute("stroke-width", "1");
+  path2.setAttribute("fill", "none");
+  lowIndicatorGroup.appendChild(path2);
+  const line = svgnode.createElementNS(SVG_NS, "line");
+  line.setAttribute("x1", "11.5");
+  line.setAttribute("y1", "2");
+  line.setAttribute("x2", "11.5");
+  line.setAttribute("y2", "14");
+  line.setAttribute("stroke", "black");
+  line.setAttribute("stroke-width", "1");
+  lowIndicatorGroup.appendChild(line);
+  const ticks = [2,5,8,11,14];
+  for (let y of ticks) {
+    const tick = svgnode.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", "9.5");
+    tick.setAttribute("y1", y);
+    tick.setAttribute("x2", "11.5");
+    tick.setAttribute("y2", y);
+    tick.setAttribute("stroke", "black");
+    tick.setAttribute("stroke-width", "1");
+    lowIndicatorGroup.appendChild(tick);
+  }
+  container.appendChild(lowIndicatorGroup);
+  return lowIndicatorGroup;
+}
+
+function togglePowerButton(buttonId) {
+  const buttonGroup = svgnode.getElementById(buttonId);
+  if (buttonGroup) {
+    buttonGroup.classList.toggle("power-on");
+    updateStatuses();
+    updateExhaust();
+  }
+}
+
+// Status update function
+function updateStatuses() {
+  const statusData = {"Inflation":0,"Feedback_K1":1,"Feedback_K2":0,"FeedbackPipeWatchdog":1,"free":1,"Fuse_Fan1":1,"Fuse_Fan2":0,"Fuse_Dryer":0};
+  
+  const fan1On = svgnode.getElementById('power-fan1').classList.contains('power-on');
+  const fan2On = svgnode.getElementById('power-fan2').classList.contains('power-on');
+  
+  const indicators = {
+    'status-Fuse_Fan1': fan1On ? statusData.Fuse_Fan1 : -1,
+    'status-Feedback_K1': fan1On ? statusData.Feedback_K1 : -1,
+    'status-FeedbackPipeWatchdog': statusData.FeedbackPipeWatchdog,
+    'status-Fuse_Dryer': statusData.Fuse_Dryer,
+    'status-Fuse_Fan2': fan2On ? statusData.Fuse_Fan2 : -1,
+    'status-Feedback_K2': fan2On ? statusData.Feedback_K2 : -1
+  };
+  
+  for (const [id, value] of Object.entries(indicators)) {
+    const circle = svgnode.getElementById(id);
+    if (value === 1) {
+      circle.setAttribute('fill', '#00FF00');
+      circle.classList.add('status-active');
+    } else if (value === 0) {
+      circle.setAttribute('fill', '#FF0000');
+      circle.classList.add('status-active');
+    } else { // -1, fan off
+      circle.setAttribute('fill', 'gray');
+      circle.classList.remove('status-active');
+    }
+  }
+  
+  // Update no-errors indicator
+  const noErrorsDisc = svgnode.getElementById('no-errors-disc');
+  const noErrorsSymbol = svgnode.getElementById('no-errors-symbol');
+  if (no_errors === 0) {
+    noErrorsDisc.setAttribute('fill', 'green');
+    noErrorsDisc.classList.add('status-active');
+    noErrorsSymbol.textContent = '✓';
+    noErrorsSymbol.setAttribute('y', '47.75');
+  } else {
+    noErrorsDisc.setAttribute('fill', 'red');
+    noErrorsDisc.classList.add('status-active');
+    noErrorsSymbol.textContent = '⚠️';
+    noErrorsSymbol.setAttribute('y', '47.75');
+  }
+}
+
+// ===== NEW ANIMATION FUNCTIONS =====
+
+/**
+ * Creates exhaust plumes using CSS animation
+ */
+function createExhaust(containerId, cx, cy, numParticles, durationSec) {
+  const container = svgnode.getElementById(containerId);
+  if (!container) return;
+  
+  for (let i = 0; i < numParticles; i++) {
+    const particle = svgnode.createElementNS(SVG_NS, "circle");
+    particle.setAttribute("class", "plume-particle");
+    particle.setAttribute("cx", cx + (Math.random() - 0.5) * 4); // Jitter x
+    particle.setAttribute("cy", cy + (Math.random() - 0.5) * 2); // Jitter y
+    particle.setAttribute("r", "2"); 
+    
+    const delay = (Math.random() * durationSec);
+    particle.style.animationDelay = -delay + "s"; // Negative delay to stagger
+    particle.style.animationDuration = durationSec + "s";
+    
+    container.appendChild(particle);
+  }
+}
+
+/**
+ * Creates a starfield/particle shower using SMIL animation
+ */
+function createStarfield(containerId, numParticles) {
+  const container = svgnode.getElementById(containerId);
+  if (!container) return;
+  
+  for (let i = 0; i < numParticles; i++) {
+    const particle = svgnode.createElementNS(SVG_NS, "line");
+    const x = Math.random() * 100; // viewBox width 0-100
+    const y_start = -50;
+    const y_end = 110; // viewBox height 0-100, plus buffer
+    const len = Math.random() * 2 + 0.5; // Streak length
+    const duration = (Math.random() * 3 + 2) + "s"; // 2-5 seconds
+    const delay = (Math.random() * 5) + "s"; // 0-5 second start delay
+    
+    particle.setAttribute("x1", x);
+    particle.setAttribute("x2", x);
+    // y1 and y2 will be set by the animation
+    particle.setAttribute("stroke", "white");
+    particle.setAttribute("stroke-width", Math.random() * 0.3 + 0.1);
+    particle.setAttribute("opacity", Math.random() * 0.5 + 0.3);
+
+    const animateY1 = svgnode.createElementNS(SVG_NS, "animate");
+    animateY1.setAttribute("attributeName", "y1");
+    animateY1.setAttribute("from", y_start);
+    animateY1.setAttribute("to", y_end);
+    animateY1.setAttribute("dur", duration);
+    animateY1.setAttribute("begin", delay);
+    animateY1.setAttribute("repeatCount", "indefinite");
+
+    const animateY2 = svgnode.createElementNS(SVG_NS, "animate");
+    animateY2.setAttribute("attributeName", "y2");
+    animateY2.setAttribute("from", y_start + len);
+    animateY2.setAttribute("to", y_end + len);
+    animateY2.setAttribute("dur", duration);
+    animateY2.setAttribute("begin", delay);
+    animateY2.setAttribute("repeatCount", "indefinite");
+    
+    particle.appendChild(animateY1);
+    particle.appendChild(animateY2);
+    container.appendChild(particle);
+  }
+}
+
+function updateExhaust() {
+  const fan1On = svgnode.getElementById('power-fan1').classList.contains('power-on');
+  const fan2On = svgnode.getElementById('power-fan2').classList.contains('power-on');
+  
+  const container1 = svgnode.getElementById('exhaust-container-1');
+  const container2 = svgnode.getElementById('exhaust-container-2');
+  const containerCenter = svgnode.getElementById('exhaust-container-center');
+  
+  if (container1) container1.style.display = fan1On ? 'block' : 'none';
+  if (container2) container2.style.display = fan2On ? 'block' : 'none';
+  if (containerCenter) containerCenter.style.display = (fan1On || fan2On) ? 'block' : 'none';
+}
+
+function initFansAndGauge() {
+  // Create fans
+  createFan(
+    "power-fan1-container",
+    {
+      id: "power-fan1",
+      x: 10,
+      y: 50,
+      size: 10,
+      strokeWidth: 0.75,
+      initialState: 'on',
+      signal: 1
+    }
+  );
+
+  // Add labels and counter for Fan 1 above/below the component
+  (function addFan1Labels(){
+    const container = svgnode.getElementById('power-fan1-container');
+    if (!container) return;
+    const f1x = 10; const f1y = 50; const f1size = 10;
+    const f1cx = f1x + f1size / 2;
+    const f1cy = f1y + f1size / 2;
+
+  const label = svgnode.createElementNS(SVG_NS, 'text');
+  label.setAttribute('x', f1cx);
+  // move FAN1 label 2 units higher than before (total 2 units up from previous)
+  label.setAttribute('y', f1cy - 25);
+    label.setAttribute('class', 'fan-label');
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('dominant-baseline', 'middle');
+    label.textContent = 'FAN1';
+    container.appendChild(label);
+
+    const units = svgnode.createElementNS(SVG_NS, 'text');
+    // place 'Hours' below the FAN label
+    units.setAttribute('x', f1cx);
+    units.setAttribute('y', f1cy - 19);
+    units.setAttribute('class', 'fan-units');
+    units.setAttribute('text-anchor', 'middle');
+    units.setAttribute('dominant-baseline', 'middle');
+    units.textContent = 'Hours';
+    container.appendChild(units);
+
+    const number = svgnode.createElementNS(SVG_NS, 'text');
+    number.setAttribute('x', f1cx);
+    // place the 6-digit value below the Hours label
+    number.setAttribute('y', f1cy - 15);
+    number.setAttribute('class', 'fan-number');
+    number.setAttribute('text-anchor', 'middle');
+    number.setAttribute('dominant-baseline', 'middle');
+    number.textContent = '000000';
+    container.appendChild(number);
+  })();
+
+  createFan(
+    "power-fan2-container",
+    {
+      id: "power-fan2",
+      x: 60,
+      y: 50,
+      size: 10,
+      strokeWidth: 0.75,
+      initialState: 'off',
+      signal: 0
+    }
+  );
+
+  // Add labels and counter for Fan 2 above/below the component
+  (function addFan2Labels(){
+    const container = svgnode.getElementById('power-fan2-container');
+    if (!container) return;
+    const f2x = 60; const f2y = 50; const f2size = 10;
+    const f2cx = f2x + f2size / 2;
+    const f2cy = f2y + f2size / 2;
+
+  const label = svgnode.createElementNS(SVG_NS, 'text');
+  label.setAttribute('x', f2cx);
+  // move FAN2 label 2 units higher than before (total 2 units up from previous)
+  label.setAttribute('y', f2cy - 25);
+    label.setAttribute('class', 'fan-label');
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('dominant-baseline', 'middle');
+    label.textContent = 'FAN2';
+    container.appendChild(label);
+
+    const units = svgnode.createElementNS(SVG_NS, 'text');
+    // place 'Hours' below the FAN label
+    units.setAttribute('x', f2cx);
+    units.setAttribute('y', f2cy - 19);
+    units.setAttribute('class', 'fan-units');
+    units.setAttribute('text-anchor', 'middle');
+    units.setAttribute('dominant-baseline', 'middle');
+    units.textContent = 'Hours';
+    container.appendChild(units);
+
+    const number = svgnode.createElementNS(SVG_NS, 'text');
+    number.setAttribute('x', f2cx);
+    // place the 6-digit value below the Hours label
+    number.setAttribute('y', f2cy - 15);
+    number.setAttribute('class', 'fan-number');
+    number.setAttribute('text-anchor', 'middle');
+    number.setAttribute('dominant-baseline', 'middle');
+    number.textContent = '000000';
+    container.appendChild(number);
+  })();
+
+  // Create gauge in the middle
+  createGauge("fanspeed-container", {cx:40, cy:18, id:"fanspeed"});
+  updateRPMGauge("fanspeed", 900);
+
+  // Create pressure gauge
+  createPressureGauge("pressure-container", {cx:40, cy:-13, id:"pressure"});
+  updatePressureGauge("pressure", 200);
+
+  // Add click listener for fuse dryer
+  const fuseDryerCircle = svgnode.getElementById('status-Fuse_Dryer');
+  if (fuseDryerCircle) {
+    fuseDryerCircle.addEventListener('click', () => {
+      // Change pressure to 50 (low)
+      updatePressureGauge("pressure", 50);
+    });
+  }
+
+  // Add click listeners for fans
+  const fan1Container = svgnode.getElementById("power-fan1-container");
+  if (fan1Container) {
+    fan1Container.addEventListener("click", () => {
+      togglePowerButton("power-fan1");
+    });
+  }
+
+  const fan2Container = svgnode.getElementById("power-fan2-container");
+  if (fan2Container) {
+    fan2Container.addEventListener("click", () => {
+      togglePowerButton("power-fan2");
+    });
+  }
+
+  // Add click listener for watchdog to toggle no_errors
+  const watchdogCircle = svgnode.getElementById('status-FeedbackPipeWatchdog');
+  if (watchdogCircle) {
+    watchdogCircle.addEventListener('click', () => {
+      no_errors = 1 - no_errors;
+      updateStatuses();
+    });
+  }
+
+  // Update status indicators
+  updateStatuses();
+}
+
+
+// ===== NEW CONSOLIDATED LOAD EVENT LISTENER =====
+window.addEventListener('load', () => {
+    // Initialize the dashboard
+    initFansAndGauge();
+    
+    // Initialize the space animations
+    // (Exhaust from under Fan1/Fan2 silver boxes, approx y=78)
+    createExhaust("exhaust-container-1", 15, 78, 10, 3); 
+    createExhaust("exhaust-container-2", 65, 78, 10, 3);
+    // (Center exhaust, 2.4x bigger, between fans)
+    createExhaust("exhaust-container-center", 40, 78, 24, 3);
+    // (Starfield overlay, 75 particles)
+    createStarfield("starfield-container", 75);
+    
+    // Update exhaust visibility based on initial fan states
+    updateExhaust();
+});
+
+    ]]>
+  </script>
+  
+  <title>Clickable Power Button Components (ID-Styled)</title>
+  
+  <defs>
+    <filter id="blur-effect" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5"/>
+    </filter>
+
+    <style>
+      :root {
+        --color-power-black: #000000;
+        --color-power-off: #555555;
+        --color-power-on: #00FF00;
+      }
+      
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      @keyframes pulse-brightness {
+        0% { opacity: 0.6; }
+        50% { opacity: 1.0; }
+        100% { opacity: 0.6; }
+      }
+      
+      /* --- Styles for Fan 1 --- */
+      #power-fan1 {
+        --power-color: var(--color-power-off); /* Default 'off' state */
+        cursor: pointer;
+      }
+      #power-fan1.power-on {
+        --power-color: var(--color-power-on); /* 'on' state */
+      }
+      #power-fan1 .intermediate-disk {
+        fill: #333333;
+      }
+      #power-fan1 .power-bg-disk {
+        fill: var(--color-power-black);
+      }
+      #power-fan1 .bg-animated-disk {
+        fill: #000000;
+      }
+      #power-fan1.power-on .bg-animated-disk {
+        fill: url(#animated-bg-gradient);
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      #power-fan1 .rotor-disk {
+        fill: #808080;
+      }
+      #power-fan1 .fan-blades {
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      #power-fan1.power-on .fan-blades {
+        animation: spin 2s linear infinite;
+      }
+      #power-fan1 .fan-blade {
+        fill: #666666;
+        stroke: #404040;
+        stroke-width: 0.2;
+      }
+      #power-fan1 .power-line {
+        fill: var(--power-color); 
+        stroke: none;
+      }
+      #power-fan1 .power-arc {
+        stroke: var(--power-color); 
+        fill: none;
+        stroke-width: 0.75;
+        stroke-linecap: round;
+      }
+
+      /* --- Styles for Fan 2 --- */
+      #power-fan2 {
+        --power-color: var(--color-power-off); /* Default 'off' state */
+        cursor: pointer;
+      }
+      #power-fan2.power-on {
+        --power-color: var(--color-power-on); /* 'on' state */
+      }
+      #power-fan2 .intermediate-disk {
+        fill: #333333;
+      }
+      #power-fan2 .power-bg-disk {
+        fill: var(--color-power-black);
+      }
+      #power-fan2 .bg-animated-disk {
+        fill: #000000;
+      }
+      #power-fan2.power-on .bg-animated-disk {
+        fill: url(#animated-bg-gradient);
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      #power-fan2 .rotor-disk {
+        fill: #808080;
+      }
+      #power-fan2 .fan-blades {
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      #power-fan2.power-on .fan-blades {
+        animation: spin 2s linear infinite;
+      }
+      #power-fan2 .fan-blade {
+        fill: #666666;
+        stroke: #404040;
+        stroke-width: 0.2;
+      }
+      #power-fan2 .power-line {
+        fill: var(--power-color); 
+        stroke: none;
+      }
+      #power-fan2 .power-arc {
+        stroke: var(--power-color); 
+        fill: none;
+        stroke-width: 0.75;
+        stroke-linecap: round;
+      }
+
+      .gauge-arc {
+        fill: none;
+        stroke: #666666;
+        stroke-width: 2.25; /* scaled */
+        stroke-linecap: round;
+      }
+      .gauge-arc-extra {
+        fill: none;
+        stroke-linecap: round;
+      }
+      .gauge-value-arc {
+        fill: none;
+        stroke: #00FF00;
+        stroke-width: 0.75; /* scaled */
+        stroke-linecap: round;
+      }
+      .gauge-tick {
+        stroke: black;
+        stroke-width: 0.375;
+      }
+      .gauge-label {
+        fill: black;
+        font-size: 3px;
+        font-family: Arial, sans-serif;
+      }
+      .gauge-indicator {
+        fill: #000000;
+        stroke: #000000;
+        stroke-width: 0.3;
+      }
+      .rpm-text {
+        fill: #000000;
+        font-size: 5px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+      }
+      .rpm-value {
+        fill: #000000;
+        font-size: 4.5px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+      }
+      .rpm-unit {
+        fill: #000000;
+        font-size: 2.5px;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+      }
+      .pressure-unit {
+        fill: #000000;
+        font-size: 3.5px;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+      }
+      /* Fan labels and counters */
+      .fan-label {
+        fill: #000000;
+        font-size: 4px;
+        font-weight: bold;
+        font-family: 'Roboto', Arial, sans-serif;
+      }
+      .fan-number {
+        fill: #000000;
+        font-size: 4px;
+        font-family: monospace, monospace;
+      }
+      .fan-units {
+        fill: #000000;
+        font-size: 3px;
+        font-weight: bold;
+        font-family: 'Roboto', Arial, sans-serif;
+      }
+      .fan-status-symbol {
+        fill: gray;
+      }
+      .status-active {
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      .status-label {
+        fill: #000000;
+        font-size: 3px;
+        font-family: Arial, sans-serif;
+        text-anchor: middle;
+      }
+      .pulsating-disk {
+        animation: pulsate-red 2s ease-in-out infinite;
+      }
+      @keyframes pulsate-red {
+        0% { opacity: 0.6; }
+        50% { opacity: 1.0; }
+        100% { opacity: 0.6; }
+      }
+
+      /* ===== NEW ANIMATION STYLES ===== */
+      @keyframes exhaust-plume {
+        0% {
+          r: 2;
+          opacity: 0.7;
+          transform: translateY(0px);
+        }
+        100% {
+          r: 10; /* Grow */
+          opacity: 0;
+          transform: translateY(20px); /* Move down 20 units */
+        }
+      }
+      
+      .plume-particle {
+        fill: #ADD8E6; /* Light blueish-white */
+        filter: url(#blur-effect);
+        animation-name: exhaust-plume;
+        /* duration and delay set by JS */
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+    </style>
+    
+    <radialGradient id="animated-bg-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#B0E0E6;stop-opacity:1.0"/>
+      <stop offset="50%" style="stop-color:#87CEEB;stop-opacity:1.0"/>
+      <stop offset="100%" style="stop-color:#4682B4;stop-opacity:0.9"/>
+    </radialGradient>
+    
+    <radialGradient id="disk-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1.0"/>
+      <stop offset="70%" style="stop-color:#F0F0F0;stop-opacity:1.0"/>
+      <stop offset="100%" style="stop-color:#DADADA;stop-opacity:1.0"/>
+    </radialGradient>
+    
+    <radialGradient id="red-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1.0"/>
+      <stop offset="100%" style="stop-color:#800000;stop-opacity:1.0"/>
+    </radialGradient>
+    
+    <radialGradient id="status-red-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1.0"/>
+      <stop offset="100%" style="stop-color:#800000;stop-opacity:1.0"/>
+    </radialGradient>
+
+    <marker id="arrowhead" markerWidth="3" markerHeight="3" refX="1.5" refY="1.5" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 3 1.5, 0 3" fill="black"/>
+    </marker>
+  </defs>
+
+  <!-- Dark space background -->
+  <rect x="0" y="-50" width="80" height="160" fill="#000011"/>
+
+  <g id="exhaust-container-1" style="display: block;"><circle class="plume-particle" cx="14.245824755070142" cy="78.66648807527443" r="2" style="animation-delay: -2.08664s; animation-duration: 3s;"/><circle class="plume-particle" cx="15.5781663698185" cy="78.58808180344045" r="2" style="animation-delay: -0.400903s; animation-duration: 3s;"/><circle class="plume-particle" cx="15.291717283140866" cy="78.28224970842072" r="2" style="animation-delay: -0.49665s; animation-duration: 3s;"/><circle class="plume-particle" cx="14.908538319901902" cy="77.78837208885415" r="2" style="animation-delay: -0.286448s; animation-duration: 3s;"/><circle class="plume-particle" cx="16.413970304468858" cy="78.70490100254258" r="2" style="animation-delay: -0.458891s; animation-duration: 3s;"/><circle class="plume-particle" cx="13.37391992469654" cy="78.26975096972446" r="2" style="animation-delay: -2.64597s; animation-duration: 3s;"/><circle class="plume-particle" cx="16.85775504572375" cy="78.17478072778509" r="2" style="animation-delay: -0.592014s; animation-duration: 3s;"/><circle class="plume-particle" cx="15.883149676711525" cy="78.73786743399633" r="2" style="animation-delay: -1.3605s; animation-duration: 3s;"/><circle class="plume-particle" cx="14.569157030488675" cy="77.80442821095569" r="2" style="animation-delay: -0.0739753s; animation-duration: 3s;"/><circle class="plume-particle" cx="13.203962530315392" cy="78.89391445481466" r="2" style="animation-delay: -1.78005s; animation-duration: 3s;"/></g>
+  <g id="exhaust-container-2" style="display: block;"><circle class="plume-particle" cx="66.60627961766525" cy="77.58845811567896" r="2" style="animation-delay: -2.87188s; animation-duration: 3s;"/><circle class="plume-particle" cx="63.907797106270515" cy="78.54461337136306" r="2" style="animation-delay: -2.62587s; animation-duration: 3s;"/><circle class="plume-particle" cx="64.3772647334547" cy="77.30274930499672" r="2" style="animation-delay: -1.99643s; animation-duration: 3s;"/><circle class="plume-particle" cx="64.85050724995475" cy="78.25890767301313" r="2" style="animation-delay: -0.86155s; animation-duration: 3s;"/><circle class="plume-particle" cx="63.393358203666324" cy="77.23801214887894" r="2" style="animation-delay: -0.45507s; animation-duration: 3s;"/><circle class="plume-particle" cx="64.49333448557316" cy="78.06324313708873" r="2" style="animation-delay: -1.70149s; animation-duration: 3s;"/><circle class="plume-particle" cx="65.94207317640526" cy="78.19114368133899" r="2" style="animation-delay: -0.493611s; animation-duration: 3s;"/><circle class="plume-particle" cx="66.80597651375288" cy="78.31440435508561" r="2" style="animation-delay: -0.702932s; animation-duration: 3s;"/><circle class="plume-particle" cx="66.71702265394802" cy="77.45026944552406" r="2" style="animation-delay: -2.4087s; animation-duration: 3s;"/><circle class="plume-particle" cx="65.93498006461924" cy="77.83547857094041" r="2" style="animation-delay: -0.427616s; animation-duration: 3s;"/></g>
+  <g id="exhaust-container-center" style="display: block;"><circle class="plume-particle" cx="41.30281716198754" cy="78.39733368696608" r="2" style="animation-delay: -1.84993s; animation-duration: 3s;"/><circle class="plume-particle" cx="40.686559447955" cy="77.29311432828129" r="2" style="animation-delay: -2.85909s; animation-duration: 3s;"/><circle class="plume-particle" cx="41.03678707062405" cy="78.6501152241456" r="2" style="animation-delay: -0.762715s; animation-duration: 3s;"/><circle class="plume-particle" cx="38.75335914283991" cy="77.21867332875104" r="2" style="animation-delay: -2.46836s; animation-duration: 3s;"/><circle class="plume-particle" cx="41.82878791603354" cy="78.20314973374535" r="2" style="animation-delay: -2.01278s; animation-duration: 3s;"/><circle class="plume-particle" cx="38.92836763461964" cy="77.10084810505008" r="2" style="animation-delay: -1.98107s; animation-duration: 3s;"/><circle class="plume-particle" cx="38.65016581951641" cy="77.57426352152987" r="2" style="animation-delay: -1.65569s; animation-duration: 3s;"/><circle class="plume-particle" cx="40.41641586726987" cy="78.44823782023903" r="2" style="animation-delay: -0.870035s; animation-duration: 3s;"/><circle class="plume-particle" cx="40.377493581336665" cy="78.84916406744715" r="2" style="animation-delay: -2.39542s; animation-duration: 3s;"/><circle class="plume-particle" cx="40.13170607519049" cy="77.75083449866389" r="2" style="animation-delay: -1.70587s; animation-duration: 3s;"/><circle class="plume-particle" cx="38.10476587571656" cy="78.04343034575238" r="2" style="animation-delay: -2.4121s; animation-duration: 3s;"/><circle class="plume-particle" cx="39.742055489041235" cy="78.08190087305806" r="2" style="animation-delay: -0.780815s; animation-duration: 3s;"/><circle class="plume-particle" cx="40.320413761505726" cy="77.96959010719522" r="2" style="animation-delay: -2.17277s; animation-duration: 3s;"/><circle class="plume-particle" cx="39.28944902114217" cy="78.74262004054972" r="2" style="animation-delay: -0.139053s; animation-duration: 3s;"/><circle class="plume-particle" cx="39.77970630900632" cy="77.17643461812366" r="2" style="animation-delay: -2.96352s; animation-duration: 3s;"/><circle class="plume-particle" cx="38.62346687459579" cy="78.03119095506383" r="2" style="animation-delay: -1.69859s; animation-duration: 3s;"/><circle class="plume-particle" cx="40.28716540601961" cy="78.76806351622983" r="2" style="animation-delay: -0.474966s; animation-duration: 3s;"/><circle class="plume-particle" cx="38.472230354217" cy="78.40284169202828" r="2" style="animation-delay: -1.74864s; animation-duration: 3s;"/><circle class="plume-particle" cx="39.247631746336275" cy="78.03758773033549" r="2" style="animation-delay: -2.04634s; animation-duration: 3s;"/><circle class="plume-particle" cx="41.69210184757051" cy="77.43705641212294" r="2" style="animation-delay: -0.702877s; animation-duration: 3s;"/><circle class="plume-particle" cx="39.4570376003101" cy="78.26022047545254" r="2" style="animation-delay: -1.05731s; animation-duration: 3s;"/><circle class="plume-particle" cx="41.359586798504814" cy="78.7663541875586" r="2" style="animation-delay: -2.32392s; animation-duration: 3s;"/><circle class="plume-particle" cx="40.69749476198172" cy="77.02668295198013" r="2" style="animation-delay: -1.6055s; animation-duration: 3s;"/><circle class="plume-particle" cx="41.23957805434015" cy="77.96856528303931" r="2" style="animation-delay: -1.38211s; animation-duration: 3s;"/></g>
+
+  <g id="system-indicator">
+      <rect x="15.4" y="-37.9" width="49.5" height="100" rx="5" ry="5" fill="silver" stroke="silver" stroke-width="1"/>
+      <text x="32" y="36" class="fan-label">SYSTEM</text>
+      
+      <circle cx="40" cy="47.75" r="9" fill="black" id="no-errors-bg"/>
+      <circle cx="40" cy="47.75" r="8" fill="red" class="status-active" id="no-errors-disc"/>
+      <text x="40" y="47.75" text-anchor="middle" dominant-baseline="middle" font-size="10" id="no-errors-symbol">⚠️</text>
+    </g>
+
+    <rect id="rect-behind-pressure-value" x="18" y="-39" width="44" height="35" fill="url(#disk-gradient)"/>
+    <rect id="rect-behind-speed-value" x="20" y="17" width="40" height="10" fill="url(#disk-gradient)"/>
+    
+  <g id="fanspeed-container"><g class="rpm-gauge" id="fanspeed" data-cx="40" data-cy="18"><path d="M 40 18 L 18.541 24.766 A 22.5 22.5 0 1 1 61.459 24.766 Z" fill="url(#disk-gradient)" class="gauge-disk"/><path d="M 25.000 18.000 A 15 15 0 0 1 55.000 18.000" class="gauge-arc"/><path d="M 25.000 18.000 A 15 15 0 0 1 28.594 8.258" class="gauge-value-arc"/><line x1="29" y1="18" x2="27" y2="18" class="gauge-tick"/><text x="22" y="18" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(270, 22, 18)">0</text><line x1="32.22182540694798" y1="10.221825406947978" x2="30.80761184457488" y2="8.807611844574883" class="gauge-tick"/><text x="27.27207793864214" y="5.272077938642145" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(-45, 27.27207793864214, 5.272077938642145)">1000</text><line x1="40" y1="7" x2="40" y2="5" class="gauge-tick"/><text x="40" y="0" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(0, 40, 0)">2000</text><line x1="47.77817459305202" y1="10.221825406947978" x2="49.19238815542512" y2="8.807611844574879" class="gauge-tick"/><text x="52.72792206135786" y="5.272077938642141" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(45, 52.72792206135786, 5.272077938642141)">3000</text><line x1="51" y1="18" x2="53" y2="18" class="gauge-tick"/><text x="58" y="17.999999999999996" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(89.99999999999999, 58, 17.999999999999996)">4000</text><g class="rpm-indicator"><polygon points="32.5860418353997,11.667881528780711 37.37717835512919,16.543701054317083 38.15133081001669,15.6372849884071" class="gauge-indicator"/></g><text x="40" y="21.75" class="rpm-value" text-anchor="middle" dominant-baseline="middle">900</text><text x="40" y="25.5" class="rpm-unit" text-anchor="middle" dominant-baseline="middle">RPM</text></g></g>
+  <g id="pressure-container"><g class="pressure-gauge" id="pressure" data-cx="40" data-cy="-13"><path d="M 40 -13 L 10.101 7.936 A 36.5 36.5 0 1 1 69.899 7.936 Z" fill="url(#red-gradient)" class="gauge-disk pulsating-disk"/><path d="M 26.351 -6.780 A 15 15 0 1 1 53.649 -6.780" class="gauge-arc"/><path d="M 26.351 -6.780 A 15 15 0 0 1 25.006 -12.581" class="gauge-value-arc"/><path d="M 12.049 -23.898 A 30 30 0 0 1 18.493 -33.915" stroke="yellow" stroke-width="11" fill="none" stroke-linecap="round"/><path d="M 12.701 -0.559 A 30 30 0 0 1 12.049 -23.898" stroke="red" stroke-width="11" fill="none" stroke-linecap="round"/><path d="M 14.521 -1.389 A 28 28 0 0 1 13.913 -23.171" id="low-text-path" opacity="0"/><path d="M 18.493 -33.915 A 30 30 0 0 1 61.507 -33.915" stroke="green" stroke-width="11" fill="none" stroke-linecap="round"/><path d="M 17.776 -34.612 A 31 31 0 0 1 62.224 -34.612" id="normal-text-path" opacity="0"/><path d="M 61.507 -33.915 A 30 30 0 0 1 67.299 -0.559" stroke="yellow" stroke-width="11" fill="none" stroke-linecap="round"/><path d="M 60.073 -32.521 A 28 28 0 0 1 65.479 -1.389" id="high-text-path" opacity="0"/><text fill="black" font-size="4px"><textPath href="#low-text-path" startOffset="50%" text-anchor="middle">LOW 100</textPath></text><text fill="black" font-size="4px"><textPath href="#normal-text-path" startOffset="50%" text-anchor="middle">NORMAL 250</textPath></text><path d="M 30.077 -36.490 A 25.5 25.5 0 0 1 49.923 -36.490" id="set-text-path" opacity="0"/><text fill="black" font-size="4px"><textPath href="#set-text-path" startOffset="50%" text-anchor="middle">SET 250</textPath></text><text fill="black" font-size="4px"><textPath href="#high-text-path" startOffset="50%" text-anchor="middle">HIGH 350</textPath></text><line x1="29.990426020358022" y1="-8.438374330781372" x2="28.170503478604942" y2="-7.608987845468892" class="gauge-tick"/><text x="23.620697124222218" y="-5.535521632187699" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(245.50000000000003, 23.620697124222218, -5.535521632187699)">0</text><line x1="29.75139649655896" y1="-16.995763535202762" x2="27.888014041387862" y2="-17.722265996148717" class="gauge-tick"/><text x="23.22955790346012" y="-19.53852214851361" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(-68.69999999999999, 23.22955790346012, -19.53852214851361)">100</text><line x1="35.71963654845773" y1="-23.133039461222932" x2="34.941388648177316" y2="-24.975410272354374" class="gauge-tick"/><text x="32.99576889747629" y="-29.58133730018298" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(-22.90000000000002, 32.99576889747629, -29.58133730018298)">200</text><line x1="44.28036345154227" y1="-23.133039461222936" x2="45.05861135182268" y2="-24.975410272354374" class="gauge-tick"/><text x="47.00423110252371" y="-29.581337300182984" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(22.89999999999999, 47.00423110252371, -29.581337300182984)">300</text><line x1="50.24860350344104" y1="-16.995763535202762" x2="52.11198595861214" y2="-17.72226599614872" class="gauge-tick"/><text x="56.77044209653988" y="-19.53852214851361" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(68.69999999999999, 56.77044209653988, -19.53852214851361)">400</text><line x1="50.00957397964198" y1="-8.438374330781372" x2="51.82949652139506" y2="-7.608987845468892" class="gauge-tick"/><text x="56.37930287577778" y="-5.535521632187699" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(114.5, 56.37930287577778, -5.535521632187699)">500</text><line x1="29.0042887345561" y1="-12.692861974040742" x2="28.004678619515744" y2="-12.664940335317173" class="gauge-tick"/><line x1="32.11398331584469" y1="-20.66881613140021" x2="31.39707270819421" y2="-21.365981234254775" class="gauge-tick"/><line x1="40" y1="-24" x2="40" y2="-25" class="gauge-tick"/><line x1="47.88601668415531" y1="-20.66881613140021" x2="48.60292729180579" y2="-21.365981234254775" class="gauge-tick"/><line x1="50.9957112654439" y1="-12.692861974040747" x2="51.995321380484256" y2="-12.66494033531718" class="gauge-tick"/><g class="pressure-indicator"><polygon points="30.253801378356542,-12.727764022445204 37.07758812597047,-12.322129187432292 37.04430508629099,-13.513680423098542" class="gauge-indicator"/></g><text x="40" y="-7.75" class="rpm-value" text-anchor="middle" dominant-baseline="middle">50</text><text x="40" y="-13.5" class="pressure-unit" text-anchor="middle" dominant-baseline="middle">Pa</text><g class="low-pressure-indicator" transform="translate(36.5, -23.5) scale(0.5)"><path d="M 4 2 C 3 4, 5 6, 4 8 C 3 10, 5 12, 4 14" marker-end="url(#arrowhead)" stroke="black" stroke-width="1" fill="none"/><path d="M 7 2 C 6 4, 8 6, 7 8 C 6 10, 8 12, 7 14" marker-end="url(#arrowhead)" stroke="black" stroke-width="1" fill="none"/><line x1="11.5" y1="2" x2="11.5" y2="14" stroke="black" stroke-width="1"/><line x1="9.5" y1="2" x2="11.5" y2="2" stroke="black" stroke-width="1"/><line x1="9.5" y1="5" x2="11.5" y2="5" stroke="black" stroke-width="1"/><line x1="9.5" y1="8" x2="11.5" y2="8" stroke="black" stroke-width="1"/><line x1="9.5" y1="11" x2="11.5" y2="11" stroke="black" stroke-width="1"/><line x1="9.5" y1="14" x2="11.5" y2="14" stroke="black" stroke-width="1"/></g></g></g>
+    
+
+    <g id="status-indicators-fan1">
+        <g id="fuse-fan1">
+            <rect x="5" y="25" width="20" height="51" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1"/>
+            <circle cx="10" cy="71" r="4" fill="black"/>
+            <circle id="status-Fuse_Fan1" cx="10" cy="71" r="3" fill="#00FF00" class="status-active"/>
+            <rect x="8.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5"/>
+            <line x1="7.5" y1="71" x2="12.5" y2="71" stroke="black" stroke-width="0.5"/>
+        </g>
+        <g id="feedback-k1">
+      <circle cx="20" cy="71" r="4" fill="black"/>
+      <circle id="status-Feedback_K1" cx="20" cy="71" r="3" fill="#00FF00" class="status-active"/>
+      <path d="M 22 70 L 21.5 71 L 22.5 71 Z" fill="black"/>
+      <path d="M 22 71 A 2 2 0 1 1 21.732 70" stroke="black" fill="none" stroke-width="0.5"/>
+    </g>
+    
+    <g id="dryer-indicator">
+      <rect x="25" y="60" width="30" height="17" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1"/>
+      <text x="34" y="65" class="fan-label">DRYER</text>
+      
+      <g id="fuse-dryer">
+        <circle cx="35" cy="71" r="4" fill="black"/>
+        <circle id="status-Fuse_Dryer" cx="35" cy="71" r="3" fill="#FF0000" class="status-active"/>
+        <rect x="33.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5"/>
+        <line x1="32.5" y1="71" x2="37.5" y2="71" stroke="black" stroke-width="0.5"/>
+      </g>
+      <g id="feedback-watchdog">
+        <circle cx="45" cy="71" r="4" fill="black"/>
+        <circle id="status-FeedbackPipeWatchdog" cx="45" cy="71" r="3" fill="#00FF00" class="status-active"/>
+        <path d="M 47 70 L 46.5 71 L 47.5 71 Z" fill="black"/>
+        <path d="M 47 71 A 2 2 0 1 1 46.732 70" stroke="black" fill="none" stroke-width="0.5"/>
+      </g>
+    </g>
+    <g id="status-indicators-fan2">
+        <g id="fuse-fan2">
+        <rect x="55" y="25" width="20" height="51" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1"/>
+        <circle cx="60" cy="71" r="4" fill="black"/>
+        <circle id="status-Fuse_Fan2" cx="60" cy="71" r="3" fill="#FF0000" class="status-active"/>
+        <rect x="58.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5"/>
+        <line x1="57.5" y1="71" x2="62.5" y2="71" stroke="black" stroke-width="0.5"/>
+        </g>
+        <g id="feedback-k2">
+        <circle cx="70" cy="71" r="4" fill="black"/>
+        <circle id="status-Feedback_K2" cx="70" cy="71" r="3" fill="#FF0000" class="status-active"/>
+        <path d="M 72 70 L 71.5 71 L 72.5 71 Z" fill="black"/>
+        <path d="M 72 71 A 2 2 0 1 1 71.732 70" stroke="black" fill="none" stroke-width="0.5"/>
+        </g>
+    </g>
+    
+  </g>
+  
+  <g id="power-fan1-container">
+  <g id="power-fan1" class="power-on"><circle class="power-bg-disk" cx="15" cy="55" r="11"/><circle class="bg-animated-disk" cx="15" cy="55" r="10"/><g class="fan-blades"><path d="M 16.910672978251213 54.40895958667732 L 25.031033135818863 51.897037830055936 L 25.031033135818863 58.102962169944064 L 16.910672978251213 55.59104041332268 Z" class="fan-blade"/><path d="M 16.152543257456934 56.63451645439578 L 21.050852101648903 63.58121138557786 L 15.148667318563596 65.49894747240842 L 15.028317584488304 56.999799518553985 Z" class="fan-blade"/><path d="M 13.801637928361693 56.60122713731024 L 8.708599123898892 63.40644247087876 L 5.0608483200697485 58.385744214104136 L 13.106828251441858 55.64490365982936 Z" class="fan-blade"/><path d="M 13.106828251441856 54.35509634017064 L 5.060848320069747 51.614255785895864 L 8.708599123898889 46.59355752912124 L 13.801637928361693 53.39877286268976 Z" class="fan-blade"/><path d="M 15.028317584488304 53.000200481446015 L 15.148667318563595 44.50105252759158 L 21.0508521016489 46.41878861442214 L 16.152543257456934 53.36548354560422 Z" class="fan-blade"/></g><circle class="intermediate-disk" cx="15" cy="55" r="6"/><circle class="rotor-disk" cx="15" cy="55" r="5"/><rect class="power-line" x="14.625" y="50" width="0.75" height="5" rx="0.375"/><path class="power-arc" d="M 18.270 51.730 A 4.625 4.625 0 1 1 11.730 51.730"/></g><text x="15" y="30" class="fan-label" text-anchor="middle" dominant-baseline="middle">FAN1</text><text x="15" y="36" class="fan-units" text-anchor="middle" dominant-baseline="middle">Hours</text><text x="15" y="40" class="fan-number" text-anchor="middle" dominant-baseline="middle">000000</text></g>
+  <g id="power-fan2-container">
+  <g id="power-fan2" class="power-on"><circle class="power-bg-disk" cx="65" cy="55" r="11"/><circle class="bg-animated-disk" cx="65" cy="55" r="10"/><g class="fan-blades"><path d="M 66.91067297825121 54.40895958667732 L 75.03103313581886 51.897037830055936 L 75.03103313581886 58.102962169944064 L 66.91067297825121 55.59104041332268 Z" class="fan-blade"/><path d="M 66.15254325745694 56.63451645439578 L 71.0508521016489 63.58121138557786 L 65.1486673185636 65.49894747240842 L 65.0283175844883 56.999799518553985 Z" class="fan-blade"/><path d="M 63.80163792836169 56.60122713731024 L 58.70859912389889 63.40644247087876 L 55.06084832006975 58.385744214104136 L 63.106828251441854 55.64490365982936 Z" class="fan-blade"/><path d="M 63.106828251441854 54.35509634017064 L 55.060848320069745 51.614255785895864 L 58.70859912389889 46.59355752912124 L 63.80163792836169 53.39877286268976 Z" class="fan-blade"/><path d="M 65.0283175844883 53.000200481446015 L 65.1486673185636 44.50105252759158 L 71.0508521016489 46.41878861442214 L 66.15254325745693 53.36548354560422 Z" class="fan-blade"/></g><circle class="intermediate-disk" cx="65" cy="55" r="6"/><circle class="rotor-disk" cx="65" cy="55" r="5"/><rect class="power-line" x="64.625" y="50" width="0.75" height="5" rx="0.375"/><path class="power-arc" d="M 68.270 51.730 A 4.625 4.625 0 1 1 61.730 51.730"/></g><text x="65" y="30" class="fan-label" text-anchor="middle" dominant-baseline="middle">FAN2</text><text x="65" y="36" class="fan-units" text-anchor="middle" dominant-baseline="middle">Hours</text><text x="65" y="40" class="fan-number" text-anchor="middle" dominant-baseline="middle">000000</text></g>
+
+  <g id="starfield-container"><line x1="84.35356439886826" x2="84.35356439886826" stroke="white" stroke-width="0.1498904311452835" opacity="0.44839464721844935"><animate attributeName="y1" from="-50" to="110" dur="4.527122067435066s" begin="2.145737886684047s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.57367662660206" to="111.42632337339795" dur="4.527122067435066s" begin="2.145737886684047s" repeatCount="indefinite"/></line><line x1="46.093822615675386" x2="46.093822615675386" stroke="white" stroke-width="0.126237443155945" opacity="0.7805437800875902"><animate attributeName="y1" from="-50" to="110" dur="2.4689060887561007s" begin="0.8532614470545419s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.166617610178164" to="110.83338238982184" dur="2.4689060887561007s" begin="0.8532614470545419s" repeatCount="indefinite"/></line><line x1="81.8419956562066" x2="81.8419956562066" stroke="white" stroke-width="0.1873369980616376" opacity="0.7070671554877994"><animate attributeName="y1" from="-50" to="110" dur="2.5677158394011403s" begin="0.05773326426991021s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.666380810325016" to="111.33361918967499" dur="2.5677158394011403s" begin="0.05773326426991021s" repeatCount="indefinite"/></line><line x1="56.02386098027286" x2="56.02386098027286" stroke="white" stroke-width="0.24652827985563625" opacity="0.4102464160038138"><animate attributeName="y1" from="-50" to="110" dur="3.458810870829976s" begin="3.325737113593358s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.15651858880377" to="110.84348141119622" dur="3.458810870829976s" begin="3.325737113593358s" repeatCount="indefinite"/></line><line x1="17.607550714600183" x2="17.607550714600183" stroke="white" stroke-width="0.33716798170245" opacity="0.7950332540517303"><animate attributeName="y1" from="-50" to="110" dur="2.79878565120842s" begin="4.4436176865625185s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.559992569311866" to="112.44000743068813" dur="2.79878565120842s" begin="4.4436176865625185s" repeatCount="indefinite"/></line><line x1="67.37621554301252" x2="67.37621554301252" stroke="white" stroke-width="0.3111139658235632" opacity="0.5973339893288321"><animate attributeName="y1" from="-50" to="110" dur="3.119405803142173s" begin="3.675743000649847s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.38995316708506" to="111.61004683291495" dur="3.119405803142173s" begin="3.675743000649847s" repeatCount="indefinite"/></line><line x1="92.47709217733738" x2="92.47709217733738" stroke="white" stroke-width="0.1301974705002262" opacity="0.7759153298492337"><animate attributeName="y1" from="-50" to="110" dur="4.2883625161968375s" begin="3.1873965663746033s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.61505937039182" to="111.38494062960818" dur="4.2883625161968375s" begin="3.1873965663746033s" repeatCount="indefinite"/></line><line x1="43.13974995747314" x2="43.13974995747314" stroke="white" stroke-width="0.14628629629082135" opacity="0.5037622254357419"><animate attributeName="y1" from="-50" to="110" dur="2.194071948425918s" begin="2.8372690101396376s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.491621586690705" to="110.50837841330929" dur="2.194071948425918s" begin="2.8372690101396376s" repeatCount="indefinite"/></line><line x1="34.606779726733315" x2="34.606779726733315" stroke="white" stroke-width="0.20352224575016964" opacity="0.3009105029130685"><animate attributeName="y1" from="-50" to="110" dur="3.4954637286386574s" begin="4.6116448169401805s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.3949428222005" to="111.60505717779951" dur="3.4954637286386574s" begin="4.6116448169401805s" repeatCount="indefinite"/></line><line x1="25.757683525662046" x2="25.757683525662046" stroke="white" stroke-width="0.16283844479853365" opacity="0.5683610380288534"><animate attributeName="y1" from="-50" to="110" dur="4.48853025440609s" begin="3.2253504035651313s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.53622597935083" to="111.46377402064917" dur="4.48853025440609s" begin="3.2253504035651313s" repeatCount="indefinite"/></line><line x1="57.25409732024741" x2="57.25409732024741" stroke="white" stroke-width="0.19439781948660678" opacity="0.3986139646876359"><animate attributeName="y1" from="-50" to="110" dur="3.918827853915364s" begin="3.353527614380751s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.0082456302665" to="111.9917543697335" dur="3.918827853915364s" begin="3.353527614380751s" repeatCount="indefinite"/></line><line x1="27.11185401280154" x2="27.11185401280154" stroke="white" stroke-width="0.2761676033747945" opacity="0.5015124342926753"><animate attributeName="y1" from="-50" to="110" dur="4.965031370781402s" begin="1.6112212632381935s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.31042541625265" to="110.68957458374736" dur="4.965031370781402s" begin="1.6112212632381935s" repeatCount="indefinite"/></line><line x1="97.99157435254494" x2="97.99157435254494" stroke="white" stroke-width="0.1707658385902414" opacity="0.3663128856122985"><animate attributeName="y1" from="-50" to="110" dur="4.987989081820147s" begin="2.6283684130575717s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.39071808751083" to="110.60928191248918" dur="4.987989081820147s" begin="2.6283684130575717s" repeatCount="indefinite"/></line><line x1="45.136063458013794" x2="45.136063458013794" stroke="white" stroke-width="0.38929044452423034" opacity="0.4305786386051647"><animate attributeName="y1" from="-50" to="110" dur="3.0699589518767287s" begin="3.4834985873866136s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.03277434995937" to="110.96722565004063" dur="3.0699589518767287s" begin="3.4834985873866136s" repeatCount="indefinite"/></line><line x1="62.32686245522277" x2="62.32686245522277" stroke="white" stroke-width="0.17585287059507695" opacity="0.635289993840978"><animate attributeName="y1" from="-50" to="110" dur="4.813583354059149s" begin="1.5069917348964235s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.182992944703116" to="110.81700705529688" dur="4.813583354059149s" begin="1.5069917348964235s" repeatCount="indefinite"/></line><line x1="11.491643939043406" x2="11.491643939043406" stroke="white" stroke-width="0.39536477794081704" opacity="0.476466237105572"><animate attributeName="y1" from="-50" to="110" dur="4.197137702057038s" begin="2.7226196863771994s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.66288224058008" to="112.33711775941993" dur="4.197137702057038s" begin="2.7226196863771994s" repeatCount="indefinite"/></line><line x1="35.407888747813146" x2="35.407888747813146" stroke="white" stroke-width="0.10955697080043902" opacity="0.5324066961261505"><animate attributeName="y1" from="-50" to="110" dur="3.177726617662106s" begin="0.818054220456928s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.61084307618596" to="111.38915692381404" dur="3.177726617662106s" begin="0.818054220456928s" repeatCount="indefinite"/></line><line x1="48.580598948357554" x2="48.580598948357554" stroke="white" stroke-width="0.33428046124918354" opacity="0.414337312954273"><animate attributeName="y1" from="-50" to="110" dur="3.313270044868441s" begin="1.0687759366107845s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.001119802267546" to="110.99888019773246" dur="3.313270044868441s" begin="1.0687759366107845s" repeatCount="indefinite"/></line><line x1="18.44850566033468" x2="18.44850566033468" stroke="white" stroke-width="0.31025869944760487" opacity="0.4334227693351391"><animate attributeName="y1" from="-50" to="110" dur="3.5817218900538377s" begin="2.0692567185165838s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.763512302229366" to="111.23648769777063" dur="3.5817218900538377s" begin="2.0692567185165838s" repeatCount="indefinite"/></line><line x1="99.07810737056768" x2="99.07810737056768" stroke="white" stroke-width="0.12690329422009822" opacity="0.4593591277562364"><animate attributeName="y1" from="-50" to="110" dur="3.3475501958631892s" begin="3.855803189114707s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.53016322309882" to="112.46983677690118" dur="3.3475501958631892s" begin="3.855803189114707s" repeatCount="indefinite"/></line><line x1="44.71384534064209" x2="44.71384534064209" stroke="white" stroke-width="0.17520737892442828" opacity="0.7450016568866209"><animate attributeName="y1" from="-50" to="110" dur="3.2618379944572684s" begin="4.3520250531060745s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.79646254151252" to="112.20353745848747" dur="3.2618379944572684s" begin="4.3520250531060745s" repeatCount="indefinite"/></line><line x1="5.455323218017016" x2="5.455323218017016" stroke="white" stroke-width="0.27006663286445615" opacity="0.32570778915960846"><animate attributeName="y1" from="-50" to="110" dur="3.7548398040895528s" begin="3.7017429179234043s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.209677745554444" to="110.79032225444556" dur="3.7548398040895528s" begin="3.7017429179234043s" repeatCount="indefinite"/></line><line x1="70.74797345178997" x2="70.74797345178997" stroke="white" stroke-width="0.36347860700002244" opacity="0.4001869956315578"><animate attributeName="y1" from="-50" to="110" dur="2.6939517458110167s" begin="0.27639926378017043s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.071935758931815" to="110.92806424106818" dur="2.6939517458110167s" begin="0.27639926378017043s" repeatCount="indefinite"/></line><line x1="52.0509402671461" x2="52.0509402671461" stroke="white" stroke-width="0.10021513743742778" opacity="0.5710760552848257"><animate attributeName="y1" from="-50" to="110" dur="4.052435445624591s" begin="0.054461324617846585s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.77155520467804" to="111.22844479532196" dur="4.052435445624591s" begin="0.054461324617846585s" repeatCount="indefinite"/></line><line x1="91.47533629030124" x2="91.47533629030124" stroke="white" stroke-width="0.3213204517258425" opacity="0.5381569355752313"><animate attributeName="y1" from="-50" to="110" dur="3.4888748403404213s" begin="3.060294226805376s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.7996267739114" to="111.2003732260886" dur="3.4888748403404213s" begin="3.060294226805376s" repeatCount="indefinite"/></line><line x1="90.53507014013377" x2="90.53507014013377" stroke="white" stroke-width="0.15007933876380639" opacity="0.7711188662524726"><animate attributeName="y1" from="-50" to="110" dur="4.302031924731903s" begin="0.6366521349875132s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.64676679381107" to="112.35323320618893" dur="4.302031924731903s" begin="0.6366521349875132s" repeatCount="indefinite"/></line><line x1="29.707200429588976" x2="29.707200429588976" stroke="white" stroke-width="0.29688764358161635" opacity="0.5325944867829716"><animate attributeName="y1" from="-50" to="110" dur="2.1483577240770853s" begin="0.9157110038948163s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.47543412622254" to="110.52456587377746" dur="2.1483577240770853s" begin="0.9157110038948163s" repeatCount="indefinite"/></line><line x1="5.184326428874019" x2="5.184326428874019" stroke="white" stroke-width="0.15599888862824646" opacity="0.48696021079483404"><animate attributeName="y1" from="-50" to="110" dur="4.653831819673988s" begin="3.2705689742562747s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.5986845409008" to="111.4013154590992" dur="4.653831819673988s" begin="3.2705689742562747s" repeatCount="indefinite"/></line><line x1="59.82112778956187" x2="59.82112778956187" stroke="white" stroke-width="0.23041274264716044" opacity="0.6125809722851868"><animate attributeName="y1" from="-50" to="110" dur="2.8811360777097876s" begin="3.4780109858541595s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.759340502027314" to="112.24065949797269" dur="2.8811360777097876s" begin="3.4780109858541595s" repeatCount="indefinite"/></line><line x1="67.03051798303689" x2="67.03051798303689" stroke="white" stroke-width="0.2572977923552665" opacity="0.4152000816811846"><animate attributeName="y1" from="-50" to="110" dur="3.6621037551700435s" begin="0.5383874565826419s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.83123830143273" to="112.16876169856727" dur="3.6621037551700435s" begin="0.5383874565826419s" repeatCount="indefinite"/></line><line x1="58.960177479049015" x2="58.960177479049015" stroke="white" stroke-width="0.3263336652774808" opacity="0.5722148315662721"><animate attributeName="y1" from="-50" to="110" dur="3.4020953943797774s" begin="1.5121926248715734s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.49896844088564" to="110.50103155911435" dur="3.4020953943797774s" begin="1.5121926248715734s" repeatCount="indefinite"/></line><line x1="15.173881344633056" x2="15.173881344633056" stroke="white" stroke-width="0.25156359220648306" opacity="0.6342967436857021"><animate attributeName="y1" from="-50" to="110" dur="2.5931950656698746s" begin="2.64094979397492s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.51924566919147" to="111.48075433080854" dur="2.5931950656698746s" begin="2.64094979397492s" repeatCount="indefinite"/></line><line x1="6.04859762851534" x2="6.04859762851534" stroke="white" stroke-width="0.3996023906738314" opacity="0.4668661504142143"><animate attributeName="y1" from="-50" to="110" dur="2.541165611908398s" begin="4.220040098953655s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.28548258623801" to="111.71451741376198" dur="2.541165611908398s" begin="4.220040098953655s" repeatCount="indefinite"/></line><line x1="44.77562719951904" x2="44.77562719951904" stroke="white" stroke-width="0.3414212524739465" opacity="0.6198535976897689"><animate attributeName="y1" from="-50" to="110" dur="2.6761396341130332s" begin="2.6627633170009s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.04886147524794" to="110.95113852475207" dur="2.6761396341130332s" begin="2.6627633170009s" repeatCount="indefinite"/></line><line x1="95.31965971766056" x2="95.31965971766056" stroke="white" stroke-width="0.21131355968839166" opacity="0.49374705000438074"><animate attributeName="y1" from="-50" to="110" dur="4.2641777477515905s" begin="0.7563114389895792s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.63994128087818" to="112.36005871912181" dur="4.2641777477515905s" begin="0.7563114389895792s" repeatCount="indefinite"/></line><line x1="65.60632708676376" x2="65.60632708676376" stroke="white" stroke-width="0.2708335774969757" opacity="0.4953468138891287"><animate attributeName="y1" from="-50" to="110" dur="4.550402627699459s" begin="1.3436247497868792s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.7598082772459" to="112.2401917227541" dur="4.550402627699459s" begin="1.3436247497868792s" repeatCount="indefinite"/></line><line x1="66.9059678221524" x2="66.9059678221524" stroke="white" stroke-width="0.13594311360764058" opacity="0.7907855453594138"><animate attributeName="y1" from="-50" to="110" dur="4.027044670280893s" begin="4.986011317032781s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.11047804486321" to="111.8895219551368" dur="4.027044670280893s" begin="4.986011317032781s" repeatCount="indefinite"/></line><line x1="11.827325618025652" x2="11.827325618025652" stroke="white" stroke-width="0.3918749672349193" opacity="0.5517829190378822"><animate attributeName="y1" from="-50" to="110" dur="3.404858851303334s" begin="0.37210530997094704s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.55176172003592" to="111.44823827996407" dur="3.404858851303334s" begin="0.37210530997094704s" repeatCount="indefinite"/></line><line x1="48.262894268021626" x2="48.262894268021626" stroke="white" stroke-width="0.16911300676101765" opacity="0.45735438584327653"><animate attributeName="y1" from="-50" to="110" dur="3.235825712841762s" begin="4.677536309888125s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.080843494496705" to="110.9191565055033" dur="3.235825712841762s" begin="4.677536309888125s" repeatCount="indefinite"/></line><line x1="89.63757227500246" x2="89.63757227500246" stroke="white" stroke-width="0.21534032976420334" opacity="0.32006239028306094"><animate attributeName="y1" from="-50" to="110" dur="3.172322636060237s" begin="1.9931657173945083s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.131384705401786" to="110.86861529459821" dur="3.172322636060237s" begin="1.9931657173945083s" repeatCount="indefinite"/></line><line x1="53.59237050208423" x2="53.59237050208423" stroke="white" stroke-width="0.1567458572166199" opacity="0.42513656225930513"><animate attributeName="y1" from="-50" to="110" dur="2.9180521851198655s" begin="1.6025925727966133s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.11916692202534" to="110.88083307797466" dur="2.9180521851198655s" begin="1.6025925727966133s" repeatCount="indefinite"/></line><line x1="7.744233481718476" x2="7.744233481718476" stroke="white" stroke-width="0.31211236697075934" opacity="0.44261164843173023"><animate attributeName="y1" from="-50" to="110" dur="3.6678566949902995s" begin="2.8526442295501897s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.913537121538944" to="112.08646287846105" dur="3.6678566949902995s" begin="2.8526442295501897s" repeatCount="indefinite"/></line><line x1="91.45178371934692" x2="91.45178371934692" stroke="white" stroke-width="0.34818175293984466" opacity="0.7085379709597865"><animate attributeName="y1" from="-50" to="110" dur="4.465438659149517s" begin="3.956413883037848s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.255652953444546" to="110.74434704655545" dur="4.465438659149517s" begin="3.956413883037848s" repeatCount="indefinite"/></line><line x1="48.25797646364811" x2="48.25797646364811" stroke="white" stroke-width="0.20547297837075246" opacity="0.5602426079284456"><animate attributeName="y1" from="-50" to="110" dur="4.401680910102874s" begin="3.3821107589054518s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.189339506082106" to="110.8106604939179" dur="4.401680910102874s" begin="3.3821107589054518s" repeatCount="indefinite"/></line><line x1="99.12122650968158" x2="99.12122650968158" stroke="white" stroke-width="0.10504044857865684" opacity="0.36666683140976447"><animate attributeName="y1" from="-50" to="110" dur="4.61136581052965s" begin="4.742222437710378s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.18690983864519" to="110.81309016135481" dur="4.61136581052965s" begin="4.742222437710378s" repeatCount="indefinite"/></line><line x1="52.64583382137823" x2="52.64583382137823" stroke="white" stroke-width="0.1320840642733084" opacity="0.42469472127551305"><animate attributeName="y1" from="-50" to="110" dur="2.1873752598495253s" begin="1.9027452640487508s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.04110548053537" to="111.95889451946464" dur="2.1873752598495253s" begin="1.9027452640487508s" repeatCount="indefinite"/></line><line x1="18.549645496297362" x2="18.549645496297362" stroke="white" stroke-width="0.37005915350852425" opacity="0.5021760107603718"><animate attributeName="y1" from="-50" to="110" dur="4.217871780849546s" begin="0.5408351312990134s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.63403833053391" to="111.36596166946609" dur="4.217871780849546s" begin="0.5408351312990134s" repeatCount="indefinite"/></line><line x1="78.66475920040142" x2="78.66475920040142" stroke="white" stroke-width="0.3261929363218774" opacity="0.3043460771051104"><animate attributeName="y1" from="-50" to="110" dur="4.951728243069584s" begin="4.0665772444250505s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.867639543418235" to="111.13236045658176" dur="4.951728243069584s" begin="4.0665772444250505s" repeatCount="indefinite"/></line><line x1="93.62787215844165" x2="93.62787215844165" stroke="white" stroke-width="0.33535408850454573" opacity="0.324279290039807"><animate attributeName="y1" from="-50" to="110" dur="3.926108131081413s" begin="0.6258520458382905s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.541448094736744" to="112.45855190526326" dur="3.926108131081413s" begin="0.6258520458382905s" repeatCount="indefinite"/></line><line x1="65.33436048672725" x2="65.33436048672725" stroke="white" stroke-width="0.284042178428706" opacity="0.3840397045632186"><animate attributeName="y1" from="-50" to="110" dur="2.38243010580713s" begin="4.699843085912825s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.35120768086871" to="111.64879231913129" dur="2.38243010580713s" begin="4.699843085912825s" repeatCount="indefinite"/></line><line x1="4.8612323812224805" x2="4.8612323812224805" stroke="white" stroke-width="0.1320615549838865" opacity="0.6729152066041262"><animate attributeName="y1" from="-50" to="110" dur="2.847680618047518s" begin="1.8211994243183638s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.42300827924798" to="111.57699172075202" dur="2.847680618047518s" begin="1.8211994243183638s" repeatCount="indefinite"/></line><line x1="0.2617078423272634" x2="0.2617078423272634" stroke="white" stroke-width="0.34528670028386266" opacity="0.7790113539416093"><animate attributeName="y1" from="-50" to="110" dur="2.841458295882226s" begin="4.210876956278784s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.17831156457954" to="111.82168843542047" dur="2.841458295882226s" begin="4.210876956278784s" repeatCount="indefinite"/></line><line x1="33.11775255848895" x2="33.11775255848895" stroke="white" stroke-width="0.24741008668373718" opacity="0.5466716121880599"><animate attributeName="y1" from="-50" to="110" dur="3.8210773292240203s" begin="1.0575253753400438s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.44194766236286" to="111.55805233763715" dur="3.8210773292240203s" begin="1.0575253753400438s" repeatCount="indefinite"/></line><line x1="18.53933543688261" x2="18.53933543688261" stroke="white" stroke-width="0.3028264408075632" opacity="0.360083357243099"><animate attributeName="y1" from="-50" to="110" dur="2.563937061915794s" begin="3.861355023068147s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.87818357472936" to="111.12181642527064" dur="2.563937061915794s" begin="3.861355023068147s" repeatCount="indefinite"/></line><line x1="85.21483437818871" x2="85.21483437818871" stroke="white" stroke-width="0.16888702798723346" opacity="0.7408749084753681"><animate attributeName="y1" from="-50" to="110" dur="3.8033226269618146s" begin="1.4640528545832465s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.921175227544744" to="112.07882477245525" dur="3.8033226269618146s" begin="1.4640528545832465s" repeatCount="indefinite"/></line><line x1="23.538004197225415" x2="23.538004197225415" stroke="white" stroke-width="0.22380369709295755" opacity="0.5346422612195468"><animate attributeName="y1" from="-50" to="110" dur="4.548900069894231s" begin="4.837996903483618s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.922561865232325" to="112.07743813476768" dur="4.548900069894231s" begin="4.837996903483618s" repeatCount="indefinite"/></line><line x1="74.45765357020574" x2="74.45765357020574" stroke="white" stroke-width="0.30394212346375754" opacity="0.7117491935651841"><animate attributeName="y1" from="-50" to="110" dur="4.649407230987977s" begin="1.6469713922313833s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.89882301325025" to="112.10117698674975" dur="4.649407230987977s" begin="1.6469713922313833s" repeatCount="indefinite"/></line><line x1="68.85752438417231" x2="68.85752438417231" stroke="white" stroke-width="0.1783355511039263" opacity="0.6413489484981217"><animate attributeName="y1" from="-50" to="110" dur="3.1279409225080563s" begin="4.49825122106269s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.044351137460595" to="111.9556488625394" dur="3.1279409225080563s" begin="4.49825122106269s" repeatCount="indefinite"/></line><line x1="30.448480040492832" x2="30.448480040492832" stroke="white" stroke-width="0.2820777637577949" opacity="0.46936648791843133"><animate attributeName="y1" from="-50" to="110" dur="2.6686893121899153s" begin="4.595762752566105s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.2305673944819" to="111.76943260551809" dur="2.6686893121899153s" begin="4.595762752566105s" repeatCount="indefinite"/></line><line x1="14.488779427382726" x2="14.488779427382726" stroke="white" stroke-width="0.10055348055944177" opacity="0.7171967881055579"><animate attributeName="y1" from="-50" to="110" dur="2.0626856956244s" begin="2.2859857809831126s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.933227841583445" to="112.06677215841655" dur="2.0626856956244s" begin="2.2859857809831126s" repeatCount="indefinite"/></line><line x1="76.93920215037001" x2="76.93920215037001" stroke="white" stroke-width="0.11348236463822335" opacity="0.5397135683832462"><animate attributeName="y1" from="-50" to="110" dur="2.2748413965452277s" begin="0.6573402035080705s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.64478445415611" to="112.35521554584389" dur="2.2748413965452277s" begin="0.6573402035080705s" repeatCount="indefinite"/></line><line x1="79.41181335801501" x2="79.41181335801501" stroke="white" stroke-width="0.17712353648565662" opacity="0.3823668569927795"><animate attributeName="y1" from="-50" to="110" dur="4.313268043823603s" begin="4.5100899982956415s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.90659237465137" to="111.09340762534863" dur="4.313268043823603s" begin="4.5100899982956415s" repeatCount="indefinite"/></line><line x1="62.47326079944017" x2="62.47326079944017" stroke="white" stroke-width="0.25018795380749376" opacity="0.36234798362236764"><animate attributeName="y1" from="-50" to="110" dur="2.2878314107634767s" begin="0.18344604379890828s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.60775309061507" to="111.39224690938494" dur="2.2878314107634767s" begin="0.18344604379890828s" repeatCount="indefinite"/></line><line x1="44.187843001351865" x2="44.187843001351865" stroke="white" stroke-width="0.39745029222958905" opacity="0.7364186460092375"><animate attributeName="y1" from="-50" to="110" dur="2.706838515780195s" begin="3.7762610978633826s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.01420943358711" to="110.98579056641289" dur="2.706838515780195s" begin="3.7762610978633826s" repeatCount="indefinite"/></line><line x1="32.33039902504249" x2="32.33039902504249" stroke="white" stroke-width="0.29769812986838884" opacity="0.4219967628775581"><animate attributeName="y1" from="-50" to="110" dur="3.0039242135825304s" begin="3.0471416537860128s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.31818339698728" to="111.68181660301272" dur="3.0039242135825304s" begin="3.0471416537860128s" repeatCount="indefinite"/></line><line x1="3.196807155251602" x2="3.196807155251602" stroke="white" stroke-width="0.349127904107431" opacity="0.5558461570537481"><animate attributeName="y1" from="-50" to="110" dur="3.954044332420888s" begin="2.0937106618737538s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.8160237354832" to="111.1839762645168" dur="3.954044332420888s" begin="2.0937106618737538s" repeatCount="indefinite"/></line><line x1="41.507151544394915" x2="41.507151544394915" stroke="white" stroke-width="0.16033847379484906" opacity="0.5932911389279256"><animate attributeName="y1" from="-50" to="110" dur="3.085939495858056s" begin="2.1229272637507646s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.773956488516234" to="112.22604351148377" dur="3.085939495858056s" begin="2.1229272637507646s" repeatCount="indefinite"/></line><line x1="55.46909772511789" x2="55.46909772511789" stroke="white" stroke-width="0.35155302532391786" opacity="0.5862111705121873"><animate attributeName="y1" from="-50" to="110" dur="3.000777089693611s" begin="4.477177844618508s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.91977183294288" to="111.08022816705711" dur="3.000777089693611s" begin="4.477177844618508s" repeatCount="indefinite"/></line><line x1="28.25442610595532" x2="28.25442610595532" stroke="white" stroke-width="0.19102879296534814" opacity="0.38029118727398037"><animate attributeName="y1" from="-50" to="110" dur="2.6464297004088255s" begin="4.761474002461381s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.40035966958394" to="110.59964033041607" dur="2.6464297004088255s" begin="4.761474002461381s" repeatCount="indefinite"/></line><line x1="45.24361004088053" x2="45.24361004088053" stroke="white" stroke-width="0.20523792392229406" opacity="0.7466609527742429"><animate attributeName="y1" from="-50" to="110" dur="2.1722614203581037s" begin="4.803291153980527s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.16658021473123" to="111.83341978526877" dur="2.1722614203581037s" begin="4.803291153980527s" repeatCount="indefinite"/></line><line x1="85.36032922435027" x2="85.36032922435027" stroke="white" stroke-width="0.3381156664589526" opacity="0.4771492004029357"><animate attributeName="y1" from="-50" to="110" dur="3.8874294362086412s" begin="4.838582324380357s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.980119589023396" to="111.01988041097661" dur="3.8874294362086412s" begin="4.838582324380357s" repeatCount="indefinite"/></line><line x1="0.9211728279510223" x2="0.9211728279510223" stroke="white" stroke-width="0.30390942277439903" opacity="0.36758983006414925"><animate attributeName="y1" from="-50" to="110" dur="4.164092846137338s" begin="3.1483063395294457s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.33589510814022" to="111.66410489185978" dur="4.164092846137338s" begin="3.1483063395294457s" repeatCount="indefinite"/></line><line x1="61.49759376217312" x2="61.49759376217312" stroke="white" stroke-width="0.29955053719048913" opacity="0.5190368879510752"><animate attributeName="y1" from="-50" to="110" dur="2.5538797397556525s" begin="4.7695817984725455s" repeatCount="indefinite"/><animate attributeName="y2" from="-48.09812020089655" to="111.90187979910345" dur="2.5538797397556525s" begin="4.7695817984725455s" repeatCount="indefinite"/></line><line x1="32.77503892513673" x2="32.77503892513673" stroke="white" stroke-width="0.19741571256844162" opacity="0.7544890170062526"><animate attributeName="y1" from="-50" to="110" dur="2.755394065839713s" begin="4.140365958749046s" repeatCount="indefinite"/><animate attributeName="y2" from="-47.5847065831379" to="112.4152934168621" dur="2.755394065839713s" begin="4.140365958749046s" repeatCount="indefinite"/></line><line x1="13.382548774657776" x2="13.382548774657776" stroke="white" stroke-width="0.1671239134824059" opacity="0.5953207178255662"><animate attributeName="y1" from="-50" to="110" dur="2.8373757914158473s" begin="4.191216600799712s" repeatCount="indefinite"/><animate attributeName="y2" from="-49.38313909208223" to="110.61686090791777" dur="2.8373757914158473s" begin="4.191216600799712s" repeatCount="indefinite"/></line></g>
+
+</svg>

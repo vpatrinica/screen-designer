@@ -1,0 +1,10 @@
+LICENSE
+pyproject.toml
+query_influxdb.py
+task-getinfluxdata.md
+query_influxdb.egg-info/PKG-INFO
+query_influxdb.egg-info/SOURCES.txt
+query_influxdb.egg-info/dependency_links.txt
+query_influxdb.egg-info/entry_points.txt
+query_influxdb.egg-info/requires.txt
+query_influxdb.egg-info/top_level.txt

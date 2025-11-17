@@ -1,0 +1,30 @@
+[{
+        "id": "e230e00f2a13f115",
+        "type": "set-shared-state",
+        "z": "c0292dea32408fa2",
+        "state": "99edbc5f41db959e",
+        "name": "LZ_icpdas01_AI16_flow_DF28",
+        "triggerOnInit": true,
+        "triggerOnChange": true,
+        "provideOutput": true,
+        "outputs": 1,
+        "x": 750,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fb4e41d7954bc2fd",
+        "type": "get-shared-state",
+        "z": "c0292dea32408fa2",
+        "state": "99edbc5f41db959e",
+        "name": "LZ_icpdas01_AI16_flow_DF28",
+        "triggerOnInit": true,
+        "triggerOnChange": true,
+        "x": 770,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    }]

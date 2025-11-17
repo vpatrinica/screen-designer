@@ -1,0 +1,2 @@
+I need to create a python file which I can use on windows and run the following:
+query influxdb v2 hosted on fqdn.de:18086 api and get the list of all different fields in the provided bucketname, and influxtoken

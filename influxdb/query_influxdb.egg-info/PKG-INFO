@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: query-influxdb
+Version: 0.1.0
+Summary: Query InfluxDB v2 to retrieve all fields in a bucket
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: influxdb-client>=1.36.0
+Dynamic: license-file
+
+I need to create a python file which I can use on windows and run the following:
+query influxdb v2 hosted on fqdn.de:18086 api and get the list of all different fields in the provided bucketname, and influxtoken

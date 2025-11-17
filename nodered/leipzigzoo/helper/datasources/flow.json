@@ -1,0 +1,2452 @@
+{
+"targets": [
+    {
+      "alias": "Durchfluss 1 - 22",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AL",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/22|--000-01-01-S083.02-2147-FB_AI.01|flow rate 1"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 2 - 22",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AM",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/22|--000-01-01-S083.02-2148-FB_AI.01|flow rate 2"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 1 - 22",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "J",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/22|--000-01-01-S083.02-2148-FB_AI.01|Durchfluss 1"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 2 - 22",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "C",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/22|--000-01-01-S083.02-2149-FB_AI.01|Durchfluss 2"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 3 - 20",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "E",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/20|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 3"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 4 - 20",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "G",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/20|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 4"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 5 - 20",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "I",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/20|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 5"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 6 - 20",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "M",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/20|--000-01-01-S325.02-4-FB_AI.01|Durchfluss 6"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 7 - 20",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "N",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/20|--000-01-01-S325.02-5-FB_AI.01|Durchfluss 7"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 8 - 20",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "O",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/20|--000-01-01-S325.02-6-FB_AI.01|Durchfluss 8"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 9 - 20",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "P",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/20|--000-01-01-S325.02-7-FB_AI.01|Durchfluss 9"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 10 - 20",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "R",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/20|--000-01-01-S325.02-8-FB_AI.01|Durchfluss 10"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 11 - 21",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "T",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/21|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 11"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 12 - 21",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "W",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/21|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 12"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 13 - 21",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "Z",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/21|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 13"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 14 - 21",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AC",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/21|--000-01-01-S325.02-4-FB_AI.01|Durchfluss 14"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 15 - 21",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "K",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/21|--000-01-01-S325.02-5-FB_AI.01|Durchfluss 15"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 16 - 21",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AH",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/21|--000-01-01-S325.02-6-FB_AI.01|Durchfluss 16"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 17 - 21",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AI",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/21|--000-01-01-S325.02-7-FB_AI.01|Durchfluss 17"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 18 - 21",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "A",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/21|--000-01-01-S325.02-8-FB_AI.01|Durchfluss 18"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 19 - 12",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "B",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/12|--000-01-01-S083.02-2146-FB_AI.01|Durchfluss 19"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 20 - 12",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "D",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/12|--000-01-01-S083.02-2147-FB_AI.01|Durchfluss 20"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 20 - 12",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AN",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/12|--000-01-01-S083.03-2147-FB_AI.01|Durchfluss 2"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 21 - 10",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "F",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/10|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 21"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 22 - 10",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "H",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/10|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 22"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 23 - 10",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "L",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/10|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 23"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 24 - 10",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "Q",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/10|--000-01-01-S325.02-4-FB_AI.01|Durchfluss 24"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 25 - 10",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "S",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/10|--000-01-01-S325.02-5-FB_AI.01|Durchfluss 25"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 26 - 10",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "U",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/10|--000-01-01-S325.02-6-FB_AI.01|Durchfluss 26"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 27 - 10",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "V",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/10|--000-01-01-S325.02-7-FB_AI.01|Durchfluss 27"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 28 - 10",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "X",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/10|--000-01-01-S325.02-8-FB_AI.01|Durchfluss 28"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 21 - icp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AP",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "AI-07"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/icpdas01"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 22 - icp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AQ",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "AI-08"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/icpdas01"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 23 - icp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AR",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "AI-11"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/icpdas01"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 24 - icp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AS",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "AI-12"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/icpdas01"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 25 - icp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AT",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "AI-13"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/icpdas01"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 26 - icp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AU",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "AI-14"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/icpdas01"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 27 - icp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AV",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "AI-15"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/icpdas01"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 28 - icp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AW",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "AI-16"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/icpdas01"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 29 - 11",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "Y",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/11|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 29"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 30 - 11",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AA",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/11|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 30"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 31 - 11",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AB",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/11|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 31"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 32 - 11",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AD",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/11|--000-01-01-S325.02-4-FB_AI.01|Durchfluss 32"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 33 - 11",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AE",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/11|--000-01-01-S325.02-5-FB_AI.01|Durchfluss 33"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 34 - 11",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AF",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/11|--000-01-01-S325.02-6-FB_AI.01|Durchfluss 34"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 35 - 11",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AG",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/11|--000-01-01-S325.02-7-FB_AI.01|Durchfluss 35"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 35 - 12",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AJ",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/12|--000-01-01-S083.01-2147-FB_AI.01|Durchfluss 35"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 35 - 12",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AX",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/12|--000-01-01-S083.03-2148-FB_AI.01|Durchfluss 35"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 36 - 11",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": true,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AK",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/11|--000-01-01-S325.02-8-FB_AI.01|Durchfluss 36"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 36 - 12",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": true,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AO",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/12|--000-01-01-S083.03-2149-FB_AI.01|Durchfluss 36"
+        }
+      ]
+    },
+    {
+      "alias": "Durchfluss 1 - 22",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "beu0fulgrml8gc"
+      },
+      "groupBy": [
+        {
+          "params": [
+            "$__interval"
+          ],
+          "type": "time"
+        },
+        {
+          "params": [
+            "none"
+          ],
+          "type": "fill"
+        }
+      ],
+      "hide": false,
+      "measurement": "leipzigzoo",
+      "orderByTime": "ASC",
+      "policy": "default",
+      "refId": "AY",
+      "resultFormat": "time_series",
+      "select": [
+        [
+          {
+            "params": [
+              "value"
+            ],
+            "type": "field"
+          },
+          {
+            "params": [],
+            "type": "last"
+          }
+        ]
+      ],
+      "tags": [
+        {
+          "key": "topic::tag",
+          "operator": "=",
+          "value": "leipzigzoo/22|--000-01-01-S083.01-2146-FB_AI.01|cushion temperature"
+        }
+      ]
+    }
+  ]
+}

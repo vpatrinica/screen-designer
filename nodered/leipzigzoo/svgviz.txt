@@ -1,0 +1,1141 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 1100 650"
+  width="100%" height="100%" id="main-svg" preserveAspectRatio="xMidYMid meet">
+  <rect id="svgEditorBackground" x="0" y="0" width="1100" height="650" style="fill:none;stroke:none" />
+  <defs>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="10" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="red-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="10" result="coloredBlur" />
+      <feColorMatrix in="coloredBlur" type="matrix" values="1 0 0 0 0.5  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="green-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="10" result="coloredBlur" />
+      <feColorMatrix in="coloredBlur" type="matrix" values="0 0 0 0 0  0 1 0 0 0.5  0 0 0 0 0  0 0 0 1 0" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="orange-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="10" result="coloredBlur" />
+      <!-- approximate orange tint -->
+      <feColorMatrix in="coloredBlur" type="matrix" values="1 0 0 0 0  0.6 0.35 0 0 0.1  0 0 0 0 0  0 0 0 1 0" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <style>
+      .panel-container {
+        font-family: sans-serif;
+        background-color: #fff;
+        /* [cite: 3] */
+        border-radius: 8px;
+        /* [cite: 3] */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        /* [cite: 3] */
+        height: 100%;
+        /* [cite: 3] */
+        display: flex;
+        /* [cite: 3] */
+        flex-direction: column;
+        /* [cite: 3] */
+        font-size: 14px;
+        /* [cite: 4] */
+      }
+
+      .panel-header {
+        padding: 12px;
+        /* [cite: 5] */
+        border-bottom: 1px solid #e5e7eb;
+        /* [cite: 5] */
+        text-align: center;
+        /* [cite: 5] */
+      }
+
+      .navigation {
+        display: flex;
+        /* [cite: 6] */
+        flex-wrap: wrap;
+        /* [cite: 6] */
+        justify-content: center;
+        /* [cite: 6] */
+        gap: 8px;
+        /* [cite: 6] */
+        margin-bottom: 12px;
+        /* [cite: 6] */
+      }
+
+      .legend {
+        display: flex;
+        /* [cite: 7] */
+        flex-wrap: wrap;
+        /* [cite: 7] */
+        justify-content: center;
+        /* [cite: 7] */
+        gap: 8px;
+        /* [cite: 7] */
+        margin-top: 8px;
+        /* [cite: 7] */
+      }
+
+      .nav-btn,
+      .legend-item {
+        cursor: pointer;
+        /* [cite: 8, 9] */
+        padding: 6px 10px;
+        /* [cite: 8, 9] */
+        border-radius: 6px;
+        /* [cite: 8, 9] */
+        border: 2px solid transparent;
+        /* [cite: 8, 9] */
+        background-color: #f9fafb;
+        /* [cite: 8, 9] */
+        display: flex;
+        /* [cite: 8, 9] */
+        align-items: center;
+        /* [cite: 8, 9] */
+        gap: 4px;
+        /* [cite: 8, 9] */
+      }
+
+      .nav-btn.active,
+      .legend-item.active {
+        border-color: #3b82f6;
+        /* [cite: 10] */
+        background-color: #dbeafe;
+        /* [cite: 10] */
+      }
+
+      h2 {
+        font-size: 1.125rem;
+        /* [cite: 11] */
+        font-weight: 700;
+        /* [cite: 11] */
+      }
+
+      .sensor-list {
+        overflow-y: auto;
+        /* [cite: 12] */
+        padding: 8px;
+        /* [cite: 12] */
+        flex-grow: 1;
+        /* [cite: 12] */
+      }
+
+      .sensor-list-item {
+        display: flex;
+        /* [cite: 13, 14] */
+        justify-content: space-between;
+        /* [cite: 13, 14] */
+        align-items: center;
+        /* [cite: 13, 14] */
+        padding: 8px;
+        /* [cite: 13, 14] */
+        border-bottom: 1px solid #f3f4f6;
+        /* [cite: 13, 14] */
+      }
+
+      .sensor-list-item.highlight {
+        background-color: #ebf8ff;
+        /* [cite: 15] */
+      }
+
+      .sensor-list-item span:first-child {
+        font-weight: 700;
+        /* [cite: 16] */
+        flex: 0 0 50%;
+        /* [cite: 16] */
+        text-align: right;
+        /* [cite: 16] */
+      }
+
+      .sensor-list-item span:last-child {
+        flex: 0 0 50%;
+        /* [cite: 17] */
+        text-align: left;
+        /* [cite: 17] */
+        padding-left: 20px;
+        /* [cite: 17] */
+      }
+
+      .sensor-unit {
+        font-size: 0.9em;
+        margin-left: 4px;
+        font-weight: bold;
+      }
+
+      .sensor-list-item .value.alert {
+        color: #ef4444;
+        /* [cite: 19] */
+        font-weight: 600;
+        /* [cite: 19] */
+      }
+
+      .sensor-list-item .value.warning {
+        color: #f97316;
+        /* orange */
+        font-weight: 600;
+      }
+
+      .value.normal {
+        color: #10b981;
+      }
+
+      .region-label {
+        cursor: pointer;
+        /* [cite: 21] */
+      }
+
+      #mapLayer {
+        transition: transform .45s cubic-bezier(0.22, 1, 0.36, 1);
+        /* [cite: 22] */
+      }
+
+      .bottom-toolbar {
+        height: 72px;
+        /* [cite: 23, 24] */
+        background: #fff;
+        /* [cite: 23, 24] */
+        border-top: 1px solid #e5e7eb;
+        /* [cite: 23, 24] */
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.06);
+        /* [cite: 23, 24] */
+        display: flex;
+        /* [cite: 23, 24] */
+        align-items: center;
+        /* [cite: 23, 24] */
+        justify-content: center;
+        /* [cite: 23, 24] */
+      }
+
+      .toolbar-nav {
+        display: flex;
+        /* [cite: 25] */
+        gap: 8px;
+        /* [cite: 25] */
+        flex-wrap: nowrap;
+        /* [cite: 25] */
+        align-items: center;
+        /* [cite: 25] */
+      }
+
+      .nav-label {
+        color: #6b7280;
+        /* [cite: 26] */
+        font-size: 14px;
+        /* [cite: 26] */
+      }
+    </style>
+  </defs>
+  <g id="mapLayer" transform="translate(0,0) scale(1.01)">
+    <image x="0" y="0" width="900" height="850" href="https://monitor.in-si.de/nodered/uimedia/img/Karte.png" />
+    <g id="region-labels" opacity="0.4" font-family="Inter, sans-serif" font-size="4rem" font-weight="bold"
+      fill="#d9534f" text-anchor="middle">
+      <text x="525" y="190" class="region-label" onclick="window.setView('1')">1</text>
+      <text x="525" y="520" class="region-label" onclick="window.setView('2')">2</text>
+      <text x="245" y="190" class="region-label" onclick="window.setView('3')">3</text>
+      <text x="245" y="520" class="region-label" onclick="window.setView('4')">4</text>
+    </g>
+    <g id="sensor-group-f1" class="sensor-group" data-sensor-id="f1" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="524" cy="52" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="524" y="52" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">1</text>
+    </g>
+    <g id="sensor-group-f2" class="sensor-group" data-sensor-id="f2" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="561" cy="87" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="561" y="87" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">2</text>
+    </g>
+    <g id="sensor-group-f3" class="sensor-group" data-sensor-id="f3" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="589" cy="125" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="589" y="125" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">3</text>
+    </g>
+    <g id="sensor-group-f4" class="sensor-group" data-sensor-id="f4" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="615" cy="170" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="615" y="170" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">4</text>
+    </g>
+    <g id="sensor-group-f5" class="sensor-group" data-sensor-id="f5" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="642" cy="217" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="642" y="217" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">5</text>
+    </g>
+    <g id="sensor-group-f6" class="sensor-group" data-sensor-id="f6" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="670" cy="260" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="670" y="260" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">6</text>
+    </g>
+    <g id="sensor-group-f7" class="sensor-group" data-sensor-id="f7" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="691" cy="316" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="691" y="316" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">7</text>
+    </g>
+    <g id="sensor-group-f8" class="sensor-group" data-sensor-id="f8" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="565" cy="332" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="565" y="332" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">8</text>
+    </g>
+    <g id="sensor-group-f9" class="sensor-group" data-sensor-id="f9" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="710" cy="380" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="710" y="380" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">9</text>
+    </g>
+    <g id="sensor-group-f10" class="sensor-group" data-sensor-id="f10" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="565" cy="381" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="565" y="381" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">10</text>
+    </g>
+    <g id="sensor-group-f11" class="sensor-group" data-sensor-id="f11" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="727" cy="423" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="727" y="423" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">11</text>
+    </g>
+    <g id="sensor-group-f12" class="sensor-group" data-sensor-id="f12" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="564" cy="422" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="564" y="422" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">12</text>
+    </g>
+    <g id="sensor-group-f13" class="sensor-group" data-sensor-id="f13" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="748" cy="463" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="748" y="463" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">13</text>
+    </g>
+    <g id="sensor-group-f14" class="sensor-group" data-sensor-id="f14" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="564" cy="469" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="564" y="469" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">14</text>
+    </g>
+    <g id="sensor-group-f15" class="sensor-group" data-sensor-id="f15" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="760" cy="511" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="760" y="511" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">15</text>
+    </g>
+    <g id="sensor-group-f16" class="sensor-group" data-sensor-id="f16" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="562" cy="516" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="562" y="516" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">16</text>
+    </g>
+    <g id="sensor-group-f17" class="sensor-group" data-sensor-id="f17" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="767" cy="560" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="767" y="560" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">17</text>
+    </g>
+    <g id="sensor-group-f18" class="sensor-group" data-sensor-id="f18" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="563" cy="561" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="563" y="561" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">18</text>
+    </g>
+    <g id="sensor-group-f19" class="sensor-group" data-sensor-id="f19" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="377" cy="47" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="377" y="47" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">19</text>
+    </g>
+    <g id="sensor-group-f20" class="sensor-group" data-sensor-id="f20" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="338" cy="80" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="338" y="80" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">20</text>
+    </g>
+    <g id="sensor-group-f21" class="sensor-group" data-sensor-id="f21" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="306" cy="123" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="306" y="123" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">21</text>
+    </g>
+    <g id="sensor-group-f22" class="sensor-group" data-sensor-id="f22" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="277" cy="159" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="277" y="159" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">22</text>
+    </g>
+    <g id="sensor-group-f23" class="sensor-group" data-sensor-id="f23" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="246" cy="207" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="246" y="207" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">23</text>
+    </g>
+    <g id="sensor-group-f24" class="sensor-group" data-sensor-id="f24" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="211" cy="256" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="211" y="256" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">24</text>
+    </g>
+    <g id="sensor-group-f25" class="sensor-group" data-sensor-id="f25" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="183" cy="312" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="183" y="312" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">25</text>
+    </g>
+    <g id="sensor-group-f26" class="sensor-group" data-sensor-id="f26" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="282" cy="321" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="282" y="321" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">26</text>
+    </g>
+    <g id="sensor-group-f27" class="sensor-group" data-sensor-id="f27" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="164" cy="367" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="164" y="367" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">27</text>
+    </g>
+    <g id="sensor-group-f28" class="sensor-group" data-sensor-id="f28" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="281" cy="366" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="281" y="366" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">28</text>
+    </g>
+    <g id="sensor-group-f29" class="sensor-group" data-sensor-id="f29" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="146" cy="410" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="146" y="410" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">29</text>
+    </g>
+    <g id="sensor-group-f30" class="sensor-group" data-sensor-id="f30" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="280" cy="411" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="280" y="411" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">30</text>
+    </g>
+    <g id="sensor-group-f31" class="sensor-group" data-sensor-id="f31" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="130" cy="456" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="130" y="456" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">31</text>
+    </g>
+    <g id="sensor-group-f32" class="sensor-group" data-sensor-id="f32" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="280" cy="460" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="280" y="460" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">32</text>
+    </g>
+    <g id="sensor-group-f33" class="sensor-group" data-sensor-id="f33" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="115" cy="504" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="115" y="504" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">33</text>
+    </g>
+    <g id="sensor-group-f34" class="sensor-group" data-sensor-id="f34" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="280" cy="514" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="280" y="514" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">34</text>
+    </g>
+    <g id="sensor-group-f35" class="sensor-group" data-sensor-id="f35" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="113" cy="550" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="113" y="550" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">35</text>
+    </g>
+    <g id="sensor-group-f36" class="sensor-group" data-sensor-id="f36" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="277" cy="561" r="8" fill="#2dd4bf" stroke="#1a202c" stroke-width="1" />
+      </g>
+      <text x="277" y="561" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">36</text>
+    </g>
+
+    <g id="sensor-group-p1" class="sensor-group" data-sensor-id="p1" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 489 17 L 481 17 A 8 8 0 0 1 489 9 Z" fill="#10b981" />
+        <path d="M 489 17 L 489 9 A 8 8 0 0 1 497 17 Z" fill="#ef4444" />
+        <path d="M 489 17 L 497 17 A 8 8 0 0 1 489 25 Z" fill="#10b981" />
+        <path d="M 489 17 L 489 25 A 8 8 0 0 1 481 17 Z" fill="#ef4444" />
+        <circle cx="489" cy="17" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="489" y="17" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">1</text>
+    </g>
+    <g id="sensor-group-p2" class="sensor-group" data-sensor-id="p2" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 482 370 L 474 370 A 8 8 0 0 1 482 362 Z" fill="#10b981" />
+        <path d="M 482 370 L 482 362 A 8 8 0 0 1 490 370 Z" fill="#ef4444" />
+        <path d="M 482 370 L 490 370 A 8 8 0 0 1 482 378 Z" fill="#10b981" />
+        <path d="M 482 370 L 482 378 A 8 8 0 0 1 474 370 Z" fill="#ef4444" />
+        <circle cx="482" cy="370" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="482" y="370" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">2</text>
+    </g>
+    <g id="sensor-group-p3" class="sensor-group" data-sensor-id="p3" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 480 421 L 472 421 A 8 8 0 0 1 480 413 Z" fill="#10b981" />
+        <path d="M 480 421 L 480 413 A 8 8 0 0 1 488 421 Z" fill="#ef4444" />
+        <path d="M 480 421 L 488 421 A 8 8 0 0 1 480 429 Z" fill="#10b981" />
+        <path d="M 480 421 L 480 429 A 8 8 0 0 1 472 421 Z" fill="#ef4444" />
+        <circle cx="480" cy="421" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="480" y="421" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">3</text>
+    </g>
+    <g id="sensor-group-p4" class="sensor-group" data-sensor-id="p4" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 505 580 L 497 580 A 8 8 0 0 1 505 572 Z" fill="#10b981" />
+        <path d="M 505 580 L 505 572 A 8 8 0 0 1 513 580 Z" fill="#ef4444" />
+        <path d="M 505 580 L 513 580 A 8 8 0 0 1 505 588 Z" fill="#10b981" />
+        <path d="M 505 580 L 505 588 A 8 8 0 0 1 497 580 Z" fill="#ef4444" />
+        <circle cx="505" cy="580" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="505" y="580" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">4</text>
+    </g>
+    <g id="sensor-group-p5" class="sensor-group" data-sensor-id="p5" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 441 583 L 433 583 A 8 8 0 0 1 441 575 Z" fill="#10b981" />
+        <path d="M 441 583 L 441 575 A 8 8 0 0 1 449 583 Z" fill="#ef4444" />
+        <path d="M 441 583 L 449 583 A 8 8 0 0 1 441 591 Z" fill="#10b981" />
+        <path d="M 441 583 L 441 591 A 8 8 0 0 1 433 583 Z" fill="#ef4444" />
+        <circle cx="441" cy="583" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="441" y="583" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">5</text>
+    </g>
+    <g id="sensor-group-p6" class="sensor-group" data-sensor-id="p6" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 408 582 L 400 582 A 8 8 0 0 1 408 574 Z" fill="#10b981" />
+        <path d="M 408 582 L 408 574 A 8 8 0 0 1 416 582 Z" fill="#ef4444" />
+        <path d="M 408 582 L 416 582 A 8 8 0 0 1 408 590 Z" fill="#10b981" />
+        <path d="M 408 582 L 408 590 A 8 8 0 0 1 400 582 Z" fill="#ef4444" />
+        <circle cx="408" cy="582" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="408" y="582" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">6</text>
+    </g>
+    <g id="sensor-group-p7" class="sensor-group" data-sensor-id="p7" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 323 580 L 315 580 A 8 8 0 0 1 323 572 Z" fill="#10b981" />
+        <path d="M 323 580 L 323 572 A 8 8 0 0 1 331 580 Z" fill="#ef4444" />
+        <path d="M 323 580 L 331 580 A 8 8 0 0 1 323 588 Z" fill="#10b981" />
+        <path d="M 323 580 L 323 588 A 8 8 0 0 1 315 580 Z" fill="#ef4444" />
+        <circle cx="323" cy="580" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="323" y="580" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">7</text>
+    </g>
+    <g id="sensor-group-p8" class="sensor-group" data-sensor-id="p8" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 367 387 L 359 387 A 8 8 0 0 1 367 379 Z" fill="#10b981" />
+        <path d="M 367 387 L 367 379 A 8 8 0 0 1 375 387 Z" fill="#ef4444" />
+        <path d="M 367 387 L 375 387 A 8 8 0 0 1 367 395 Z" fill="#10b981" />
+        <path d="M 367 387 L 367 395 A 8 8 0 0 1 359 387 Z" fill="#ef4444" />
+        <circle cx="367" cy="387" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="367" y="387" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">8</text>
+    </g>
+    <g id="sensor-group-p9" class="sensor-group" data-sensor-id="p9" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 440 232 L 432 232 A 8 8 0 0 1 440 224 Z" fill="#10b981" />
+        <path d="M 440 232 L 440 224 A 8 8 0 0 1 448 232 Z" fill="#ef4444" />
+        <path d="M 440 232 L 448 232 A 8 8 0 0 1 440 240 Z" fill="#10b981" />
+        <path d="M 440 232 L 440 240 A 8 8 0 0 1 432 232 Z" fill="#ef4444" />
+        <circle cx="440" cy="232" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="440" y="232" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">9</text>
+    </g>
+    <g id="sensor-group-p10" class="sensor-group" data-sensor-id="p10" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <path d="M 419 15 L 411 15 A 8 8 0 0 1 419 7 Z" fill="#10b981" />
+        <path d="M 419 15 L 419 7 A 8 8 0 0 1 427 15 Z" fill="#ef4444" />
+        <path d="M 419 15 L 427 15 A 8 8 0 0 1 419 23 Z" fill="#10b981" />
+        <path d="M 419 15 L 419 23 A 8 8 0 0 1 411 15 Z" fill="#ef4444" />
+        <circle cx="419" cy="15" r="8" fill="none" stroke="#1a202c" stroke-width="1"
+          vector-effect="non-scaling-stroke" />
+      </g>
+      <text x="419" y="15" font-size="8" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">10</text>
+    </g>
+
+    <g id="sensor-group-s1" class="sensor-group" data-sensor-id="s1" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="632" cy="82" r="8" fill="black" stroke="white" stroke-width="1.5"
+          vector-effect="non-scaling-stroke" />
+        <circle cx="632" cy="82" r="1.5" fill="white" />
+      </g>
+      <text x="632" y="82" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">1</text>
+    </g>
+    <g id="sensor-group-s2" class="sensor-group" data-sensor-id="s2" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="544" cy="592" r="8" fill="black" stroke="white" stroke-width="1.5"
+          vector-effect="non-scaling-stroke" />
+        <circle cx="544" cy="592" r="1.5" fill="white" />
+      </g>
+      <text x="544" y="592" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">2</text>
+    </g>
+    <g id="sensor-group-s3" class="sensor-group" data-sensor-id="s3" style="opacity: 1;">
+      <g class="sensor-point-group">
+        <circle cx="187" cy="591" r="8" fill="black" stroke="white" stroke-width="1.5"
+          vector-effect="non-scaling-stroke" />
+        <circle cx="187" cy="591" r="1.5" fill="white" />
+      </g>
+      <text x="187" y="591" font-size="9" fill="white" text-anchor="middle" dominant-baseline="central"
+        style="pointer-events:none; font-weight: bold;">3</text>
+    </g>
+  </g>
+  <foreignObject id="panelFO" x="800" y="0" width="300" height="778">
+    <div xmlns="http://www.w3.org/1999/xhtml" class="panel-container">
+      <div class="panel-header">
+        <div id="standalone-navigation-container" class="navigation">
+          <button id="nav-btn-full" class="nav-btn active">Gesamtübersicht</button>
+          <button id="nav-label" class="nav-btn" disabled>Zonen:</button>
+          <button id="nav-btn-1" class="nav-btn">1</button>
+          <button id="nav-btn-2" class="nav-btn">2</button>
+          <button id="nav-btn-3" class="nav-btn">3</button>
+          <button id="nav-btn-4" class="nav-btn">4</button>
+        </div>
+        <div id="standalone-legend-container" class="legend">
+          <div class="legend-item active" data-type="all"><span>Alle Sensoren</span></div>
+          <div class="legend-item" data-type="pressure"><span>Druck</span></div>
+          <div class="legend-item" data-type="flow"><span>Durchfluss</span></div>
+          <div class="legend-item" data-type="snow"><span>Schnee</span></div>
+        </div>
+      </div>
+      <div id="standalone-sensor-list" class="sensor-list"> </div>
+    </div>
+  </foreignObject>
+  <foreignObject id="standalone-tooltip-fo" x="136" y="-134" width="180" height="120"
+    style="visibility: hidden; pointer-events: none;">
+    <div xmlns="http://www.w3.org/1999/xhtml" id="standalone-tooltip-div"
+      style="padding: 0.75rem; background-color: rgba(0, 0, 0, 0.85); color: white; border-radius: 0.375rem; font-size: 0.875rem;">
+    </div>
+  </foreignObject>
+  <!-- NEW: Add a hidden foreignObject to act as a data island -->
+  <foreignObject x="-1" y="-1" width="1" height="1" style="visibility: hidden;">
+    <div id="sensor-data-island" xmlns="http://www.w3.org/1999/xhtml">
+      <!-- This will be populated with spans like <span id="data-f1-value"></span> -->
+    </div>
+  </foreignObject>
+  <script>
+    <![CDATA[
+    // --- Make the entire script an async IIFE ---
+    (async function(){
+      
+      // --- Central Sensor Registry ---
+      let sensorRegistry = {};
+
+      // --- ** UPDATED ** Define the correct base URL for data ---
+      const SENSOR_DATA_BASE_URL = 'https://monitor.in-si.de/nodered/uimedia/shared-state/';
+      
+      // --- Sensor Configuration (from original file) ---
+      const sensorConfig = [{"id":"f1","displayId":"1","type":"flow","x":523,"y":52,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f1_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f1_status"},{"id":"f2","displayId":"2","type":"flow","x":561,"y":87,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f2_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f2_status"},{"id":"f3","displayId":"3","type":"flow","x":589,"y":125,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f3_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f3_status"},{"id":"f4","displayId":"4","type":"flow","x":615,"y":170,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f4_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f4_status"},{"id":"f5","displayId":"5","type":"flow","x":642,"y":217,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f5_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f5_status"},{"id":"f6","displayId":"6","type":"flow","x":670,"y":260,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f6_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f6_status"},{"id":"f7","displayId":"7","type":"flow","x":691,"y":316,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f7_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f7_status"},{"id":"f8","displayId":"8","type":"flow","x":565,"y":332,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f8_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f8_status"},{"id":"f9","displayId":"9","type":"flow","x":710,"y":380,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f9_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f9_status"},{"id":"f10","displayId":"10","type":"flow","x":565,"y":381,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f10_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f10_status"},{"id":"f11","displayId":"11","type":"flow","x":727,"y":423,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f11_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f11_status"},{"id":"f12","displayId":"12","type":"flow","x":564,"y":422,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f12_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f12_status"},{"id":"f13","displayId":"13","type":"flow","x":748,"y":463,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f13_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f13_status"},{"id":"f14","displayId":"14","type":"flow","x":564,"y":469,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f14_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f14_status"},{"id":"f15","displayId":"15","type":"flow","x":760,"y":511,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f15_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f15_status"},{"id":"f16","displayId":"16","type":"flow","x":562,"y":516,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f16_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f16_status"},{"id":"f17","displayId":"17","type":"flow","x":767,"y":560,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f17_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f17_status"},{"id":"f18","displayId":"18","type":"flow","x":563,"y":561,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f18_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f18_status"},{"id":"f19","displayId":"19","type":"flow","x":377,"y":47,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f19_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f19_status"},{"id":"f20","displayId":"20","type":"flow","x":338,"y":80,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f20_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f20_status"},{"id":"f21","displayId":"21","type":"flow","x":306,"y":123,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f21_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f21_status"},{"id":"f22","displayId":"22","type":"flow","x":277,"y":159,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f22_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f22_status"},{"id":"f23","displayId":"23","type":"flow","x":246,"y":207,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f23_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f23_status"},{"id":"f24","displayId":"24","type":"flow","x":211,"y":256,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f24_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f24_status"},{"id":"f25","displayId":"25","type":"flow","x":183,"y":312,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f25_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f25_status"},{"id":"f26","displayId":"26","type":"flow","x":282,"y":321,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f26_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f26_status"},{"id":"f27","displayId":"27","type":"flow","x":164,"y":367,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f27_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f27_status"},{"id":"f28","displayId":"28","type":"flow","x":281,"y":366,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f28_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f28_status"},{"id":"f29","displayId":"29","type":"flow","x":146,"y":410,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f29_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f29_status"},{"id":"f30","displayId":"30","type":"flow","x":280,"y":411,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f30_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f30_status"},{"id":"f31","displayId":"31","type":"flow","x":130,"y":456,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f31_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f31_status"},{"id":"f32","displayId":"32","type":"flow","x":280,"y":460,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f32_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f32_status"},{"id":"f33","displayId":"33","type":"flow","x":115,"y":504,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f33_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f33_status"},{"id":"f34","displayId":"34","type":"flow","x":280,"y":514,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f34_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f34_status"},{"id":"f35","displayId":"35","type":"flow","x":113,"y":550,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f35_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f35_status"},{"id":"f36","displayId":"36","type":"flow","x":277,"y":561,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f36_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f36_status"},{"id":"p1","displayId":"1","type":"pressure","x":489,"y":17,"region":1,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p1_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p1_value"},{"id":"p2","displayId":"2","type":"pressure","x":482,"y":370,"region":2,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p2_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p2_value"},{"id":"p3","displayId":"3","type":"pressure","x":480,"y":421,"region":2,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p3_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p3_value"},{"id":"p4","displayId":"4","type":"pressure","x":505,"y":580,"region":2,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p4_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p4_value"},{"id":"p5","displayId":"5","type":"pressure","x":441,"y":583,"region":2,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p5_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p5_value"},{"id":"p6","displayId":"6","type":"pressure","x":408,"y":582,"region":4,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p6_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p6_value"},{"id":"p7","displayId":"7","type":"pressure","x":323,"y":580,"region":4,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p7_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p7_value"},{"id":"p8","displayId":"8","type":"pressure","x":367,"y":387,"region":4,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p8_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p8_value"},{"id":"p9","displayId":"9","type":"pressure","x":440,"y":232,"region":1,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p9_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p9_value"},{"id":"p10","displayId":"10","type":"pressure","x":419,"y":15,"region":3,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p10_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p10_value"},{"id":"s1","displayId":"1","type":"snow","x":632,"y":82,"region":1,"label":"Schnee","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s1_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s1_status"},{"id":"s2","displayId":"2","type":"snow","x":544,"y":592,"region":2,"label":"Schnee","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s2_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s2_status"},{"id":"s3","displayId":"3","type":"snow","x":187,"y":591,"region":4,"label":"Schnee","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s3_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s3_status"}];
+
+      // --- Original UI variables --- let dx = 135, dy = 80;
+      const viewBoxes = {"1":[530,280,400,300],"2":[380,580,400,300],"3":[380,280,400,300],"4":[0,280,400,300],"full":[200,300,450,480]}; /* [cite: 108] */
+      let currentView = "full"; /* [cite: 108] */
+      let currentFilter = "all"; /* [cite: 108] */
+      const svgRoot = document.getElementById("main-svg"); /* [cite: 108] */
+      const mapLayer = document.getElementById("mapLayer"); /* [cite: 109] */
+      const navigationContainer = document.getElementById("standalone-navigation-container"); /* [cite: 109] */
+      const bottomNav = document.getElementById("bottom-toolbar-nav"); /* [cite: 109] */
+      const legendContainer = document.getElementById("standalone-legend-container"); /* [cite: 109] */
+      const sensorListContainer = document.getElementById("standalone-sensor-list"); /* [cite: 110] */
+      const tooltipFO = document.getElementById("standalone-tooltip-fo"); /* [cite: 110] */
+      const tooltipDiv = document.getElementById("standalone-tooltip-div"); /* [cite: 110] */
+      const panelFO = document.getElementById("panelFO"); /* [cite: 110] */
+      const toolbarFO = document.getElementById("toolbarFO"); /* [cite: 110] */
+      let mapViewport = { x: 0, y: 0, w: 800, h: 578 }; /* [cite: 111] */
+
+      // --- NEW: Function to rotate and translate all sensor and region coordinates ---
+      function transformAllCoordinates() {
+        const centerX = 425;
+        const centerY = 178;
+        const angleRad = 37 * Math.PI / 180; // 30 degrees clockwise
+        const cosAngle = Math.cos(angleRad);
+        const sinAngle = Math.sin(angleRad);
+
+        const rotate = (x, y) => {
+          const translatedX = x - centerX;
+          const translatedY = y - centerY;
+          const rotatedX = translatedX * cosAngle - translatedY * sinAngle;
+          const rotatedY = translatedX * sinAngle + translatedY * cosAngle;
+          return {
+            x: Math.round(rotatedX + centerX),
+            y: Math.round(rotatedY + centerY)
+          };
+        };
+
+        // 1. Rotate coordinates in sensorConfig
+        sensorConfig.forEach(sensor => {
+          const newCoords = rotate(sensor.x, sensor.y);
+          sensor.x = newCoords.x;
+          sensor.y = newCoords.y;
+        });
+
+        // 2. Calculate translation vector from rotated f31 and f35
+        let dx = 135, dy = 80;
+        
+        // 3. Translate all sensor coordinates
+        sensorConfig.forEach(sensor => {
+            sensor.x += dx;
+            sensor.y += dy;
+        });
+
+        // 4. Update all SVG elements with new, transformed coordinates
+        sensorConfig.forEach(sensor => {
+            const group = document.getElementById(`sensor-group-${sensor.id}`);
+            if (group) {
+                const pointGroup = group.querySelector('.sensor-point-group');
+                const text = group.querySelector('text');
+
+                if (pointGroup) {
+                    // Update all circles in the group
+                    const circles = pointGroup.querySelectorAll('circle');
+                    circles.forEach(circle => {
+                        circle.setAttribute('cx', sensor.x);
+                        circle.setAttribute('cy', sensor.y);
+                    });
+
+                    // Update all paths in the group (for pressure sensors)
+                    const paths = pointGroup.querySelectorAll('path');
+                    if (paths.length > 0) {
+                        // This is a pressure sensor, we need to regenerate the 'd' attribute
+                        const x = sensor.x;
+                        const y = sensor.y;
+                        const d1 = `M ${x} ${y-8} L ${x-8} ${y-8} A 8 8 0 0 1 ${x} ${y-16} Z`;
+                        const d2 = `M ${x} ${y-8} L ${x} ${y-16} A 8 8 0 0 1 ${x+8} ${y-8} Z`;
+                        const d3 = `M ${x} ${y-8} L ${x+8} ${y-8} A 8 8 0 0 1 ${x} ${y} Z`;
+                        const d4 = `M ${x} ${y-8} L ${x} ${y} A 8 8 0 0 1 ${x-8} ${y-8} Z`;
+                        
+                        // A more robust way would be to find them by a unique characteristic if possible
+                        // For now, assuming order is consistent.
+                        paths[0].setAttribute('d', `M ${x} ${y} L ${x - 8} ${y} A 8 8 0 0 1 ${x} ${y - 8} Z`);
+                        paths[1].setAttribute('d', `M ${x} ${y} L ${x} ${y - 8} A 8 8 0 0 1 ${x + 8} ${y} Z`);
+                        paths[2].setAttribute('d', `M ${x} ${y} L ${x + 8} ${y} A 8 8 0 0 1 ${x} ${y + 8} Z`);
+                        paths[3].setAttribute('d', `M ${x} ${y} L ${x} ${y + 8} A 8 8 0 0 1 ${x - 8} ${y} Z`);
+                    }
+                }
+
+                if (text) {
+                    text.setAttribute('x', sensor.x);
+                    text.setAttribute('y', sensor.y);
+                }
+            }
+        });
+
+        // 5. Rotate and translate region labels
+        const regionLabels = document.querySelectorAll('#region-labels .region-label');
+        regionLabels.forEach(label => {
+            const x = parseFloat(label.getAttribute('x'));
+            const y = parseFloat(label.getAttribute('y'));
+            const newCoords = rotate(x, y);
+            label.setAttribute('x', newCoords.x + dx);
+            label.setAttribute('y', newCoords.y + dy);
+        });
+      }
+      // --- NEW: Sensor Class to manage state and UI updates ---
+      class Sensor {
+        constructor(config) {
+          this.config = config;
+          this.id = config.id;
+          
+          // Find UI elements
+          this.mapElement = document.getElementById(`sensor-group-${this.id}`);
+          
+          // Find data island elements
+          this.valueDataElement = document.getElementById(`data-${this.id}-value`);
+          this.unitDataElement = document.getElementById(`data-${this.id}-unit`);
+          this.statusDataElement = document.getElementById(`data-${this.id}-status`);
+
+          // Create observers
+          this.valueObserver = new MutationObserver(() => this.updateValue());
+          this.statusObserver = new MutationObserver(() => this.updateStatus());
+
+          // Start observing
+          this.valueObserver.observe(this.valueDataElement, { childList: true, characterData: true, subtree: true });
+          this.statusObserver.observe(this.statusDataElement, { childList: true, characterData: true, subtree: true });
+        }
+
+        // Called when the data island status changes
+        updateStatus() {
+          const rawStatus = this.statusDataElement.textContent;
+          const newStatus = (rawStatus || '').toString().trim();
+
+          // Helper: map common status strings or color codes to a CSS color
+          function statusToColor(s) {
+            if (!s) return null;
+            const ss = s.toString().trim().toLowerCase();
+            // common named statuses
+            if (ss === 'red' || ss === 'alarm' || ss === 'error') return '#ef4444';
+            if (ss === 'green' || ss === 'ok' || ss === 'normal') return '#10b981';
+            if (ss === 'orange' || ss === 'warn' || ss === 'warning') return '#f97316';
+            // hex color
+            if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(ss)) return ss;
+            // rgb/rgba
+            if (/^rgba?\(/i.test(ss)) return s;
+            // fallback: if the status contains the words
+            if (ss.indexOf('red') !== -1) return '#ef4444';
+            if (ss.indexOf('green') !== -1) return '#10b981';
+            if (ss.indexOf('orange') !== -1 || ss.indexOf('warn') !== -1) return '#f97316';
+            return null;
+          }
+
+          const color = statusToColor(newStatus);
+
+          // Update map glow by applying a colored drop-shadow filter directly to the point group.
+          // Using CSS drop-shadow is more reliable and accepts arbitrary color strings.
+          if (this.mapElement) {
+            const pointGroup = this.mapElement.querySelector('.sensor-point-group');
+            if (pointGroup) {
+              if (color) {
+                // stronger spread and blur for visibility
+                pointGroup.style.filter = `drop-shadow(0 0 12px ${color}) drop-shadow(0 0 6px ${color})`;
+                pointGroup.style.transition = 'filter 200ms ease';
+              } else {
+                pointGroup.style.filter = 'none';
+              }
+            }
+          }
+
+          // Update list item style (if it exists) so the value and unit inherit the color
+          const listContainer = document.getElementById(`list-container-${this.id}`);
+            if (listContainer) {
+              listContainer.classList.remove('alert', 'normal', 'warning');
+              if (color === '#ef4444' || (newStatus||'').toLowerCase().indexOf('red')!==-1) {
+                listContainer.classList.add('alert');
+              } else if (color === '#10b981' || (newStatus||'').toLowerCase().indexOf('green')!==-1) {
+                listContainer.classList.add('normal');
+              } else if (color === '#f97316' || (newStatus||'').toLowerCase().indexOf('orange')!==-1 || (newStatus||'').toLowerCase().indexOf('warn')!==-1) {
+                listContainer.classList.add('warning');
+              }
+            }
+        }
+
+        // Called when the data island value changes
+        updateValue() {
+          const newValue = this.valueDataElement.textContent;
+          
+          // Update list item value span
+          const listItem = document.getElementById(`list-item-${this.id}`);
+          if (listItem) {
+            const valueSpan = listItem.querySelector('.sensor-value');
+            if (valueSpan) valueSpan.textContent = newValue;
+          }
+        }
+      }
+
+      // --- ** UPDATED ** HELPER: Fetches and parses sensor data from the correct URL ---
+      async function fetchSensorData(configPath, sensorId, type) {
+        // 1. Get the filename from the end of the path
+        const filename = configPath.split('/').pop();
+        if (!filename) {
+          console.error(`Could not extract filename from config path: ${configPath}`);
+          return null;
+        }
+
+        // 2. Correct the 'leipzigtoo' typo to 'leipzigzoo'
+        const correctedFilename = filename.replace('leipzigtoo_', 'leipzigzoo_');
+
+        // 3. Build the final, absolute URL
+        const finalUrl = SENSOR_DATA_BASE_URL + correctedFilename;
+        
+        try {
+          // 4. Fetch the data
+          const response = await fetch(finalUrl);
+          if (!response.ok) {
+            console.error(`Failed to fetch ${type} for ${sensorId} at ${finalUrl}: ${response.status} ${response.statusText}`);
+            return null; // Don't crash if a file is missing
+          }
+          return await response.json(); // Parse JSON response
+        } catch (error) {
+          console.error(`Error fetching or parsing ${type} for ${sensorId} at ${finalUrl}:`, error);
+          return null; // Handle network or JSON parse errors
+        }
+      }
+
+      // --- REFACTORED: Now async, fetches real data ---
+      async function initializeSensorRegistry() {
+        console.log("Initializing sensor registry... fetching data...");
+        const dataIsland = document.getElementById('sensor-data-island');
+
+        // Use Promise.all to fetch all sensor data in parallel for performance
+        const loadPromises = sensorConfig.map(async (config) => {
+          // Fetch value and status files concurrently using the config paths
+          const [valueFile, statusFile] = await Promise.all([
+            fetchSensorData(config.value, config.id, 'value'), // Use config path
+            fetchSensorData(config.status, config.id, 'status') // Use config path
+          ]);
+
+          let finalValue = "N/A"; // Default value
+          let finalUnit = ""; // Default unit
+          let finalStatus = "grey"; // Default status
+
+          // Process value file content
+          if (valueFile && valueFile.value !== undefined) {
+            // Check for unit in the nested config object within the value file
+            const unit = (valueFile.config && valueFile.config.unit) ? valueFile.config.unit : "";
+            finalValue = valueFile.value;
+            finalUnit = unit;
+          } else {
+            console.warn(`Value data missing or invalid for sensor ${config.id}`);
+          }
+
+          // Process status file content
+          if (statusFile && statusFile.value !== undefined) {
+            finalStatus = statusFile.value; // Expecting "red", "green", etc.
+          } else {
+             console.warn(`Status data missing or invalid for sensor ${config.id}`);
+          }
+          
+          // --- NEW: Populate the data island ---
+          const valueSpan = document.createElement('span');
+          valueSpan.id = `data-${config.id}-value`;
+          valueSpan.textContent = finalValue;
+          dataIsland.appendChild(valueSpan);
+
+          const unitSpan = document.createElement('span');
+          unitSpan.id = `data-${config.id}-unit`;
+          unitSpan.textContent = finalUnit;
+          dataIsland.appendChild(unitSpan);
+
+          const statusSpan = document.createElement('span');
+          statusSpan.id = `data-${config.id}-status`;
+          statusSpan.textContent = finalStatus;
+          dataIsland.appendChild(statusSpan);
+
+          // Store the config for rendering the list later
+          sensorRegistry[config.id] = { ...config, initialValue: finalValue, initialUnit: finalUnit, initialStatus: finalStatus };
+        });
+
+        // Wait for all fetches and processing to complete
+        await Promise.all(loadPromises);
+        
+        // --- NEW: Instantiate Sensor objects AFTER data island is populated ---
+        Object.values(sensorRegistry).forEach(sensorData => {
+            const sensor = new Sensor(sensorData);
+            // Trigger initial UI update based on loaded data
+            sensor.updateValue();
+            sensor.updateStatus();
+        });
+
+        console.log("Sensor registry initialized and observers attached.");
+      }
+
+      // --- Global function for external updates ---
+      window.updateSensorState = function(sensorId, newValue, newStatus) {
+        // 1. Update the data island, which triggers the observers
+        if (newValue !== undefined) {
+          const valueEl = document.getElementById(`data-${sensorId}-value`);
+          if (valueEl) {
+            valueEl.textContent = newValue;
+          } else {
+            console.warn(`Data island element for value not found: data-${sensorId}-value`);
+          }
+        }
+        if (newStatus !== undefined) {
+          const statusEl = document.getElementById(`data-${sensorId}-status`);
+          if (statusEl) {
+            statusEl.textContent = newStatus;
+          } else {
+            console.warn(`Data island element for status not found: data-${sensorId}-status`);
+          }
+        }
+      };
+
+      // --- Original UI functions (unchanged) ---
+      function setMapTransform(view){ var box=viewBoxes[view]||viewBoxes.full; var bx=box[0], by=box[1], bw=box[2], bh=box[3]; var sx = mapViewport.w/bw; var sy = mapViewport.h/bh; var s = Math.min(sx, sy); var tx = mapViewport.x - bx*s + (mapViewport.w - bw*s)/2; var ty = mapViewport.y - by*s + (mapViewport.h - bh*s)/2; mapLayer.setAttribute("transform", "translate("+tx+","+ty+") scale("+s+")"); } /* [cite: 112, 113, 114] */
+      function getSVGPoint(clientX, clientY) { const pt = svgRoot.createSVGPoint(); pt.x = clientX; pt.y = clientY; return pt.matrixTransform(svgRoot.getScreenCTM().inverse()); } /* [cite: 115] */
+      function applyLayout(){ var isMobile = true; var docH = 650; if(isMobile){ svgRoot.setAttribute("viewBox", "0 0 800 "+docH); /* [cite: 117] */ if (panelFO) { panelFO.setAttribute("x", "0"); panelFO.setAttribute("y", "400"); panelFO.setAttribute("width", "800"); panelFO.setAttribute("height", "378"); /* [cite: 117] */ } if (toolbarFO) { toolbarFO.setAttribute("x", "0"); toolbarFO.setAttribute("y", "578"); toolbarFO.setAttribute("width", "800"); toolbarFO.setAttribute("height", "72"); /* [cite: 118, 119] */ } mapViewport = { x: 0, y: 0, w: 800, h: 400 }; /* [cite: 119] */ } else { svgRoot.setAttribute("viewBox", "0 0 1100 "+docH); /* [cite:   120] */ if (panelFO) { panelFO.setAttribute("x", "800"); panelFO.setAttribute("y", "0"); panelFO.setAttribute("width", "300"); panelFO.setAttribute("height", "578"); /* [cite: 121] */ } if (toolbarFO) { toolbarFO.setAttribute("x", "0"); toolbarFO.setAttribute("y", "578"); toolbarFO.setAttribute("width", "1100"); toolbarFO.setAttribute("height", "72"); /* [cite: 122, 123] */ } mapViewport = { x: 0, y: 0, w: 800, h: 578 }; /* [cite: 123] */ } setMapTransform(currentView==="full"?"full":String(currentView)); /* [cite: 124] */ }
+      window.setView = function(view){ currentView = view; setMapTransform(view==="full"?"full":String(view)); updateNavActiveState(); renderSensorList(); }; /* [cite: 125] */
+      function updateNavActiveState(){ navigationContainer && navigationContainer.querySelectorAll(".nav-btn").forEach(function(b){ b.classList.remove("active"); }); var panelBtn = navigationContainer && navigationContainer.querySelector("#nav-btn-"+(currentView==="full"?"full":currentView)); if (panelBtn) panelBtn.classList.add("active"); bottomNav && bottomNav.querySelectorAll(".nav-btn").forEach(function(b){ b.classList.remove("active"); if ((b.dataset.view||"") === (currentView==="full"?"full":String(currentView))) b.classList.add("active"); }); } /* [cite: 126, 127, 128] */
+
+      // --- REFACTORED: renderSensorList (reads from registry) ---
+      function renderSensorList(){
+        var allSensors = Object.values(sensorRegistry);
+        var base = currentView==="full"?
+          allSensors : allSensors.filter(function(s){ return String(s.region)===String(currentView); }); /* [cite: 129] */
+        var data = currentFilter==="all"? base: base.filter(function(s){ return s.type===currentFilter; }); /* [cite: 129] */
+        data.sort(function(a,b){ if (a.type<b.type) return -1; if (a.type>b.type) return 1; var ai=parseInt(a.displayId), bi=parseInt(b.displayId); if(!isNaN(ai)&&!isNaN(bi)) return ai-bi; return String(a.displayId).localeCompare(String(b.displayId)); }); /* [cite: 130] */
+        
+        var XHTML = "http://www.w3.org/1999/xhtml"; /* [cite: 132] */
+        while (sensorListContainer.firstChild) sensorListContainer.removeChild(sensorListContainer.firstChild); /* [cite: 133] */
+        
+        data.forEach(function(s){
+          var row = document.createElementNS(XHTML, "div");
+          row.setAttribute("class", "sensor-list-item");
+          row.setAttribute("data-sensor-id", s.id);
+          row.setAttribute("id", "list-item-" + s.id);
+
+          var left = document.createElementNS(XHTML, "span"); 
+          left.setAttribute("class", "name"); 
+          left.textContent = s.label + " " + s.displayId;
+          
+          var right = document.createElementNS(XHTML, "span"); 
+          let statusClass = '';
+          if (s.initialStatus === 'red') statusClass = ' alert';
+          else if (s.initialStatus === 'green') statusClass = ' normal';
+          else if (s.initialStatus === 'orange') statusClass = ' warning';
+          right.setAttribute("class", "value" + statusClass);
+          right.setAttribute("id", "list-container-" + s.id);
+          
+          var valueSpan = document.createElementNS(XHTML, "span");
+          valueSpan.setAttribute("class", "sensor-value");
+          valueSpan.textContent = s.initialValue;
+          
+          var unitSpan = document.createElementNS(XHTML, "span");
+          unitSpan.setAttribute("class", "sensor-unit");
+          unitSpan.textContent = s.initialUnit;
+          
+          right.appendChild(valueSpan);
+          right.appendChild(unitSpan);
+          
+          row.appendChild(left); 
+          row.appendChild(right); /* [cite: 134] */
+          
+          row.addEventListener("mouseenter", function(){
+            svgRoot.querySelectorAll(".sensor-group").forEach(function(g){ g.style.opacity="0.3"; });
+            var g = svgRoot.querySelector("#sensor-group-"+s.id); if (g) g.style.opacity = "1";
+            row.classList.add("highlight");
+          }); /* [cite: 134] */
+          row.addEventListener("mouseleave", function(){
+            svgRoot.querySelectorAll(".sensor-group").forEach(function(g){ g.style.opacity="1"; }); /* [cite: 135] */
+            row.classList.remove("highlight"); /* [cite: 135] */
+          });
+          sensorListContainer.appendChild(row);
+        });
+      }
+
+      // --- REFACTORED: addMapInteractionListeners (reads from registry) ---
+      function addMapInteractionListeners(){
+        svgRoot.querySelectorAll(".sensor-group").forEach(function(group){
+          var id = group.getAttribute("data-sensor-id");
+          var sensor = sensorRegistry[id];
+          if (!sensor) return; 
+
+          group.addEventListener("mouseenter", function(e){
+            while (tooltipDiv.firstChild) tooltipDiv.removeChild(tooltipDiv.firstChild);
+            var XHTML = "http://www.w3.org/1999/xhtml"; /* [cite: 136] */
+            
+            // Get status for coloring
+            const statusEl = document.getElementById(`data-${id}-status`);
+            const status = statusEl ? statusEl.textContent : 'grey';
+            let bgColor = 'rgba(0, 0, 0, 0.85)'; // default
+            if ((status||'').toString().trim().toLowerCase() === 'red') {
+              bgColor = 'rgba(239, 68, 68, 0.85)'; // red for alert
+            } else if ((status||'').toString().trim().toLowerCase() === 'green') {
+              bgColor = 'rgba(34, 197, 94, 0.85)'; // green for normal
+            } else if ((status||'').toString().trim().toLowerCase() === 'orange' || (status||'').toString().trim().toLowerCase().indexOf('warn')!==-1) {
+              bgColor = 'rgba(249, 115, 22, 0.85)'; // orange/warn
+            }
+            tooltipDiv.style.backgroundColor = bgColor;
+            
+            var titleEl = document.createElementNS(XHTML, "div"); /* [cite: 136] */
+            titleEl.style.fontWeight = "700"; /* [cite: 136] */
+            titleEl.style.marginBottom = "4px"; /* [cite: 136] */
+            titleEl.textContent = sensor.label + " #" + sensor.displayId; /* [cite: 136] */
+            tooltipDiv.appendChild(titleEl); /* [cite: 136] */
+            
+            // Read live value and unit from the data island for the tooltip
+            const valueEl = document.getElementById(`data-${id}-value`);
+            const unitEl = document.getElementById(`data-${id}-unit`);
+            const valueText = valueEl ? valueEl.textContent : 'N/A';
+            const unitText = unitEl ? unitEl.textContent : '';
+            
+            var valueLine = document.createElementNS(XHTML, "div");
+            valueLine.innerHTML = `<strong>Wert:</strong> ${valueText}${unitText ? ' ' + unitText : ''}`;
+            tooltipDiv.appendChild(valueLine);
+            
+            tooltipFO.style.visibility = "visible"; /* [cite: 141] */
+          }); /* [cite: 142] */
+          group.addEventListener("mouseleave", function(){ tooltipFO.style.visibility = "hidden"; }); /* [cite: 142] */
+          group.addEventListener("mousemove", function(e){ var p = getSVGPoint(e.clientX, e.clientY); tooltipFO.setAttribute("x", p.x+15); tooltipFO.setAttribute("y", p.y+15); }); /* [cite: 142] */
+        });
+      } /* [cite: 143] */
+      
+      // --- Original Event Listeners (unchanged) ---
+      navigationContainer && navigationContainer.querySelector("#nav-btn-full").addEventListener("click",function(){window.setView("full")}); /* [cite: 143] */
+      navigationContainer && navigationContainer.querySelector("#nav-btn-1").addEventListener("click",function(){window.setView("1")}); /* [cite: 143] */
+      navigationContainer && navigationContainer.querySelector("#nav-btn-2").addEventListener("click",function(){window.setView("2")}); /* [cite: 143] */
+      navigationContainer && navigationContainer.querySelector("#nav-btn-3").addEventListener("click",function(){window.setView("3")}); /* [cite: 143] */
+      navigationContainer && navigationContainer.querySelector("#nav-btn-4").addEventListener("click",function(){window.setView("4")}); /* [cite: 143] */
+      bottomNav && bottomNav.querySelectorAll(".nav-btn").forEach(function(b){ b.addEventListener("click", function(){ window.setView(b.dataset.view); }); }); /* [cite: 144] */
+      legendContainer.querySelectorAll(".legend-item").forEach(function(i){ i.addEventListener("click",function(){ currentFilter=i.dataset.type; legendContainer.querySelectorAll(".legend-item").forEach(function(el){ el.classList.toggle("active", el.dataset.type===currentFilter); }); renderSensorList(); }); }); /* [cite: 145] */
+      
+      // --- REFACTORED: Init Sequence ---
+      applyLayout(); /* [cite: 146] */
+      transformAllCoordinates(); // Rotate and translate all coordinates before initializing
+      await initializeSensorRegistry(); // ** AWAIT the data loading **
+      updateNavActiveState(); /* [cite: 146] */
+      renderSensorList();       /* [cite: 146] */
+      addMapInteractionListeners(); /* [cite: 146] */
+      window.addEventListener("resize", function(){ applyLayout(); }); /* [cite: 146] */
+
+    })(); // End of async IIFE
+    ]]>
+  </script>
+</svg>

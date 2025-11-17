@@ -1,0 +1,1573 @@
+<svg xmlns="http://www.w3.org/2000/svg" 
+     viewBox="0 0 100 100" 
+     width="60mm" 
+     height="120mm"
+     >
+  <script type="text/javascript">
+    <![CDATA[
+    
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+/**
+ * Global state for no errors indicator
+ */
+let no_errors = 0;
+
+/**
+ * Creates a parametric power button and appends it to a container.
+ */
+function createFan(containerId, params) {
+  const { x, y, size, strokeWidth, id, initialState, signal } = params;
+  
+  const cx = x + size / 2;
+  const cy = y + size / 2;
+  const r_bg = size / 2;
+  
+  const rect = {
+    x: cx - (strokeWidth / 2),
+    y: y,
+    width: strokeWidth,
+    height: size / 2,
+    rx: strokeWidth / 2
+  };
+  
+  const r_arc = (size / 2) - (strokeWidth / 2);
+  const startAngleRad = -135 * (Math.PI / 180);
+  const endAngleRad = -45 * (Math.PI / 180);
+  
+  const startX = cx + r_arc * Math.cos(endAngleRad);
+  const startY = cy + r_arc * Math.sin(endAngleRad);
+  const endX = cx + r_arc * Math.cos(startAngleRad);
+  const endY = cy + r_arc * Math.sin(startAngleRad);
+  
+  const arcPathD = `M ${startX.toFixed(3)} ${startY.toFixed(3)} A ${r_arc} ${r_arc} 0 1 1 ${endX.toFixed(3)} ${endY.toFixed(3)}`;
+
+  const container = document.getElementById(containerId);
+  if (!container) { return; }
+
+  const mainGroup = document.createElementNS(SVG_NS, "g");
+  mainGroup.setAttribute("id", id);
+  
+  // ** NOTE: The .power-button-component class is no longer added. **
+  
+  // We still use the 'power-on' class for state toggling
+  if (initialState === 'on') {
+    mainGroup.classList.add("power-on");
+  }
+
+  // Child elements (still use classes for styling)
+  const bgAnimatedDisk = document.createElementNS(SVG_NS, "circle");
+  bgAnimatedDisk.setAttribute("class", "bg-animated-disk");
+  bgAnimatedDisk.setAttribute("cx", cx);
+  bgAnimatedDisk.setAttribute("cy", cy);
+  bgAnimatedDisk.setAttribute("r", 10); // 10 SVG units radius
+
+  const rotorDisk = document.createElementNS(SVG_NS, "circle");
+  rotorDisk.setAttribute("class", "rotor-disk");
+  rotorDisk.setAttribute("cx", cx);
+  rotorDisk.setAttribute("cy", cy);
+  rotorDisk.setAttribute("r", 5); // 3mm physical radius
+
+  const intermediateDisk = document.createElementNS(SVG_NS, "circle");
+  intermediateDisk.setAttribute("class", "intermediate-disk");
+  intermediateDisk.setAttribute("cx", cx);
+  intermediateDisk.setAttribute("cy", cy);
+  intermediateDisk.setAttribute("r", 6); // 1 unit bigger than power symbol (power symbol ~5 units)
+
+  const bgDisk = document.createElementNS(SVG_NS, "circle");
+  bgDisk.setAttribute("class", "power-bg-disk");
+  bgDisk.setAttribute("cx", cx);
+  bgDisk.setAttribute("cy", cy);
+  bgDisk.setAttribute("r", 11); // 11 SVG units radius
+
+  const lineRect = document.createElementNS(SVG_NS, "rect");
+  lineRect.setAttribute("class", "power-line");
+  lineRect.setAttribute("x", rect.x);
+  lineRect.setAttribute("y", rect.y);
+  lineRect.setAttribute("width", rect.width);
+  lineRect.setAttribute("height", rect.height);
+  lineRect.setAttribute("rx", rect.rx);
+
+  const arcPath = document.createElementNS(SVG_NS, "path");
+  arcPath.setAttribute("class", "power-arc");
+  arcPath.setAttribute("d", arcPathD);
+
+  // Create fan blades (5 blades, diameter 21, radius 10.5 - extended by 3)
+  const bladesGroup = document.createElementNS(SVG_NS, "g");
+  bladesGroup.setAttribute("class", "fan-blades");
+  
+  const bladeRadius = 10.5; // diameter 21 = radius 10.5 (original 9 + 3)
+  const bladeAngle = 360 / 5; // 72 degrees per blade
+  
+  for (let i = 0; i < 5; i++) {
+    const angle = (i * bladeAngle) * (Math.PI / 180);
+    
+    // Create blade as a curved path
+    const bladeStartAngle = angle - 0.3; // small angle for blade width
+    const bladeEndAngle = angle + 0.3;
+    
+    const innerRadius = 2; // inner radius of blade
+    const outerRadius = bladeRadius;
+    
+    // Calculate blade path points
+    const x1 = cx + innerRadius * Math.cos(bladeStartAngle);
+    const y1 = cy + innerRadius * Math.sin(bladeStartAngle);
+    const x2 = cx + outerRadius * Math.cos(bladeStartAngle);
+    const y2 = cy + outerRadius * Math.sin(bladeStartAngle);
+    const x3 = cx + outerRadius * Math.cos(bladeEndAngle);
+    const y3 = cy + outerRadius * Math.sin(bladeEndAngle);
+    const x4 = cx + innerRadius * Math.cos(bladeEndAngle);
+    const y4 = cy + innerRadius * Math.sin(bladeEndAngle);
+    
+    const bladePath = `M ${x1} ${y1} L ${x2} ${y2} L ${x3} ${y3} L ${x4} ${y4} Z`;
+    
+    const blade = document.createElementNS(SVG_NS, "path");
+    blade.setAttribute("d", bladePath);
+    blade.setAttribute("class", "fan-blade");
+    bladesGroup.appendChild(blade);
+  }
+
+  mainGroup.appendChild(bgDisk);
+  mainGroup.appendChild(bgAnimatedDisk);
+  mainGroup.appendChild(bladesGroup);
+  mainGroup.appendChild(intermediateDisk);
+  mainGroup.appendChild(rotorDisk);
+  mainGroup.appendChild(lineRect);
+  mainGroup.appendChild(arcPath);
+
+  container.appendChild(mainGroup);
+}
+
+function createGauge(containerId, params) {
+  const { cx, cy, id } = params;
+  const gaugeGroup = document.createElementNS(SVG_NS, "g");
+  gaugeGroup.setAttribute("class", "rpm-gauge");
+  gaugeGroup.setAttribute("id", id);
+  gaugeGroup.setAttribute("data-cx", cx);
+  gaugeGroup.setAttribute("data-cy", cy);
+  
+  // Gauge arc (semi-circle, radius 15)
+  const gaugeArc = document.createElementNS(SVG_NS, "path");
+  const gaugeRadius = 15;
+  // --- Filled sector using radial gradient (radius 22.5) ---
+  // Draw a filled sector starting at (π + 22.5°) and expanding by 40° to
+  // the left and the right (i.e. both ends extended by 40°). Use radius 22.5
+  // and fill with the radial gradient defined in <defs> (#disk-gradient).
+  const diskRadius = 22.5;
+  const diskStart = Math.PI + (22.5 * Math.PI / 180);
+  let diskEnd = -22.5 * Math.PI / 180;
+  // expand both ends by 40 degrees (in radians) — 5° less than before
+  const expand = 40 * Math.PI / 180;
+  const diskStartExpanded = diskStart - expand;
+  const diskEndExpanded = diskEnd + expand;
+  // Normalize end so it's greater than start for positive span
+  let diskEndNorm = diskEndExpanded;
+  while (diskEndNorm < diskStartExpanded) {
+    diskEndNorm += 2 * Math.PI;
+  }
+  const diskAngleSpan = diskEndNorm - diskStartExpanded;
+  const diskLargeArc = (diskAngleSpan > Math.PI) ? 1 : 0;
+  const diskSweep = 1;
+  const diskStartX = (cx + diskRadius * Math.cos(diskStartExpanded)).toFixed(3);
+  const diskStartY = (cy + diskRadius * Math.sin(diskStartExpanded)).toFixed(3);
+  const diskEndX = (cx + diskRadius * Math.cos(diskEndNorm)).toFixed(3);
+  const diskEndY = (cy + diskRadius * Math.sin(diskEndNorm)).toFixed(3);
+  const diskPathD = `M ${cx} ${cy} L ${diskStartX} ${diskStartY} A ${diskRadius} ${diskRadius} 0 ${diskLargeArc} ${diskSweep} ${diskEndX} ${diskEndY} Z`;
+  const diskPath = document.createElementNS(SVG_NS, "path");
+  diskPath.setAttribute("d", diskPathD);
+  diskPath.setAttribute("fill", "url(#disk-gradient)");
+  diskPath.setAttribute("class", "gauge-disk");
+  // append disk before the gauge arc so it sits beneath the arcs
+  gaugeGroup.appendChild(diskPath);
+  const gaugeStartAngle = 0; // 0°
+  const gaugeEndAngle = Math.PI; // 180°
+  // compute arc flags so arcs always follow the same direction and use the
+  // correct large-arc flag for the angle span
+  const angleSpan = Math.abs(gaugeEndAngle - gaugeStartAngle);
+  const largeArcFlag = (angleSpan > Math.PI) ? 1 : 0;
+  const sweepFlag = 1; // clockwise
+  // rotate the gauge arcs 180° (π radians) so they are reflected around the center
+  const rotatedStart = gaugeStartAngle + Math.PI;
+  const rotatedEnd = gaugeEndAngle + Math.PI;
+  const gaugeArcPath = `M ${ (cx + gaugeRadius * Math.cos(rotatedStart)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(rotatedStart)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${largeArcFlag} ${sweepFlag} ${ (cx + gaugeRadius * Math.cos(rotatedEnd)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(rotatedEnd)).toFixed(3) }`;
+  gaugeArc.setAttribute("d", gaugeArcPath);
+  gaugeArc.setAttribute("class", "gauge-arc");
+  gaugeGroup.appendChild(gaugeArc);
+  
+  // Value arc (radius 20, shows current RPM)
+  const valueArc = document.createElementNS(SVG_NS, "path");
+  const currentRPM = 900;
+  const maxRPM = 4000;
+  // Draw the value arc starting from gaugeEndAngle (π = 180°) inward to
+  // gaugeEndAngle - alpha so it appears from 180° toward the left by alpha,
+  // then rotate by π so the arc is reflected 180° around the center.
+  const rpmRatio = currentRPM / maxRPM;
+  const deltaAngle = rpmRatio * (gaugeEndAngle - gaugeStartAngle);
+  // Start the value arc at the rotated gauge-start (rotated by π) and draw it
+  // along the same curved path as the gauge arc by sweeping forward by deltaAngle.
+  const valueStartAngle = gaugeStartAngle + Math.PI; // rotated start (other end)
+  const valueEndAngle = valueStartAngle + deltaAngle; // sweep forward along arc
+  // Use sweepFlag = 1 to match the gauge arc direction (clockwise rotated arc)
+  const valueSweepFlag = 1;
+  const valueAngleSpan = Math.abs(valueStartAngle - valueEndAngle);
+  const valueLargeArc = (valueAngleSpan > Math.PI) ? 1 : 0;
+  const valueArcPath = `M ${ (cx + gaugeRadius * Math.cos(valueStartAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueStartAngle)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${valueLargeArc} ${valueSweepFlag} ${ (cx + gaugeRadius * Math.cos(valueEndAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueEndAngle)).toFixed(3) }`;
+  valueArc.setAttribute("d", valueArcPath);
+  valueArc.setAttribute("class", "gauge-value-arc");
+  gaugeGroup.appendChild(valueArc);
+  
+  // Gauge tick marks and numbers
+  const numTicks = 4; // 0, 1000, 2000, 3000, 4000
+  
+  for (let i = 0; i <= numTicks; i++) {
+    const rpm = (i * maxRPM) / numTicks;
+    const angle = gaugeStartAngle + (i * (gaugeEndAngle - gaugeStartAngle)) / numTicks;
+    
+    // Tick mark
+    const tickInnerRadius = gaugeRadius - 4;
+    const tickOuterRadius = gaugeRadius - 2;
+    let tickX1 = cx + tickInnerRadius * Math.cos(angle);
+    let tickY1 = cy + tickInnerRadius * Math.sin(angle);
+    let tickX2 = cx + tickOuterRadius * Math.cos(angle);
+    let tickY2 = cy + tickOuterRadius * Math.sin(angle);
+    
+    // Symmetric with respect to the center
+    tickX1 = 2 * cx - tickX1;
+    tickY1 = 2 * cy - tickY1;
+    tickX2 = 2 * cx - tickX2;
+    tickY2 = 2 * cy - tickY2;
+    
+    const tick = document.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", tickX1);
+    tick.setAttribute("y1", tickY1);
+    tick.setAttribute("x2", tickX2);
+    tick.setAttribute("y2", tickY2);
+    tick.setAttribute("class", "gauge-tick");
+    gaugeGroup.appendChild(tick);
+    
+    // Number label
+    if (i >= 0 && i <= 4) {
+      const labelRadius = gaugeRadius + 3;
+      let labelX = cx + labelRadius * Math.cos(angle);
+      let labelY = cy + labelRadius * Math.sin(angle);
+      
+      // Symmetric with respect to the center
+      labelX = 2 * cx - labelX;
+      labelY = 2 * cy - labelY;
+      
+      const label = document.createElementNS(SVG_NS, "text");
+      label.setAttribute("x", labelX);
+      label.setAttribute("y", labelY);
+      label.setAttribute("class", "gauge-label");
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("dominant-baseline", "middle");
+      
+      // Align along the arc (tangent orientation)
+      const radialAngle = Math.atan2(labelY - cy, labelX - cx) * 180 / Math.PI;
+      const tangentAngle = radialAngle + 90;
+      label.setAttribute("transform", `rotate(${tangentAngle}, ${labelX}, ${labelY})`);
+      
+      label.textContent = rpm.toString();
+      gaugeGroup.appendChild(label);
+    }
+  }
+  
+  // RPM indicator triangle
+  const indicatorGroup = document.createElementNS(SVG_NS, "g");
+  indicatorGroup.setAttribute("class", "rpm-indicator");
+  
+  // Triangle pointing to current RPM (start at 0)
+  const indicatorAngle = gaugeStartAngle; // Start at 0 RPM
+  const indicatorRadius = gaugeRadius - 3;
+  // Original small triangle depth (kept as base reference)
+  const triangleSize = 2.25;
+  // Keep the base at (indicatorRadius - triangleSize) and extend the tip
+  // outward so the triangle height becomes 3x while the base points stay
+  // at the same radius.
+  const baseRadius = indicatorRadius - triangleSize;
+  const newTriangleHeight = triangleSize * 3; // 3x taller
+  const tipRadius = baseRadius + newTriangleHeight;
+  // Move the whole triangle inward by another half of its height (total = full height)
+  // previously shifted by newTriangleHeight/2; add another half so full shift = newTriangleHeight
+  const halfShift = newTriangleHeight;
+  const baseRadiusShifted = baseRadius - halfShift;
+  const tipRadiusShifted = tipRadius - halfShift;
+
+  const trianglePoints = [
+    // Tip: pushed outward from base to increase height, then shifted inward
+    [cx + tipRadiusShifted * Math.cos(indicatorAngle), cy + tipRadiusShifted * Math.sin(indicatorAngle)],
+    // Base points: shifted inward by same halfShift
+    [cx + baseRadiusShifted * Math.cos(indicatorAngle - 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle - 0.2)],
+    [cx + baseRadiusShifted * Math.cos(indicatorAngle + 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle + 0.2)]
+  ];
+  
+  const triangle = document.createElementNS(SVG_NS, "polygon");
+  triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+  triangle.setAttribute("class", "gauge-indicator");
+  indicatorGroup.appendChild(triangle);
+  
+  gaugeGroup.appendChild(indicatorGroup);
+  
+  // Center RPM value and unit (value centered at gauge center, unit below)
+  const rpmValue = document.createElementNS(SVG_NS, "text");
+  rpmValue.setAttribute("x", cx);
+  // move the numeric value 3.75 units lower (adjusted)
+  rpmValue.setAttribute("y", cy + 3.75);
+  rpmValue.setAttribute("class", "rpm-value");
+  rpmValue.setAttribute("text-anchor", "middle");
+  rpmValue.setAttribute("dominant-baseline", "middle");
+  rpmValue.textContent = currentRPM.toString();
+  gaugeGroup.appendChild(rpmValue);
+
+  const rpmUnit = document.createElementNS(SVG_NS, "text");
+  rpmUnit.setAttribute("x", cx);
+  // place unit slightly below the numeric value
+  rpmUnit.setAttribute("y", cy + 7.5);
+  rpmUnit.setAttribute("class", "rpm-unit");
+  rpmUnit.setAttribute("text-anchor", "middle");
+  rpmUnit.setAttribute("dominant-baseline", "middle");
+  rpmUnit.textContent = "RPM";
+  gaugeGroup.appendChild(rpmUnit);
+
+  const container = document.getElementById(containerId);
+  if (!container) { return; }
+  container.appendChild(gaugeGroup);
+}
+
+/**
+ * Update the RPM gauge for a specific fan
+ */
+function updateRPMGauge(gaugeId, rpm) {
+  const gaugeGroup = document.getElementById(gaugeId);
+  if (!gaugeGroup) return;
+  const maxRPM = 4000;
+  const gaugeStartAngle = 0; // 0°
+  const gaugeEndAngle = Math.PI; // 180°
+  const cx = parseFloat(gaugeGroup.getAttribute("data-cx"));
+  const cy = parseFloat(gaugeGroup.getAttribute("data-cy"));
+  const gaugeRadius = 15;
+  
+  // Update RPM numeric value (unit stays static)
+  const rpmValue = gaugeGroup.querySelector('.rpm-value');
+  if (rpmValue) {
+    rpmValue.textContent = rpm.toString();
+  }
+  
+  // Update value arc
+  const valueArc = gaugeGroup.querySelector('.gauge-value-arc');
+  if (valueArc) {
+    const rpmRatio = Math.min(rpm / maxRPM, 1); // Clamp to max
+  // Draw value arc from π inward: start at gaugeEndAngle and go to gaugeEndAngle - delta,
+  // then rotate by π so the arc is reflected 180° around the gauge center.
+  const deltaAngle = rpmRatio * (gaugeEndAngle - gaugeStartAngle);
+    // Align runtime update with the same logic: start at the rotated gauge-start
+    // and sweep forward by deltaAngle so the arc follows the gauge's curve.
+    const valueStartAngle = gaugeStartAngle + Math.PI;
+    const valueEndAngle = valueStartAngle + deltaAngle;
+    // sweep clockwise to follow the gauge arc direction
+    const valueSweepFlag = 1;
+    const valueAngleSpan = Math.abs(valueStartAngle - valueEndAngle);
+    const valueLargeArc = (valueAngleSpan > Math.PI) ? 1 : 0;
+    const valueArcPath = `M ${ (cx + gaugeRadius * Math.cos(valueStartAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueStartAngle)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${valueLargeArc} ${valueSweepFlag} ${ (cx + gaugeRadius * Math.cos(valueEndAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueEndAngle)).toFixed(3) }`;
+    valueArc.setAttribute("d", valueArcPath);
+  }
+  
+  // Update indicator triangle position
+  const indicatorGroup = gaugeGroup.querySelector('.rpm-indicator');
+  if (indicatorGroup) {
+    // Remove existing triangle
+    const existingTriangle = indicatorGroup.querySelector('.gauge-indicator');
+    if (existingTriangle) {
+      indicatorGroup.removeChild(existingTriangle);
+    }
+    
+    // Calculate new angle based on RPM
+    const rpmRatio = Math.min(rpm / maxRPM, 1); // Clamp to max
+    const indicatorAngle = gaugeStartAngle + (rpmRatio * (gaugeEndAngle - gaugeStartAngle));
+    
+    // Create new triangle
+    const indicatorRadius = gaugeRadius - 3;
+    // Original small triangle depth (kept as base reference)
+    const triangleSize = 2.25;
+    // Keep the base at (indicatorRadius - triangleSize) and extend the tip
+    // outward so the triangle height becomes 3x while the base points stay
+    // at the same radius.
+    const baseRadius = indicatorRadius - triangleSize;
+    const newTriangleHeight = triangleSize * 3; // 3x taller
+    const tipRadius = baseRadius + newTriangleHeight;
+  // Move the whole triangle inward by another half of its height (total = full height)
+  // previously shifted by newTriangleHeight/2; add another half so full shift = newTriangleHeight
+  const halfShift = newTriangleHeight;
+    const baseRadiusShifted = baseRadius - halfShift;
+    const tipRadiusShifted = tipRadius - halfShift;
+
+    let trianglePoints = [
+      // Tip: pushed outward from base to increase height, then shifted inward
+      [cx + tipRadiusShifted * Math.cos(indicatorAngle), cy + tipRadiusShifted * Math.sin(indicatorAngle)],
+      // Base points: shifted inward by same halfShift
+      [cx + baseRadiusShifted * Math.cos(indicatorAngle - 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle - 0.2)],
+      [cx + baseRadiusShifted * Math.cos(indicatorAngle + 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle + 0.2)]
+    ];
+    
+    // Symmetric with respect to the center
+    trianglePoints = trianglePoints.map(([px, py]) => [2 * cx - px, 2 * cy - py]);
+    
+    const triangle = document.createElementNS(SVG_NS, "polygon");
+    triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+    triangle.setAttribute("class", "gauge-indicator");
+    indicatorGroup.appendChild(triangle);
+  }
+}
+
+function createPressureGauge(containerId, params) {
+  const { cx, cy, id } = params;
+  const gaugeGroup = document.createElementNS(SVG_NS, "g");
+  gaugeGroup.setAttribute("class", "pressure-gauge");
+  gaugeGroup.setAttribute("id", id);
+  gaugeGroup.setAttribute("data-cx", cx);
+  gaugeGroup.setAttribute("data-cy", cy);
+  
+  // Gauge arc (semi-circle, radius 15)
+  const gaugeRadius = 15;
+  // Extra arcs: 10mm bigger (25) and 15mm bigger (30)
+  const extraRadius1 = 25;
+  const extraRadius2 = 30;
+  
+  // Disk radius
+  const diskRadius = 36.5;
+  const diskStart = Math.PI + (22.5 * Math.PI / 180);
+  let diskEnd = -22.5 * Math.PI / 180;
+  const expand = 57.5 * Math.PI / 180;
+  const diskStartExpanded = diskStart - expand;
+  const diskEndExpanded = diskEnd + expand;
+  let diskEndNorm = diskEndExpanded;
+  while (diskEndNorm < diskStartExpanded) {
+    diskEndNorm += 2 * Math.PI;
+  }
+  const diskAngleSpan = diskEndNorm - diskStartExpanded;
+  const diskLargeArc = (diskAngleSpan > Math.PI) ? 1 : 0;
+  const diskSweep = 1;
+  const diskStartX = (cx + diskRadius * Math.cos(diskStartExpanded)).toFixed(3);
+  const diskStartY = (cy + diskRadius * Math.sin(diskStartExpanded)).toFixed(3);
+  const diskEndX = (cx + diskRadius * Math.cos(diskEndNorm)).toFixed(3);
+  const diskEndY = (cy + diskRadius * Math.sin(diskEndNorm)).toFixed(3);
+  const diskPathD = `M ${cx} ${cy} L ${diskStartX} ${diskStartY} A ${diskRadius} ${diskRadius} 0 ${diskLargeArc} ${diskSweep} ${diskEndX} ${diskEndY} Z`;
+  const diskPath = document.createElementNS(SVG_NS, "path");
+  diskPath.setAttribute("d", diskPathD);
+  diskPath.setAttribute("fill", "url(#disk-gradient)");
+  diskPath.setAttribute("class", "gauge-disk");
+  gaugeGroup.appendChild(diskPath);
+  
+  // Extra arcs behind
+  const gaugeStartAngle = -24.5 * Math.PI / 180;
+  const gaugeEndAngle = Math.PI + 24.5 * Math.PI / 180;
+  const angleSpan = Math.abs(gaugeEndAngle - gaugeStartAngle);
+  const largeArcFlag = (angleSpan > Math.PI) ? 1 : 0;
+  const sweepFlag = 1;
+  const rotatedStart = gaugeStartAngle + Math.PI;
+  const rotatedEnd = gaugeEndAngle + Math.PI;
+  
+  // Extra arc 2 (20mm bigger, radius 35)
+  //const extraArc2 = document.createElementNS(SVG_NS, "path");
+  //const extraArcPath2 = `M ${ (cx + extraRadius2 * Math.cos(rotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(rotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${largeArcFlag} ${sweepFlag} ${ (cx + extraRadius2 * Math.cos(rotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(rotatedEnd)).toFixed(3) }`;
+  //extraArc2.setAttribute("d", extraArcPath2);
+  //extraArc2.setAttribute("class", "gauge-arc-extra");
+  //extraArc2.setAttribute("stroke", "#AAAAAA");
+  //extraArc2.setAttribute("stroke-width", "1.5");
+  //extraArc2.setAttribute("fill", "none");
+  //extraArc2.setAttribute("stroke-linecap", "round");
+  //gaugeGroup.appendChild(extraArc2);
+  
+  // Extra arc 1 (10mm bigger, radius 25)
+  const extraArc1 = document.createElementNS(SVG_NS, "path");
+  const extraArcPath1 = `M ${ (cx + extraRadius1 * Math.cos(rotatedStart)).toFixed(3) } ${ (cy + extraRadius1 * Math.sin(rotatedStart)).toFixed(3) } A ${extraRadius1} ${extraRadius1} 0 ${largeArcFlag} ${sweepFlag} ${ (cx + extraRadius1 * Math.cos(rotatedEnd)).toFixed(3) } ${ (cy + extraRadius1 * Math.sin(rotatedEnd)).toFixed(3) }`;
+  extraArc1.setAttribute("d", extraArcPath1);
+  extraArc1.setAttribute("class", "gauge-arc-extra");
+  extraArc1.setAttribute("stroke", "#888888");
+  extraArc1.setAttribute("stroke-width", "1.5");
+  extraArc1.setAttribute("fill", "none");
+  extraArc1.setAttribute("stroke-linecap", "round");
+  //gaugeGroup.appendChild(extraArc1);
+  
+  // Main gauge arc
+  const gaugeArc = document.createElementNS(SVG_NS, "path");
+  const gaugeArcPath = `M ${ (cx + gaugeRadius * Math.cos(rotatedStart)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(rotatedStart)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${largeArcFlag} ${sweepFlag} ${ (cx + gaugeRadius * Math.cos(rotatedEnd)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(rotatedEnd)).toFixed(3) }`;
+  gaugeArc.setAttribute("d", gaugeArcPath);
+  gaugeArc.setAttribute("class", "gauge-arc");
+  gaugeGroup.appendChild(gaugeArc);
+  
+  // Value arc
+  const valueArc = document.createElementNS(SVG_NS, "path");
+  const currentPressure = 200;
+  const maxPressure = 500;
+  const pressureRatio = currentPressure / maxPressure;
+  const deltaAngle = pressureRatio * (gaugeEndAngle - gaugeStartAngle);
+  const valueStartAngle = gaugeStartAngle + Math.PI;
+  const valueEndAngle = valueStartAngle + deltaAngle;
+  const valueSweepFlag = 1;
+  const valueAngleSpan = Math.abs(valueStartAngle - valueEndAngle);
+  const valueLargeArc = (valueAngleSpan > Math.PI) ? 1 : 0;
+  const valueArcPath = `M ${ (cx + gaugeRadius * Math.cos(valueStartAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueStartAngle)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${valueLargeArc} ${valueSweepFlag} ${ (cx + gaugeRadius * Math.cos(valueEndAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueEndAngle)).toFixed(3) }`;
+  valueArc.setAttribute("d", valueArcPath);
+  valueArc.setAttribute("class", "gauge-value-arc");
+  gaugeGroup.appendChild(valueArc);
+  
+  // Colored segments on outer arc
+  const lowStart = gaugeStartAngle;
+  const lowEnd = gaugeStartAngle + (100 / maxPressure) * (gaugeEndAngle - gaugeStartAngle);
+  const yellowEnd = gaugeStartAngle + (150 / maxPressure) * (gaugeEndAngle - gaugeStartAngle);
+  const greenEnd = gaugeStartAngle + (350 / maxPressure) * (gaugeEndAngle - gaugeStartAngle);
+  const highEnd = gaugeStartAngle + (500 / maxPressure) * (gaugeEndAngle - gaugeStartAngle);
+  
+  
+  // YELLOW segment (yellow) 100-150
+  const yellowArc = document.createElementNS(SVG_NS, "path");
+  const yellowAngleSpan = Math.abs(yellowEnd - lowEnd);
+  const yellowLargeArc = (yellowAngleSpan > Math.PI) ? 1 : 0;
+  const yellowRotatedStart = lowEnd + Math.PI;
+  const yellowRotatedEnd = yellowEnd + Math.PI;
+  const yellowArcPath = `M ${ (cx + extraRadius2 * Math.cos(yellowRotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(yellowRotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${yellowLargeArc} 1 ${ (cx + extraRadius2 * Math.cos(yellowRotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(yellowRotatedEnd)).toFixed(3) }`;
+  yellowArc.setAttribute("d", yellowArcPath);
+  yellowArc.setAttribute("stroke", "yellow");
+  yellowArc.setAttribute("stroke-width", "11");
+  yellowArc.setAttribute("fill", "none");
+  yellowArc.setAttribute("stroke-linecap", "round");
+  gaugeGroup.appendChild(yellowArc);
+
+
+  // LOW segment (red) 0-100
+  const lowArc = document.createElementNS(SVG_NS, "path");
+  const lowAngleSpan = Math.abs(lowEnd - lowStart);
+  const lowLargeArc = (lowAngleSpan > Math.PI) ? 1 : 0;
+  const lowRotatedStart = lowStart + Math.PI;
+  const lowRotatedEnd = lowEnd + Math.PI;
+  const lowArcPath = `M ${ (cx + extraRadius2 * Math.cos(lowRotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(lowRotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${lowLargeArc} 1 ${ (cx + extraRadius2 * Math.cos(lowRotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(lowRotatedEnd)).toFixed(3) }`;
+  lowArc.setAttribute("d", lowArcPath);
+  lowArc.setAttribute("stroke", "red");
+  lowArc.setAttribute("stroke-width", "11");
+  lowArc.setAttribute("fill", "none");
+  lowArc.setAttribute("stroke-linecap", "round");
+  gaugeGroup.appendChild(lowArc);
+  
+  // Text path for LOW label (inwards by 2 units)
+  const lowPath = document.createElementNS(SVG_NS, "path");
+  const lowTextArcPath = `M ${ (cx + (extraRadius2 - 2) * Math.cos(lowRotatedStart)).toFixed(3) } ${ (cy + (extraRadius2 - 2) * Math.sin(lowRotatedStart)).toFixed(3) } A ${extraRadius2 - 2} ${extraRadius2 - 2} 0 ${lowLargeArc} 1 ${ (cx + (extraRadius2 - 2) * Math.cos(lowRotatedEnd)).toFixed(3) } ${ (cy + (extraRadius2 - 2) * Math.sin(lowRotatedEnd)).toFixed(3) }`;
+  lowPath.setAttribute("d", lowTextArcPath);
+  lowPath.setAttribute("id", "low-text-path");
+  lowPath.setAttribute("opacity", "0");
+  gaugeGroup.appendChild(lowPath);
+  
+  
+  // GREEN segment (green) 150-350
+  const greenArc = document.createElementNS(SVG_NS, "path");
+  const greenAngleSpan = Math.abs(greenEnd - yellowEnd);
+  const greenLargeArc = (greenAngleSpan > Math.PI) ? 1 : 0;
+  const greenRotatedStart = yellowEnd + Math.PI;
+  const greenRotatedEnd = greenEnd + Math.PI;
+  const greenArcPath = `M ${ (cx + extraRadius2 * Math.cos(greenRotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(greenRotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${greenLargeArc} 1 ${ (cx + extraRadius2 * Math.cos(greenRotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(greenRotatedEnd)).toFixed(3) }`;
+  greenArc.setAttribute("d", greenArcPath);
+  greenArc.setAttribute("stroke", "green");
+  greenArc.setAttribute("stroke-width", "11");
+  greenArc.setAttribute("fill", "none");
+  greenArc.setAttribute("stroke-linecap", "round");
+  gaugeGroup.appendChild(greenArc);
+  
+  // Text path for NORMAL label (inwards by 2 units)
+  const normalPath = document.createElementNS(SVG_NS, "path");
+  const normalTextArcPath = `M ${ (cx + (extraRadius2 + 1.0) * Math.cos(greenRotatedStart)).toFixed(3) } ${ (cy + (extraRadius2 + 1.0) * Math.sin(greenRotatedStart)).toFixed(3) } A ${extraRadius2 + 1.0} ${extraRadius2 + 1.0} 0 ${greenLargeArc} 1 ${ (cx + (extraRadius2 + 1.0) * Math.cos(greenRotatedEnd)).toFixed(3) } ${ (cy + (extraRadius2 + 1.0) * Math.sin(greenRotatedEnd)).toFixed(3) }`;
+  normalPath.setAttribute("d", normalTextArcPath);
+  normalPath.setAttribute("id", "normal-text-path");
+  normalPath.setAttribute("opacity", "0");
+  gaugeGroup.appendChild(normalPath);
+  
+  // HIGH segment (yellow) 350-500
+  const highArc = document.createElementNS(SVG_NS, "path");
+  const highAngleSpan = Math.abs(highEnd - greenEnd);
+  const highLargeArc = (highAngleSpan > Math.PI) ? 1 : 0;
+  const highRotatedStart = greenEnd + Math.PI;
+  const highRotatedEnd = highEnd + Math.PI;
+  const highArcPath = `M ${ (cx + extraRadius2 * Math.cos(highRotatedStart)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(highRotatedStart)).toFixed(3) } A ${extraRadius2} ${extraRadius2} 0 ${highLargeArc} 1 ${ (cx + extraRadius2 * Math.cos(highRotatedEnd)).toFixed(3) } ${ (cy + extraRadius2 * Math.sin(highRotatedEnd)).toFixed(3) }`;
+  highArc.setAttribute("d", highArcPath);
+  highArc.setAttribute("stroke", "yellow");
+  highArc.setAttribute("stroke-width", "11");
+  highArc.setAttribute("fill", "none");
+  highArc.setAttribute("stroke-linecap", "round");
+  gaugeGroup.appendChild(highArc);
+  
+  // Text path for HIGH label (inwards by 2 units)
+  const highPath = document.createElementNS(SVG_NS, "path");
+  const highTextArcPath = `M ${ (cx + (extraRadius2 - 2) * Math.cos(highRotatedStart)).toFixed(3) } ${ (cy + (extraRadius2 - 2) * Math.sin(highRotatedStart)).toFixed(3) } A ${extraRadius2 - 2} ${extraRadius2 - 2} 0 ${highLargeArc} 1 ${ (cx + (extraRadius2 - 2) * Math.cos(highRotatedEnd)).toFixed(3) } ${ (cy + (extraRadius2 - 2) * Math.sin(highRotatedEnd)).toFixed(3) }`;
+  highPath.setAttribute("d", highTextArcPath);
+  highPath.setAttribute("id", "high-text-path");
+  highPath.setAttribute("opacity", "0");
+  gaugeGroup.appendChild(highPath);
+  
+  // Labels in the arc itself
+  const labelRadius = extraRadius1 - 2 + 10 - 5; // Moved outwards by 10, then inwards by 5
+  
+  // LOW 100 label
+  const lowLabel = document.createElementNS(SVG_NS, "text");
+  lowLabel.setAttribute("fill", "black");
+  lowLabel.setAttribute("font-size", "4px");
+  const lowTextPath = document.createElementNS(SVG_NS, "textPath");
+  lowTextPath.setAttribute("href", "#low-text-path");
+  lowTextPath.setAttribute("startOffset", "50%");
+  lowTextPath.setAttribute("text-anchor", "middle");
+  lowTextPath.textContent = "LOW 100";
+  lowLabel.appendChild(lowTextPath);
+  gaugeGroup.appendChild(lowLabel);
+  
+  // NORMAL 250 label
+  const normalLabel = document.createElementNS(SVG_NS, "text");
+  normalLabel.setAttribute("fill", "black");
+  normalLabel.setAttribute("font-size", "4px");
+  const normalTextPath = document.createElementNS(SVG_NS, "textPath");
+  normalTextPath.setAttribute("href", "#normal-text-path");
+  normalTextPath.setAttribute("startOffset", "50%");
+  normalTextPath.setAttribute("text-anchor", "middle");
+  normalTextPath.textContent = "NORMAL 250";
+  normalLabel.appendChild(normalTextPath);
+  gaugeGroup.appendChild(normalLabel);
+  
+  // SET 250 label (below normal, between 200 and 300)
+  const setStartRatio = 200 / maxPressure;
+  const setEndRatio = 300 / maxPressure;
+  const setStartAngle = gaugeStartAngle + setStartRatio * (gaugeEndAngle - gaugeStartAngle) + Math.PI;
+  const setEndAngle = gaugeStartAngle + setEndRatio * (gaugeEndAngle - gaugeStartAngle) + Math.PI;
+  const setAngleSpan = Math.abs(setEndAngle - setStartAngle);
+  const setLargeArc = (setAngleSpan > Math.PI) ? 1 : 0;
+  const setPath = document.createElementNS(SVG_NS, "path");
+  const setTextArcPath = `M ${ (cx + (extraRadius2 - 4.5) * Math.cos(setStartAngle)).toFixed(3) } ${ (cy + (extraRadius2 - 4.5) * Math.sin(setStartAngle)).toFixed(3) } A ${extraRadius2 - 4.5} ${extraRadius2 - 4.5} 0 ${setLargeArc} 1 ${ (cx + (extraRadius2 - 4.5) * Math.cos(setEndAngle)).toFixed(3) } ${ (cy + (extraRadius2 - 4.5) * Math.sin(setEndAngle)).toFixed(3) }`;
+  setPath.setAttribute("d", setTextArcPath);
+  setPath.setAttribute("id", "set-text-path");
+  setPath.setAttribute("opacity", "0");
+  gaugeGroup.appendChild(setPath);
+  
+  const setLabel = document.createElementNS(SVG_NS, "text");
+  setLabel.setAttribute("fill", "black");
+  setLabel.setAttribute("font-size", "4px");
+  const setTextPath = document.createElementNS(SVG_NS, "textPath");
+  setTextPath.setAttribute("href", "#set-text-path");
+  setTextPath.setAttribute("startOffset", "50%");
+  setTextPath.setAttribute("text-anchor", "middle");
+  setTextPath.textContent = "SET 250";
+  setLabel.appendChild(setTextPath);
+  gaugeGroup.appendChild(setLabel);
+  
+  // HIGH 350 label
+  const highLabel = document.createElementNS(SVG_NS, "text");
+  highLabel.setAttribute("fill", "black");
+  highLabel.setAttribute("font-size", "4px");
+  const highTextPath = document.createElementNS(SVG_NS, "textPath");
+  highTextPath.setAttribute("href", "#high-text-path");
+  highTextPath.setAttribute("startOffset", "50%");
+  highTextPath.setAttribute("text-anchor", "middle");
+  highTextPath.textContent = "HIGH 350";
+  highLabel.appendChild(highTextPath);
+  gaugeGroup.appendChild(highLabel);
+  
+  // Gauge tick marks and numbers
+  const numTicks = 5;
+  for (let i = 0; i <= numTicks; i++) {
+    const pressure = (i * maxPressure) / numTicks;
+    const angle = gaugeStartAngle + (i * (gaugeEndAngle - gaugeStartAngle)) / numTicks;
+    const tickInnerRadius = gaugeRadius - 4;
+    const tickOuterRadius = gaugeRadius - 2;
+    let tickX1 = cx + tickInnerRadius * Math.cos(angle);
+    let tickY1 = cy + tickInnerRadius * Math.sin(angle);
+    let tickX2 = cx + tickOuterRadius * Math.cos(angle);
+    let tickY2 = cy + tickOuterRadius * Math.sin(angle);
+    tickX1 = 2 * cx - tickX1;
+    tickY1 = 2 * cy - tickY1;
+    tickX2 = 2 * cx - tickX2;
+    tickY2 = 2 * cy - tickY2;
+    const tick = document.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", tickX1);
+    tick.setAttribute("y1", tickY1);
+    tick.setAttribute("x2", tickX2);
+    tick.setAttribute("y2", tickY2);
+    tick.setAttribute("class", "gauge-tick");
+    gaugeGroup.appendChild(tick);
+    
+    if (i >= 0 && i <= 5) {
+      const labelRadius = gaugeRadius + 3;
+      let labelX = cx + labelRadius * Math.cos(angle);
+      let labelY = cy + labelRadius * Math.sin(angle);
+      labelX = 2 * cx - labelX;
+      labelY = 2 * cy - labelY;
+      const label = document.createElementNS(SVG_NS, "text");
+      label.setAttribute("x", labelX);
+      label.setAttribute("y", labelY);
+      label.setAttribute("class", "gauge-label");
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("dominant-baseline", "middle");
+      const radialAngle = Math.atan2(labelY - cy, labelX - cx) * 180 / Math.PI;
+      const tangentAngle = radialAngle + 90;
+      label.setAttribute("transform", `rotate(${tangentAngle}, ${labelX}, ${labelY})`);
+      label.textContent = pressure.toString();
+      gaugeGroup.appendChild(label);
+    }
+  }
+  
+  // Minor ticks
+  for (let i = 0.5; i < numTicks; i += 1) {
+    const angle = gaugeStartAngle + (i * (gaugeEndAngle - gaugeStartAngle)) / numTicks;
+    const tickInnerRadius = gaugeRadius - 4;
+    const tickOuterRadius = gaugeRadius - 3;
+    let tickX1 = cx + tickInnerRadius * Math.cos(angle);
+    let tickY1 = cy + tickInnerRadius * Math.sin(angle);
+    let tickX2 = cx + tickOuterRadius * Math.cos(angle);
+    let tickY2 = cy + tickOuterRadius * Math.sin(angle);
+    tickX1 = 2 * cx - tickX1;
+    tickY1 = 2 * cy - tickY1;
+    tickX2 = 2 * cx - tickX2;
+    tickY2 = 2 * cy - tickY2;
+    const tick = document.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", tickX1);
+    tick.setAttribute("y1", tickY1);
+    tick.setAttribute("x2", tickX2);
+    tick.setAttribute("y2", tickY2);
+    tick.setAttribute("class", "gauge-tick");
+    gaugeGroup.appendChild(tick);
+  }
+  
+  // Indicator
+  const indicatorGroup = document.createElementNS(SVG_NS, "g");
+  indicatorGroup.setAttribute("class", "pressure-indicator");
+  const indicatorAngle = gaugeStartAngle;
+  const indicatorRadius = gaugeRadius - 3;
+  const triangleSize = 2.25;
+  const baseRadius = indicatorRadius - triangleSize;
+  const newTriangleHeight = triangleSize * 3;
+  const tipRadius = baseRadius + newTriangleHeight;
+  const halfShift = newTriangleHeight;
+  const baseRadiusShifted = baseRadius - halfShift;
+  const tipRadiusShifted = tipRadius - halfShift;
+  const trianglePoints = [
+    [cx + tipRadiusShifted * Math.cos(indicatorAngle), cy + tipRadiusShifted * Math.sin(indicatorAngle)],
+    [cx + baseRadiusShifted * Math.cos(indicatorAngle - 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle - 0.2)],
+    [cx + baseRadiusShifted * Math.cos(indicatorAngle + 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle + 0.2)]
+  ];
+  const triangle = document.createElementNS(SVG_NS, "polygon");
+  triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+  triangle.setAttribute("class", "gauge-indicator");
+  indicatorGroup.appendChild(triangle);
+  gaugeGroup.appendChild(indicatorGroup);
+  
+  // Center value and unit
+  const pressureValue = document.createElementNS(SVG_NS, "text");
+  pressureValue.setAttribute("x", cx);
+  pressureValue.setAttribute("y", cy + 5.25);
+  pressureValue.setAttribute("class", "rpm-value");
+  pressureValue.setAttribute("text-anchor", "middle");
+  pressureValue.setAttribute("dominant-baseline", "middle");
+  pressureValue.textContent = currentPressure.toString();
+  gaugeGroup.appendChild(pressureValue);
+
+  const pressureUnit = document.createElementNS(SVG_NS, "text");
+  pressureUnit.setAttribute("x", cx);
+  pressureUnit.setAttribute("y", cy - 0.5);
+  pressureUnit.setAttribute("class", "pressure-unit");
+  pressureUnit.setAttribute("text-anchor", "middle");
+  pressureUnit.setAttribute("dominant-baseline", "middle");
+  pressureUnit.textContent = "Pa";
+  gaugeGroup.appendChild(pressureUnit);
+
+  const container = document.getElementById(containerId);
+  if (!container) { return; }
+  container.appendChild(gaugeGroup);
+}
+
+function updatePressureGauge(gaugeId, pressure) {
+  const gaugeGroup = document.getElementById(gaugeId);
+  if (!gaugeGroup) return;
+  const maxPressure = 500;
+  const gaugeStartAngle = -24.5 * Math.PI / 180;
+  const gaugeEndAngle = Math.PI + 24.5 * Math.PI / 180;
+  const cx = parseFloat(gaugeGroup.getAttribute("data-cx"));
+  const cy = parseFloat(gaugeGroup.getAttribute("data-cy"));
+  const gaugeRadius = 15;
+  
+  const pressureValue = gaugeGroup.querySelector('.rpm-value');
+  if (pressureValue) {
+    pressureValue.textContent = pressure.toString();
+  }
+  
+  const valueArc = gaugeGroup.querySelector('.gauge-value-arc');
+  if (valueArc) {
+    const pressureRatio = Math.min(pressure / maxPressure, 1);
+    const deltaAngle = pressureRatio * (gaugeEndAngle - gaugeStartAngle);
+    const valueStartAngle = gaugeStartAngle + Math.PI;
+    const valueEndAngle = valueStartAngle + deltaAngle;
+    const valueSweepFlag = 1;
+    const valueAngleSpan = Math.abs(valueStartAngle - valueEndAngle);
+    const valueLargeArc = (valueAngleSpan > Math.PI) ? 1 : 0;
+    const valueArcPath = `M ${ (cx + gaugeRadius * Math.cos(valueStartAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueStartAngle)).toFixed(3) } A ${gaugeRadius} ${gaugeRadius} 0 ${valueLargeArc} ${valueSweepFlag} ${ (cx + gaugeRadius * Math.cos(valueEndAngle)).toFixed(3) } ${ (cy + gaugeRadius * Math.sin(valueEndAngle)).toFixed(3) }`;
+    valueArc.setAttribute("d", valueArcPath);
+  }
+  
+  const indicatorGroup = gaugeGroup.querySelector('.pressure-indicator');
+  if (indicatorGroup) {
+    const existingTriangle = indicatorGroup.querySelector('.gauge-indicator');
+    if (existingTriangle) {
+      indicatorGroup.removeChild(existingTriangle);
+    }
+    
+    const pressureRatio = Math.min(pressure / maxPressure, 1);
+    const indicatorAngle = gaugeStartAngle + (pressureRatio * (gaugeEndAngle - gaugeStartAngle));
+    const indicatorRadius = gaugeRadius - 3;
+    const triangleSize = 2.25;
+    const baseRadius = indicatorRadius - triangleSize;
+    const newTriangleHeight = triangleSize * 3;
+    const tipRadius = baseRadius + newTriangleHeight;
+    const halfShift = newTriangleHeight;
+    const baseRadiusShifted = baseRadius - halfShift;
+    const tipRadiusShifted = tipRadius - halfShift;
+    let trianglePoints = [
+      [cx + tipRadiusShifted * Math.cos(indicatorAngle), cy + tipRadiusShifted * Math.sin(indicatorAngle)],
+      [cx + baseRadiusShifted * Math.cos(indicatorAngle - 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle - 0.2)],
+      [cx + baseRadiusShifted * Math.cos(indicatorAngle + 0.2), cy + baseRadiusShifted * Math.sin(indicatorAngle + 0.2)]
+    ];
+    trianglePoints = trianglePoints.map(([px, py]) => [2 * cx - px, 2 * cy - py]);
+    const triangle = document.createElementNS(SVG_NS, "polygon");
+    triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+    triangle.setAttribute("class", "gauge-indicator");
+    indicatorGroup.appendChild(triangle);
+  }
+  
+  // Conditional low pressure indicator
+  let existingIndicator = gaugeGroup.querySelector('.low-pressure-indicator');
+  if (pressure < 100) {
+    if (existingIndicator) {
+      gaugeGroup.removeChild(existingIndicator);
+    }
+    let lowLabelX = cx - 3.5;
+    let lowLabelY = cy - 10.5;
+    const lowIndicatorGroup = createLowPressureIndicator(gaugeGroup, { className: "low-pressure-indicator", transform: `translate(${lowLabelX}, ${lowLabelY}) scale(0.5)` });
+    // Make disk red pulsating
+    const diskPath = gaugeGroup.querySelector('.gauge-disk');
+    if (diskPath) {
+      diskPath.setAttribute("fill", "url(#red-gradient)");
+      diskPath.classList.add("pulsating-disk");
+    }
+  } else {
+    if (existingIndicator) {
+      gaugeGroup.removeChild(existingIndicator);
+    }
+    // Reset disk to normal
+    const diskPath = gaugeGroup.querySelector('.gauge-disk');
+    if (diskPath) {
+      diskPath.setAttribute("fill", "url(#disk-gradient)");
+      diskPath.classList.remove("pulsating-disk");
+    }
+  }
+}
+
+function createLowPressureIndicator(container, params) {
+  const { className, transform } = params;
+  const lowIndicatorGroup = document.createElementNS(SVG_NS, "g");
+  lowIndicatorGroup.setAttribute("class", className);
+  lowIndicatorGroup.setAttribute("transform", transform);
+  const path1 = document.createElementNS(SVG_NS, "path");
+  path1.setAttribute("d", "M 4 2 C 3 4, 5 6, 4 8 C 3 10, 5 12, 4 14");
+  path1.setAttribute("marker-end", "url(#arrowhead)");
+  path1.setAttribute("stroke", "black");
+  path1.setAttribute("stroke-width", "1");
+  path1.setAttribute("fill", "none");
+  lowIndicatorGroup.appendChild(path1);
+  const path2 = document.createElementNS(SVG_NS, "path");
+  path2.setAttribute("d", "M 7 2 C 6 4, 8 6, 7 8 C 6 10, 8 12, 7 14");
+  path2.setAttribute("marker-end", "url(#arrowhead)");
+  path2.setAttribute("stroke", "black");
+  path2.setAttribute("stroke-width", "1");
+  path2.setAttribute("fill", "none");
+  lowIndicatorGroup.appendChild(path2);
+  const line = document.createElementNS(SVG_NS, "line");
+  line.setAttribute("x1", "11.5");
+  line.setAttribute("y1", "2");
+  line.setAttribute("x2", "11.5");
+  line.setAttribute("y2", "14");
+  line.setAttribute("stroke", "black");
+  line.setAttribute("stroke-width", "1");
+  lowIndicatorGroup.appendChild(line);
+  const ticks = [2,5,8,11,14];
+  for (let y of ticks) {
+    const tick = document.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", "9.5");
+    tick.setAttribute("y1", y);
+    tick.setAttribute("x2", "11.5");
+    tick.setAttribute("y2", y);
+    tick.setAttribute("stroke", "black");
+    tick.setAttribute("stroke-width", "1");
+    lowIndicatorGroup.appendChild(tick);
+  }
+  container.appendChild(lowIndicatorGroup);
+  return lowIndicatorGroup;
+}
+
+function togglePowerButton(buttonId) {
+  const buttonGroup = document.getElementById(buttonId);
+  if (buttonGroup) {
+    buttonGroup.classList.toggle("power-on");
+    updateStatuses();
+    updateExhaust();
+  }
+}
+
+// Status update function
+function updateStatuses() {
+  const statusData = {"Inflation":0,"Feedback_K1":1,"Feedback_K2":0,"FeedbackPipeWatchdog":1,"free":1,"Fuse_Fan1":1,"Fuse_Fan2":0,"Fuse_Dryer":0};
+  
+  const fan1On = document.getElementById('power-fan1').classList.contains('power-on');
+  const fan2On = document.getElementById('power-fan2').classList.contains('power-on');
+  
+  const indicators = {
+    'status-Fuse_Fan1': fan1On ? statusData.Fuse_Fan1 : -1,
+    'status-Feedback_K1': fan1On ? statusData.Feedback_K1 : -1,
+    'status-FeedbackPipeWatchdog': statusData.FeedbackPipeWatchdog,
+    'status-Fuse_Dryer': statusData.Fuse_Dryer,
+    'status-Fuse_Fan2': fan2On ? statusData.Fuse_Fan2 : -1,
+    'status-Feedback_K2': fan2On ? statusData.Feedback_K2 : -1
+  };
+  
+  for (const [id, value] of Object.entries(indicators)) {
+    const circle = document.getElementById(id);
+    if (value === 1) {
+      circle.setAttribute('fill', '#00FF00');
+      circle.classList.add('status-active');
+    } else if (value === 0) {
+      circle.setAttribute('fill', '#FF0000');
+      circle.classList.add('status-active');
+    } else { // -1, fan off
+      circle.setAttribute('fill', 'gray');
+      circle.classList.remove('status-active');
+    }
+  }
+  
+  // Update no-errors indicator
+  const noErrorsDisc = document.getElementById('no-errors-disc');
+  const noErrorsSymbol = document.getElementById('no-errors-symbol');
+  if (no_errors === 0) {
+    noErrorsDisc.setAttribute('fill', 'green');
+    noErrorsDisc.classList.add('status-active');
+    noErrorsSymbol.textContent = '✓';
+    noErrorsSymbol.setAttribute('y', '47.75');
+  } else {
+    noErrorsDisc.setAttribute('fill', 'red');
+    noErrorsDisc.classList.add('status-active');
+    noErrorsSymbol.textContent = '⚠️';
+    noErrorsSymbol.setAttribute('y', '47.75');
+  }
+}
+
+// ===== NEW ANIMATION FUNCTIONS =====
+
+/**
+ * Creates exhaust plumes using CSS animation
+ */
+function createExhaust(containerId, cx, cy, numParticles, durationSec) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  for (let i = 0; i < numParticles; i++) {
+    const particle = document.createElementNS(SVG_NS, "circle");
+    particle.setAttribute("class", "plume-particle");
+    particle.setAttribute("cx", cx + (Math.random() - 0.5) * 4); // Jitter x
+    particle.setAttribute("cy", cy + (Math.random() - 0.5) * 2); // Jitter y
+    particle.setAttribute("r", "2"); 
+    
+    const delay = (Math.random() * durationSec);
+    particle.style.animationDelay = -delay + "s"; // Negative delay to stagger
+    particle.style.animationDuration = durationSec + "s";
+    
+    container.appendChild(particle);
+  }
+}
+
+/**
+ * Creates a starfield/particle shower using SMIL animation
+ */
+function createStarfield(containerId, numParticles) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  for (let i = 0; i < numParticles; i++) {
+    const particle = document.createElementNS(SVG_NS, "line");
+    const x = Math.random() * 100; // viewBox width 0-100
+    const y_start = -50;
+    const y_end = 110; // viewBox height 0-100, plus buffer
+    const len = Math.random() * 2 + 0.5; // Streak length
+    const duration = (Math.random() * 3 + 2) + "s"; // 2-5 seconds
+    const delay = (Math.random() * 5) + "s"; // 0-5 second start delay
+    
+    particle.setAttribute("x1", x);
+    particle.setAttribute("x2", x);
+    // y1 and y2 will be set by the animation
+    particle.setAttribute("stroke", "white");
+    particle.setAttribute("stroke-width", Math.random() * 0.3 + 0.1);
+    particle.setAttribute("opacity", Math.random() * 0.5 + 0.3);
+
+    const animateY1 = document.createElementNS(SVG_NS, "animate");
+    animateY1.setAttribute("attributeName", "y1");
+    animateY1.setAttribute("from", y_start);
+    animateY1.setAttribute("to", y_end);
+    animateY1.setAttribute("dur", duration);
+    animateY1.setAttribute("begin", delay);
+    animateY1.setAttribute("repeatCount", "indefinite");
+
+    const animateY2 = document.createElementNS(SVG_NS, "animate");
+    animateY2.setAttribute("attributeName", "y2");
+    animateY2.setAttribute("from", y_start + len);
+    animateY2.setAttribute("to", y_end + len);
+    animateY2.setAttribute("dur", duration);
+    animateY2.setAttribute("begin", delay);
+    animateY2.setAttribute("repeatCount", "indefinite");
+    
+    particle.appendChild(animateY1);
+    particle.appendChild(animateY2);
+    container.appendChild(particle);
+  }
+}
+
+function updateExhaust() {
+  const fan1On = document.getElementById('power-fan1').classList.contains('power-on');
+  const fan2On = document.getElementById('power-fan2').classList.contains('power-on');
+  
+  const container1 = document.getElementById('exhaust-container-1');
+  const container2 = document.getElementById('exhaust-container-2');
+  const containerCenter = document.getElementById('exhaust-container-center');
+  
+  if (container1) container1.style.display = fan1On ? 'block' : 'none';
+  if (container2) container2.style.display = fan2On ? 'block' : 'none';
+  if (containerCenter) containerCenter.style.display = (fan1On || fan2On) ? 'block' : 'none';
+}
+
+function initFansAndGauge() {
+  // Create fans
+  createFan(
+    "power-fan1-container",
+    {
+      id: "power-fan1",
+      x: 10,
+      y: 50,
+      size: 10,
+      strokeWidth: 0.75,
+      initialState: 'on',
+      signal: 1
+    }
+  );
+
+  // Add labels and counter for Fan 1 above/below the component
+  (function addFan1Labels(){
+    const container = document.getElementById('power-fan1-container');
+    if (!container) return;
+    const f1x = 10; const f1y = 50; const f1size = 10;
+    const f1cx = f1x + f1size / 2;
+    const f1cy = f1y + f1size / 2;
+
+  const label = document.createElementNS(SVG_NS, 'text');
+  label.setAttribute('x', f1cx);
+  // move FAN1 label 2 units higher than before (total 2 units up from previous)
+  label.setAttribute('y', f1cy - 25);
+    label.setAttribute('class', 'fan-label');
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('dominant-baseline', 'middle');
+    label.textContent = 'FAN1';
+    container.appendChild(label);
+
+    const units = document.createElementNS(SVG_NS, 'text');
+    // place 'Hours' below the FAN label
+    units.setAttribute('x', f1cx);
+    units.setAttribute('y', f1cy - 19);
+    units.setAttribute('class', 'fan-units');
+    units.setAttribute('text-anchor', 'middle');
+    units.setAttribute('dominant-baseline', 'middle');
+    units.textContent = 'Hours';
+    container.appendChild(units);
+
+    const number = document.createElementNS(SVG_NS, 'text');
+    number.setAttribute('x', f1cx);
+    // place the 6-digit value below the Hours label
+    number.setAttribute('y', f1cy - 15);
+    number.setAttribute('class', 'fan-number');
+    number.setAttribute('text-anchor', 'middle');
+    number.setAttribute('dominant-baseline', 'middle');
+    number.textContent = '000000';
+    container.appendChild(number);
+  })();
+
+  createFan(
+    "power-fan2-container",
+    {
+      id: "power-fan2",
+      x: 60,
+      y: 50,
+      size: 10,
+      strokeWidth: 0.75,
+      initialState: 'off',
+      signal: 0
+    }
+  );
+
+  // Add labels and counter for Fan 2 above/below the component
+  (function addFan2Labels(){
+    const container = document.getElementById('power-fan2-container');
+    if (!container) return;
+    const f2x = 60; const f2y = 50; const f2size = 10;
+    const f2cx = f2x + f2size / 2;
+    const f2cy = f2y + f2size / 2;
+
+  const label = document.createElementNS(SVG_NS, 'text');
+  label.setAttribute('x', f2cx);
+  // move FAN2 label 2 units higher than before (total 2 units up from previous)
+  label.setAttribute('y', f2cy - 25);
+    label.setAttribute('class', 'fan-label');
+    label.setAttribute('text-anchor', 'middle');
+    label.setAttribute('dominant-baseline', 'middle');
+    label.textContent = 'FAN2';
+    container.appendChild(label);
+
+    const units = document.createElementNS(SVG_NS, 'text');
+    // place 'Hours' below the FAN label
+    units.setAttribute('x', f2cx);
+    units.setAttribute('y', f2cy - 19);
+    units.setAttribute('class', 'fan-units');
+    units.setAttribute('text-anchor', 'middle');
+    units.setAttribute('dominant-baseline', 'middle');
+    units.textContent = 'Hours';
+    container.appendChild(units);
+
+    const number = document.createElementNS(SVG_NS, 'text');
+    number.setAttribute('x', f2cx);
+    // place the 6-digit value below the Hours label
+    number.setAttribute('y', f2cy - 15);
+    number.setAttribute('class', 'fan-number');
+    number.setAttribute('text-anchor', 'middle');
+    number.setAttribute('dominant-baseline', 'middle');
+    number.textContent = '000000';
+    container.appendChild(number);
+  })();
+
+  // Create gauge in the middle
+  createGauge("fanspeed-container", {cx:40, cy:18, id:"fanspeed"});
+  updateRPMGauge("fanspeed", 900);
+
+  // Create pressure gauge
+  createPressureGauge("pressure-container", {cx:40, cy:-13, id:"pressure"});
+  updatePressureGauge("pressure", 200);
+
+  // Add click listener for fuse dryer
+  const fuseDryerCircle = document.getElementById('status-Fuse_Dryer');
+  if (fuseDryerCircle) {
+    fuseDryerCircle.addEventListener('click', () => {
+      // Change pressure to 50 (low)
+      updatePressureGauge("pressure", 50);
+    });
+  }
+
+  // Add click listeners for fans
+  const fan1Container = document.getElementById("power-fan1-container");
+  if (fan1Container) {
+    fan1Container.addEventListener("click", () => {
+      togglePowerButton("power-fan1");
+    });
+  }
+
+  const fan2Container = document.getElementById("power-fan2-container");
+  if (fan2Container) {
+    fan2Container.addEventListener("click", () => {
+      togglePowerButton("power-fan2");
+    });
+  }
+
+  // Add click listener for watchdog to toggle no_errors
+  const watchdogCircle = document.getElementById('status-FeedbackPipeWatchdog');
+  if (watchdogCircle) {
+    watchdogCircle.addEventListener('click', () => {
+      no_errors = 1 - no_errors;
+      updateStatuses();
+    });
+  }
+
+  // Update status indicators
+  updateStatuses();
+}
+
+
+// ===== NEW CONSOLIDATED LOAD EVENT LISTENER =====
+window.addEventListener('load', () => {
+    // Initialize the dashboard
+    initFansAndGauge();
+    
+    // Initialize the space animations
+    // (Exhaust from under Fan1/Fan2 silver boxes, approx y=78)
+    createExhaust("exhaust-container-1", 15, 78, 10, 3); 
+    createExhaust("exhaust-container-2", 65, 78, 10, 3);
+    // (Center exhaust, 2.4x bigger, between fans)
+    createExhaust("exhaust-container-center", 40, 78, 24, 3);
+    // (Starfield overlay, 75 particles)
+    createStarfield("starfield-container", 75);
+    
+    // Update exhaust visibility based on initial fan states
+    updateExhaust();
+});
+
+    ]]>
+  </script>
+  
+  <title>Clickable Power Button Components (ID-Styled)</title>
+  
+  <defs>
+    <filter id="blur-effect" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+    </filter>
+
+    <style>
+      :root {
+        --color-power-black: #000000;
+        --color-power-off: #555555;
+        --color-power-on: #00FF00;
+      }
+      
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      @keyframes pulse-brightness {
+        0% { opacity: 0.6; }
+        50% { opacity: 1.0; }
+        100% { opacity: 0.6; }
+      }
+      
+      /* --- Styles for Fan 1 --- */
+      #power-fan1 {
+        --power-color: var(--color-power-off); /* Default 'off' state */
+        cursor: pointer;
+      }
+      #power-fan1.power-on {
+        --power-color: var(--color-power-on); /* 'on' state */
+      }
+      #power-fan1 .intermediate-disk {
+        fill: #333333;
+      }
+      #power-fan1 .power-bg-disk {
+        fill: var(--color-power-black);
+      }
+      #power-fan1 .bg-animated-disk {
+        fill: #000000;
+      }
+      #power-fan1.power-on .bg-animated-disk {
+        fill: url(#animated-bg-gradient);
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      #power-fan1 .rotor-disk {
+        fill: #808080;
+      }
+      #power-fan1 .fan-blades {
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      #power-fan1.power-on .fan-blades {
+        animation: spin 2s linear infinite;
+      }
+      #power-fan1 .fan-blade {
+        fill: #666666;
+        stroke: #404040;
+        stroke-width: 0.2;
+      }
+      #power-fan1 .power-line {
+        fill: var(--power-color); 
+        stroke: none;
+      }
+      #power-fan1 .power-arc {
+        stroke: var(--power-color); 
+        fill: none;
+        stroke-width: 0.75;
+        stroke-linecap: round;
+      }
+
+      /* --- Styles for Fan 2 --- */
+      #power-fan2 {
+        --power-color: var(--color-power-off); /* Default 'off' state */
+        cursor: pointer;
+      }
+      #power-fan2.power-on {
+        --power-color: var(--color-power-on); /* 'on' state */
+      }
+      #power-fan2 .intermediate-disk {
+        fill: #333333;
+      }
+      #power-fan2 .power-bg-disk {
+        fill: var(--color-power-black);
+      }
+      #power-fan2 .bg-animated-disk {
+        fill: #000000;
+      }
+      #power-fan2.power-on .bg-animated-disk {
+        fill: url(#animated-bg-gradient);
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      #power-fan2 .rotor-disk {
+        fill: #808080;
+      }
+      #power-fan2 .fan-blades {
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      #power-fan2.power-on .fan-blades {
+        animation: spin 2s linear infinite;
+      }
+      #power-fan2 .fan-blade {
+        fill: #666666;
+        stroke: #404040;
+        stroke-width: 0.2;
+      }
+      #power-fan2 .power-line {
+        fill: var(--power-color); 
+        stroke: none;
+      }
+      #power-fan2 .power-arc {
+        stroke: var(--power-color); 
+        fill: none;
+        stroke-width: 0.75;
+        stroke-linecap: round;
+      }
+
+      .gauge-arc {
+        fill: none;
+        stroke: #666666;
+        stroke-width: 2.25; /* scaled */
+        stroke-linecap: round;
+      }
+      .gauge-arc-extra {
+        fill: none;
+        stroke-linecap: round;
+      }
+      .gauge-value-arc {
+        fill: none;
+        stroke: #00FF00;
+        stroke-width: 0.75; /* scaled */
+        stroke-linecap: round;
+      }
+      .gauge-tick {
+        stroke: black;
+        stroke-width: 0.375;
+      }
+      .gauge-label {
+        fill: black;
+        font-size: 3px;
+        font-family: Arial, sans-serif;
+      }
+      .gauge-indicator {
+        fill: #000000;
+        stroke: #000000;
+        stroke-width: 0.3;
+      }
+      .rpm-text {
+        fill: #000000;
+        font-size: 5px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+      }
+      .rpm-value {
+        fill: #000000;
+        font-size: 4.5px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+      }
+      .rpm-unit {
+        fill: #000000;
+        font-size: 2.5px;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+      }
+      .pressure-unit {
+        fill: #000000;
+        font-size: 3.5px;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+      }
+      /* Fan labels and counters */
+      .fan-label {
+        fill: #000000;
+        font-size: 4px;
+        font-weight: bold;
+        font-family: 'Roboto', Arial, sans-serif;
+      }
+      .fan-number {
+        fill: #000000;
+        font-size: 4px;
+        font-family: monospace, monospace;
+      }
+      .fan-units {
+        fill: #000000;
+        font-size: 3px;
+        font-weight: bold;
+        font-family: 'Roboto', Arial, sans-serif;
+      }
+      .fan-status-symbol {
+        fill: gray;
+      }
+      .status-active {
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      .status-label {
+        fill: #000000;
+        font-size: 3px;
+        font-family: Arial, sans-serif;
+        text-anchor: middle;
+      }
+      .pulsating-disk {
+        animation: pulsate-red 2s ease-in-out infinite;
+      }
+      @keyframes pulsate-red {
+        0% { opacity: 0.6; }
+        50% { opacity: 1.0; }
+        100% { opacity: 0.6; }
+      }
+
+      /* ===== NEW ANIMATION STYLES ===== */
+      @keyframes exhaust-plume {
+        0% {
+          r: 2;
+          opacity: 0.7;
+          transform: translateY(0px);
+        }
+        100% {
+          r: 10; /* Grow */
+          opacity: 0;
+          transform: translateY(20px); /* Move down 20 units */
+        }
+      }
+      
+      .plume-particle {
+        fill: #ADD8E6; /* Light blueish-white */
+        filter: url(#blur-effect);
+        animation-name: exhaust-plume;
+        /* duration and delay set by JS */
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+    </style>
+    
+    <radialGradient id="animated-bg-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#B0E0E6;stop-opacity:1.0" />
+      <stop offset="50%" style="stop-color:#87CEEB;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#4682B4;stop-opacity:0.9" />
+    </radialGradient>
+    
+    <radialGradient id="disk-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1.0" />
+      <stop offset="70%" style="stop-color:#F0F0F0;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#DADADA;stop-opacity:1.0" />
+    </radialGradient>
+    
+    <radialGradient id="red-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#800000;stop-opacity:1.0" />
+    </radialGradient>
+    
+    <radialGradient id="status-red-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#800000;stop-opacity:1.0" />
+    </radialGradient>
+
+    <marker 
+      id="arrowhead" 
+      markerWidth="3" 
+      markerHeight="3" 
+      refX="1.5" 
+      refY="1.5" 
+      orient="auto" 
+      markerUnits="strokeWidth">
+      <polygon points="0 0, 3 1.5, 0 3" fill="black" />
+    </marker>
+  </defs>
+
+  <!-- Dark space background -->
+  <rect x="0" y="-50" width="80" height="160" fill="#000011" />
+
+  <g id="exhaust-container-1"></g>
+  <g id="exhaust-container-2"></g>
+  <g id="exhaust-container-center"></g>
+
+  <g id="system-indicator">
+      <rect x="15.4" y="-37.9" width="49.5" height="100" rx="5" ry="5" fill="silver" stroke="silver" stroke-width="1"/>
+      <text x="32" y="36" class="fan-label">SYSTEM</text>
+      
+      <circle cx="40" cy="47.75" r="9" fill="black" id="no-errors-bg"/>
+      <circle cx="40" cy="47.75" r="8" fill="green" class="status-active" id="no-errors-disc"/>
+      <text x="40" y="47.75" text-anchor="middle" dominant-baseline="middle" font-size="10" id="no-errors-symbol">✓</text>
+    </g>
+
+    <rect id="rect-behind-pressure-value" x="18" y="-39" width="44" height="35" fill="url(#disk-gradient)" />
+    <rect id="rect-behind-speed-value" x="20" y="17" width="40" height="10" fill="url(#disk-gradient)" />
+    
+  <g id="fanspeed-container"></g>
+  <g id="pressure-container"></g>
+    
+
+    <g id="status-indicators-fan1">
+        <g id="fuse-fan1">
+            <rect x="5" y="25" width="20" height="51" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1"/>
+            <circle cx="10" cy="71" r="4" fill="black"/>
+            <circle id="status-Fuse_Fan1" cx="10" cy="71" r="3" fill="#00FF00" class="status-active"/>
+            <rect x="8.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5"/>
+            <line x1="7.5" y1="71" x2="12.5" y2="71" stroke="black" stroke-width="0.5"/>
+        </g>
+        <g id="feedback-k1">
+      <circle cx="20" cy="71" r="4" fill="black"/>
+      <circle id="status-Feedback_K1" cx="20" cy="71" r="3" fill="#00FF00" class="status-active"/>
+      <path d="M 22 70 L 21.5 71 L 22.5 71 Z" fill="black"/>
+      <path d="M 22 71 A 2 2 0 1 1 21.732 70" stroke="black" fill="none" stroke-width="0.5"/>
+    </g>
+    
+    <g id="dryer-indicator">
+      <rect x="25" y="60" width="30" height="17" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1"/>
+      <text x="34" y="65" class="fan-label">DRYER</text>
+      
+      <g id="fuse-dryer">
+        <circle cx="35" cy="71" r="4" fill="black"/>
+        <circle id="status-Fuse_Dryer" cx="35" cy="71" r="3" fill="#FF0000" class="status-active"/>
+        <rect x="33.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5"/>
+        <line x1="32.5" y1="71" x2="37.5" y2="71" stroke="black" stroke-width="0.5"/>
+      </g>
+      <g id="feedback-watchdog">
+        <circle cx="45" cy="71" r="4" fill="black"/>
+        <circle id="status-FeedbackPipeWatchdog" cx="45" cy="71" r="3" fill="#00FF00" class="status-active"/>
+        <path d="M 47 70 L 46.5 71 L 47.5 71 Z" fill="black"/>
+        <path d="M 47 71 A 2 2 0 1 1 46.732 70" stroke="black" fill="none" stroke-width="0.5"/>
+      </g>
+    </g>
+    <g id="status-indicators-fan2">
+        <g id="fuse-fan2">
+        <rect x="55" y="25" width="20" height="51" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1"/>
+        <circle cx="60" cy="71" r="4" fill="black"/>
+        <circle id="status-Fuse_Fan2" cx="60" cy="71" r="3" fill="gray"/>
+        <rect x="58.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5"/>
+        <line x1="57.5" y1="71" x2="62.5" y2="71" stroke="black" stroke-width="0.5"/>
+        </g>
+        <g id="feedback-k2">
+        <circle cx="70" cy="71" r="4" fill="black"/>
+        <circle id="status-Feedback_K2" cx="70" cy="71" r="3" fill="gray"/>
+        <path d="M 72 70 L 71.5 71 L 72.5 71 Z" fill="black"/>
+        <path d="M 72 71 A 2 2 0 1 1 71.732 70" stroke="black" fill="none" stroke-width="0.5"/>
+        </g>
+    </g>
+    
+  </g>
+  
+  <g id="power-fan1-container">
+  </g>
+  <g id="power-fan2-container">
+  </g>
+
+  <g id="starfield-container"></g>
+
+</svg>

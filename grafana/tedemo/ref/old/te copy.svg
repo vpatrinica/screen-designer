@@ -1,0 +1,552 @@
+<svg xmlns="http://www.w3.org/2000/svg" 
+     viewBox="0 0 100 100" 
+     width="60mm" 
+     height="120mm"
+     >
+  <script type="text/javascript">
+    <![CDATA[
+      
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+/**
+ * Creates a parametric power button and appends it to a container.
+ */
+function createFan(containerId, params) {
+  const { x, y, size, strokeWidth, id, initialState } = params;
+  
+  const cx = x + size / 2;
+  const cy = y + size / 2;
+  const r_bg = size / 2;
+  
+  const rect = {
+    x: cx - (strokeWidth / 2),
+    y: y,
+    width: strokeWidth,
+    height: size / 2,
+    rx: strokeWidth / 2
+  };
+  
+  const r_arc = (size / 2) - (strokeWidth / 2);
+  const startAngleRad = -135 * (Math.PI / 180);
+  const endAngleRad = -45 * (Math.PI / 180);
+  
+  const startX = cx + r_arc * Math.cos(endAngleRad);
+  const startY = cy + r_arc * Math.sin(endAngleRad);
+  const endX = cx + r_arc * Math.cos(startAngleRad);
+  const endY = cy + r_arc * Math.sin(startAngleRad);
+  
+  const arcPathD = `M ${startX.toFixed(3)} ${startY.toFixed(3)} A ${r_arc} ${r_arc} 0 1 1 ${endX.toFixed(3)} ${endY.toFixed(3)}`;
+
+  const container = document.getElementById(containerId);
+  if (!container) { return; }
+
+  const mainGroup = document.createElementNS(SVG_NS, "g");
+  mainGroup.setAttribute("id", id);
+  
+  // ** NOTE: The .power-button-component class is no longer added. **
+  
+  // We still use the 'power-on' class for state toggling
+  if (initialState === 'on') {
+    mainGroup.classList.add("power-on");
+  }
+
+  // Child elements (still use classes for styling)
+  const bgAnimatedDisk = document.createElementNS(SVG_NS, "circle");
+  bgAnimatedDisk.setAttribute("class", "bg-animated-disk");
+  bgAnimatedDisk.setAttribute("cx", cx);
+  bgAnimatedDisk.setAttribute("cy", cy);
+  bgAnimatedDisk.setAttribute("r", 10); // 10 SVG units radius
+
+  const rotorDisk = document.createElementNS(SVG_NS, "circle");
+  rotorDisk.setAttribute("class", "rotor-disk");
+  rotorDisk.setAttribute("cx", cx);
+  rotorDisk.setAttribute("cy", cy);
+  rotorDisk.setAttribute("r", 5); // 3mm physical radius
+
+  const intermediateDisk = document.createElementNS(SVG_NS, "circle");
+  intermediateDisk.setAttribute("class", "intermediate-disk");
+  intermediateDisk.setAttribute("cx", cx);
+  intermediateDisk.setAttribute("cy", cy);
+  intermediateDisk.setAttribute("r", 6); // 1 unit bigger than power symbol (power symbol ~5 units)
+
+  const bgDisk = document.createElementNS(SVG_NS, "circle");
+  bgDisk.setAttribute("class", "power-bg-disk");
+  bgDisk.setAttribute("cx", cx);
+  bgDisk.setAttribute("cy", cy);
+  bgDisk.setAttribute("r", 11); // 11 SVG units radius
+
+  const lineRect = document.createElementNS(SVG_NS, "rect");
+  lineRect.setAttribute("class", "power-line");
+  lineRect.setAttribute("x", rect.x);
+  lineRect.setAttribute("y", rect.y);
+  lineRect.setAttribute("width", rect.width);
+  lineRect.setAttribute("height", rect.height);
+  lineRect.setAttribute("rx", rect.rx);
+
+  const arcPath = document.createElementNS(SVG_NS, "path");
+  arcPath.setAttribute("class", "power-arc");
+  arcPath.setAttribute("d", arcPathD);
+
+  // Create fan blades (5 blades, diameter 21, radius 10.5 - extended by 3)
+  const bladesGroup = document.createElementNS(SVG_NS, "g");
+  bladesGroup.setAttribute("class", "fan-blades");
+  
+  const bladeRadius = 10.5; // diameter 21 = radius 10.5 (original 9 + 3)
+  const bladeAngle = 360 / 5; // 72 degrees per blade
+  
+  for (let i = 0; i < 5; i++) {
+    const angle = (i * bladeAngle) * (Math.PI / 180);
+    
+    // Create blade as a curved path
+    const bladeStartAngle = angle - 0.3; // small angle for blade width
+    const bladeEndAngle = angle + 0.3;
+    
+    const innerRadius = 2; // inner radius of blade
+    const outerRadius = bladeRadius;
+    
+    // Calculate blade path points
+    const x1 = cx + innerRadius * Math.cos(bladeStartAngle);
+    const y1 = cy + innerRadius * Math.sin(bladeStartAngle);
+    const x2 = cx + outerRadius * Math.cos(bladeStartAngle);
+    const y2 = cy + outerRadius * Math.sin(bladeStartAngle);
+    const x3 = cx + outerRadius * Math.cos(bladeEndAngle);
+    const y3 = cy + outerRadius * Math.sin(bladeEndAngle);
+    const x4 = cx + innerRadius * Math.cos(bladeEndAngle);
+    const y4 = cy + innerRadius * Math.sin(bladeEndAngle);
+    
+    const bladePath = `M ${x1} ${y1} L ${x2} ${y2} L ${x3} ${y3} L ${x4} ${y4} Z`;
+    
+    const blade = document.createElementNS(SVG_NS, "path");
+    blade.setAttribute("d", bladePath);
+    blade.setAttribute("class", "fan-blade");
+    bladesGroup.appendChild(blade);
+  }
+
+  mainGroup.appendChild(bgDisk);
+  mainGroup.appendChild(bgAnimatedDisk);
+  mainGroup.appendChild(bladesGroup);
+  mainGroup.appendChild(intermediateDisk);
+  mainGroup.appendChild(rotorDisk);
+  mainGroup.appendChild(lineRect);
+  mainGroup.appendChild(arcPath);
+  container.appendChild(mainGroup);
+}
+
+function createGauge(containerId, params) {
+  const { cx, cy, id } = params;
+  const gaugeGroup = document.createElementNS(SVG_NS, "g");
+  gaugeGroup.setAttribute("class", "rpm-gauge");
+  gaugeGroup.setAttribute("id", id);
+  gaugeGroup.setAttribute("data-cx", cx);
+  gaugeGroup.setAttribute("data-cy", cy);
+  
+  // Gauge arc (semi-circle, radius 20)
+  const gaugeArc = document.createElementNS(SVG_NS, "path");
+  const gaugeRadius = 20;
+  const gaugeStartAngle = 0; // 0°
+  const gaugeEndAngle = Math.PI; // 180°
+  const gaugeArcPath = `M ${cx + gaugeRadius * Math.cos(gaugeStartAngle)} ${cy + gaugeRadius * Math.sin(gaugeStartAngle)} A ${gaugeRadius} ${gaugeRadius} 0 0 0 ${cx + gaugeRadius * Math.cos(gaugeEndAngle)} ${cy + gaugeRadius * Math.sin(gaugeEndAngle)}`;
+  gaugeArc.setAttribute("d", gaugeArcPath);
+  gaugeArc.setAttribute("class", "gauge-arc");
+  gaugeGroup.appendChild(gaugeArc);
+  
+  // Value arc (radius 20, shows current RPM)
+  const valueArc = document.createElementNS(SVG_NS, "path");
+  const currentRPM = 900;
+  const maxRPM = 4000;
+  const rpmRatio = currentRPM / maxRPM;
+  const valueEndAngle = gaugeStartAngle + (rpmRatio * (gaugeEndAngle - gaugeStartAngle));
+  const valueArcPath = `M ${cx + gaugeRadius * Math.cos(gaugeStartAngle)} ${cy + gaugeRadius * Math.sin(gaugeStartAngle)} A ${gaugeRadius} ${gaugeRadius} 0 0 0 ${cx + gaugeRadius * Math.cos(valueEndAngle)} ${cy + gaugeRadius * Math.sin(valueEndAngle)}`;
+  valueArc.setAttribute("d", valueArcPath);
+  valueArc.setAttribute("class", "gauge-value-arc");
+  gaugeGroup.appendChild(valueArc);
+  
+  // Gauge tick marks and numbers
+  const numTicks = 4; // 0, 1000, 2000, 3000, 4000
+  
+  for (let i = 0; i <= numTicks; i++) {
+    const rpm = (i * maxRPM) / numTicks;
+    const angle = gaugeStartAngle + (i * (gaugeEndAngle - gaugeStartAngle)) / numTicks;
+    
+    // Tick mark
+    const tickInnerRadius = gaugeRadius - 4;
+    const tickOuterRadius = gaugeRadius - 2;
+    let tickX1 = cx + tickInnerRadius * Math.cos(angle);
+    let tickY1 = cy + tickInnerRadius * Math.sin(angle);
+    let tickX2 = cx + tickOuterRadius * Math.cos(angle);
+    let tickY2 = cy + tickOuterRadius * Math.sin(angle);
+    
+    // Symmetric with respect to the center
+    tickX1 = 2 * cx - tickX1;
+    tickY1 = 2 * cy - tickY1;
+    tickX2 = 2 * cx - tickX2;
+    tickY2 = 2 * cy - tickY2;
+    
+    const tick = document.createElementNS(SVG_NS, "line");
+    tick.setAttribute("x1", tickX1);
+    tick.setAttribute("y1", tickY1);
+    tick.setAttribute("x2", tickX2);
+    tick.setAttribute("y2", tickY2);
+    tick.setAttribute("class", "gauge-tick");
+    gaugeGroup.appendChild(tick);
+    
+    // Number label
+    if (i >= 0 && i <= 4) {
+      const labelRadius = gaugeRadius + 5;
+      let labelX = cx + labelRadius * Math.cos(angle);
+      let labelY = cy + labelRadius * Math.sin(angle);
+      
+      // Symmetric with respect to the center
+      labelX = 2 * cx - labelX;
+      labelY = 2 * cy - labelY;
+      
+      const label = document.createElementNS(SVG_NS, "text");
+      label.setAttribute("x", labelX);
+      label.setAttribute("y", labelY);
+      label.setAttribute("class", "gauge-label");
+      label.setAttribute("text-anchor", "middle");
+      label.setAttribute("dominant-baseline", "middle");
+      
+      // Align along the arc (tangent orientation)
+      const radialAngle = Math.atan2(labelY - cy, labelX - cx) * 180 / Math.PI;
+      const tangentAngle = radialAngle + 90;
+      label.setAttribute("transform", `rotate(${tangentAngle}, ${labelX}, ${labelY})`);
+      
+      label.textContent = rpm.toString();
+      gaugeGroup.appendChild(label);
+    }
+  }
+  
+  // RPM indicator triangle
+  const indicatorGroup = document.createElementNS(SVG_NS, "g");
+  indicatorGroup.setAttribute("class", "rpm-indicator");
+  
+  // Triangle pointing to current RPM (start at 0)
+  const indicatorAngle = gaugeStartAngle; // Start at 0 RPM
+  const indicatorRadius = gaugeRadius - 3;
+  const triangleSize = 3;
+  
+  const trianglePoints = [
+    [cx + indicatorRadius * Math.cos(indicatorAngle), cy + indicatorRadius * Math.sin(indicatorAngle)],
+    [cx + (indicatorRadius - triangleSize) * Math.cos(indicatorAngle - 0.2), cy + (indicatorRadius - triangleSize) * Math.sin(indicatorAngle - 0.2)],
+    [cx + (indicatorRadius - triangleSize) * Math.cos(indicatorAngle + 0.2), cy + (indicatorRadius - triangleSize) * Math.sin(indicatorAngle + 0.2)]
+  ];
+  
+  const triangle = document.createElementNS(SVG_NS, "polygon");
+  triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+  triangle.setAttribute("class", "gauge-indicator");
+  indicatorGroup.appendChild(triangle);
+  
+  gaugeGroup.appendChild(indicatorGroup);
+  
+  // Center RPM text
+  const rpmText = document.createElementNS(SVG_NS, "text");
+  rpmText.setAttribute("x", cx);
+  rpmText.setAttribute("y", cy + 5);
+  rpmText.setAttribute("class", "rpm-text");
+  rpmText.setAttribute("text-anchor", "middle");
+  rpmText.setAttribute("dominant-baseline", "middle");
+  rpmText.textContent = "900 RPM";
+  gaugeGroup.appendChild(rpmText);
+
+  const container = document.getElementById(containerId);
+  if (!container) { return; }
+  container.appendChild(gaugeGroup);
+}
+
+/**
+ * Update the RPM gauge for a specific fan
+ */
+function updateRPMGauge(gaugeId, rpm) {
+  const gaugeGroup = document.getElementById(gaugeId);
+  if (!gaugeGroup) return;
+  const maxRPM = 4000;
+  const gaugeStartAngle = 0; // 0°
+  const gaugeEndAngle = Math.PI; // 180°
+  const cx = parseFloat(gaugeGroup.getAttribute("data-cx"));
+  const cy = parseFloat(gaugeGroup.getAttribute("data-cy"));
+  const gaugeRadius = 20;
+  
+  // Update RPM text
+  const rpmText = gaugeGroup.querySelector('.rpm-text');
+  if (rpmText) {
+    rpmText.textContent = rpm.toString() + " RPM";
+  }
+  
+  // Update value arc
+  const valueArc = gaugeGroup.querySelector('.gauge-value-arc');
+  if (valueArc) {
+    const rpmRatio = Math.min(rpm / maxRPM, 1); // Clamp to max
+    const valueEndAngle = gaugeStartAngle + (rpmRatio * (gaugeEndAngle - gaugeStartAngle));
+    const valueArcPath = `M ${cx + gaugeRadius * Math.cos(gaugeStartAngle)} ${cy + gaugeRadius * Math.sin(gaugeStartAngle)} A ${gaugeRadius} ${gaugeRadius} 0 0 0 ${cx + gaugeRadius * Math.cos(valueEndAngle)} ${cy + gaugeRadius * Math.sin(valueEndAngle)}`;
+    valueArc.setAttribute("d", valueArcPath);
+  }
+  
+  // Update indicator triangle position
+  const indicatorGroup = gaugeGroup.querySelector('.rpm-indicator');
+  if (indicatorGroup) {
+    // Remove existing triangle
+    const existingTriangle = indicatorGroup.querySelector('.gauge-indicator');
+    if (existingTriangle) {
+      indicatorGroup.removeChild(existingTriangle);
+    }
+    
+    // Calculate new angle based on RPM
+    const rpmRatio = Math.min(rpm / maxRPM, 1); // Clamp to max
+    const indicatorAngle = gaugeStartAngle + (rpmRatio * (gaugeEndAngle - gaugeStartAngle));
+    
+    // Create new triangle
+    const indicatorRadius = gaugeRadius - 3;
+    const triangleSize = 3;
+    
+    let trianglePoints = [
+      [cx + indicatorRadius * Math.cos(indicatorAngle), cy + indicatorRadius * Math.sin(indicatorAngle)],
+      [cx + (indicatorRadius - triangleSize) * Math.cos(indicatorAngle - 0.2), cy + (indicatorRadius - triangleSize) * Math.sin(indicatorAngle - 0.2)],
+      [cx + (indicatorRadius - triangleSize) * Math.cos(indicatorAngle + 0.2), cy + (indicatorRadius - triangleSize) * Math.sin(indicatorAngle + 0.2)]
+    ];
+    
+    // Symmetric with respect to the center
+    trianglePoints = trianglePoints.map(([px, py]) => [2 * cx - px, 2 * cy - py]);
+    
+    const triangle = document.createElementNS(SVG_NS, "polygon");
+    triangle.setAttribute("points", trianglePoints.map(p => p.join(',')).join(' '));
+    triangle.setAttribute("class", "gauge-indicator");
+    indicatorGroup.appendChild(triangle);
+  }
+}
+
+function togglePowerButton(buttonId) {
+  const buttonGroup = document.getElementById(buttonId);
+  if (buttonGroup) {
+    buttonGroup.classList.toggle("power-on");
+  }
+}
+
+function initFansAndGauge() {
+  // Create fans
+  createFan(
+    "power-fan1-container",
+    {
+      id: "power-fan1",
+      x: 10,
+      y: 65,
+      size: 10,
+      strokeWidth: 0.75,
+      initialState: 'on'
+    }
+  );
+
+  createFan(
+    "power-fan2-container",
+    {
+      id: "power-fan2",
+      x: 60,
+      y: 65,
+      size: 10,
+      strokeWidth: 0.75,
+      initialState: 'off'
+    }
+  );
+
+  // Create gauge in the middle
+  createGauge("fanspeed-container", {cx:40, cy:50, id:"fanspeed"});
+  updateRPMGauge("fanspeed", 900);
+
+  // Add click listeners for fans
+  const fan1Container = document.getElementById("power-fan1-container");
+  if (fan1Container) {
+    fan1Container.addEventListener("click", () => {
+      togglePowerButton("power-fan1");
+    });
+  }
+
+  const fan2Container = document.getElementById("power-fan2-container");
+  if (fan2Container) {
+    fan2Container.addEventListener("click", () => {
+      togglePowerButton("power-fan2");
+    });
+  }
+}
+
+// Initialize when the window loads
+window.addEventListener('load', initFansAndGauge);
+
+    ]]>
+  </script>
+  
+  <title>Clickable Power Button Components (ID-Styled)</title>
+  
+  <defs>
+    <style>
+      :root {
+        --color-power-black: #000000;
+        --color-power-off: #555555;
+        --color-power-on: #00FF00;
+      }
+      
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      @keyframes pulse-brightness {
+        0% { opacity: 0.6; }
+        50% { opacity: 1.0; }
+        100% { opacity: 0.6; }
+      }
+      
+      /* --- Styles for Fan 1 --- */
+      #power-fan1 {
+        --power-color: var(--color-power-off); /* Default 'off' state */
+        cursor: pointer;
+      }
+      #power-fan1.power-on {
+        --power-color: var(--color-power-on); /* 'on' state */
+      }
+      #power-fan1 .intermediate-disk {
+        fill: #333333;
+      }
+      #power-fan1 .power-bg-disk {
+        fill: var(--color-power-black);
+      }
+      #power-fan1 .bg-animated-disk {
+        fill: #000000;
+      }
+      #power-fan1.power-on .bg-animated-disk {
+        fill: url(#animated-bg-gradient);
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      #power-fan1 .rotor-disk {
+        fill: #808080;
+      }
+      #power-fan1 .fan-blades {
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      #power-fan1.power-on .fan-blades {
+        animation: spin 2s linear infinite;
+      }
+      #power-fan1 .fan-blade {
+        fill: #666666;
+        stroke: #404040;
+        stroke-width: 0.2;
+      }
+      #power-fan1 .power-line {
+        fill: var(--power-color); 
+        stroke: none;
+      }
+      #power-fan1 .power-arc {
+        stroke: var(--power-color); 
+        fill: none;
+        stroke-width: 0.75;
+        stroke-linecap: round;
+      }
+
+      /* --- Styles for Fan 2 --- */
+      #power-fan2 {
+        --power-color: var(--color-power-off); /* Default 'off' state */
+        cursor: pointer;
+      }
+      #power-fan2.power-on {
+        --power-color: var(--color-power-on); /* 'on' state */
+      }
+      #power-fan2 .intermediate-disk {
+        fill: #333333;
+      }
+      #power-fan2 .power-bg-disk {
+        fill: var(--color-power-black);
+      }
+      #power-fan2 .bg-animated-disk {
+        fill: #000000;
+      }
+      #power-fan2.power-on .bg-animated-disk {
+        fill: url(#animated-bg-gradient);
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      #power-fan2 .rotor-disk {
+        fill: #808080;
+      }
+      #power-fan2 .fan-blades {
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      #power-fan2.power-on .fan-blades {
+        animation: spin 2s linear infinite;
+      }
+      #power-fan2 .fan-blade {
+        fill: #666666;
+        stroke: #404040;
+        stroke-width: 0.2;
+      }
+      #power-fan2 .power-line {
+        fill: var(--power-color); 
+        stroke: none;
+      }
+      #power-fan2 .power-arc {
+        stroke: var(--power-color); 
+        fill: none;
+        stroke-width: 0.75;
+        stroke-linecap: round;
+      }
+
+      .gauge-arc {
+        fill: none;
+        stroke: #666666;
+        stroke-width: 1;
+      }
+      .gauge-value-arc {
+        fill: none;
+        stroke: #00FF00;
+        stroke-width: 3;
+      }
+      .gauge-tick {
+        stroke: #666666;
+        stroke-width: 0.5;
+      }
+      .gauge-label {
+        fill: #666666;
+        font-size: 4px;
+        font-family: Arial, sans-serif;
+      }
+      .gauge-indicator {
+        fill: #FF0000;
+        stroke: #CC0000;
+        stroke-width: 0.2;
+      }
+      .rpm-text {
+        fill: #000000;
+        font-size: 5px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+      }
+      .rpm-label {
+        fill: #666666;
+        font-size: 3px;
+        font-family: Arial, sans-serif;
+      }
+    </style>
+    
+    <!-- Bright light blue radial gradient for animated background disk -->
+    <radialGradient id="animated-bg-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#B0E0E6;stop-opacity:1.0" />
+      <stop offset="50%" style="stop-color:#87CEEB;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#4682B4;stop-opacity:0.9" />
+    </radialGradient>
+    
+    <!-- Glow filter for enhanced visibility -->
+    <filter id="glow-filter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g id="power-fan1-container"></g>
+  <g id="power-fan2-container"></g>
+  <g id="fanspeed-container"></g>
+
+</svg>

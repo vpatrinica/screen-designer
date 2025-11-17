@@ -1,0 +1,19 @@
+[project]
+name = "query-influxdb"
+version = "0.1.0"
+description = "Query InfluxDB v2 to retrieve all fields in a bucket"
+readme = "task-getinfluxdata.md"
+requires-python = ">=3.8"
+dependencies = [
+    "influxdb-client>=1.36.0",
+]
+
+[project.scripts]
+query-influxdb = "query_influxdb:main"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv]
+managed = true

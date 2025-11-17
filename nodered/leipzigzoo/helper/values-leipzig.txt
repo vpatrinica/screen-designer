@@ -1,0 +1,270 @@
+state_value,_field,_measurement,topic
+163.35,value,leipzigzoo,leipzigzoo/11|--000-01-01-S066.01-4839-FB_AI.01|cushion pressure
+17.98,value,leipzigzoo,leipzigzoo/11|--000-01-01-S083.01-2146-FB_AI.01|cushion temperature
+1.85,value,leipzigzoo,leipzigzoo/11|--000-01-01-S083.03-2147-FB_AI.01|Durchfluss 2
+0.43,value,leipzigzoo,leipzigzoo/11|--000-01-01-S083.03-2148-FB_AI.01|Durchfluss 35
+0.4,value,leipzigzoo,leipzigzoo/11|--000-01-01-S083.03-2149-FB_AI.01|Durchfluss 36
+23.7,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.01-1-FB_AI.01|Kissentemperatur 7
+240.48,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.01-2-FB_AI.01|Kissendruck 7
+27.47,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.01-3-FB_AI.01|Kissenfeuchte 7
+22.24,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.01-4-FB_AI.01|Kissentemperatur 8
+288.09,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.01-5-FB_AI.01|Kissendruck 8
+28.81,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.01-6-FB_AI.01|Kissenfeuchte 8
+6.29,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 29
+1.93,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 30
+4.95,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 31
+2.04,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.02-4-FB_AI.01|Durchfluss 32
+4.69,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.02-5-FB_AI.01|Durchfluss 33
+1.99,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.02-6-FB_AI.01|Durchfluss 34
+10,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.02-7-FB_AI.01|Durchfluss 35
+2.17,value,leipzigzoo,leipzigzoo/11|--000-01-01-S325.02-8-FB_AI.01|Durchfluss 36
+0,value,leipzigzoo,leipzigzoo/11|--000-02-01-M.01-6-FB_BI.01|Störung 29!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-01-M.02-6-FB_BI.01|Störung 31!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-01-M.03-6-FB_BI.01|Störung 30!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-01-M.04-6-FB_BI.01|Störung 32!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-01-M.06-6-FB_BI.01|Störung 33!
+2.1,value,leipzigzoo,leipzigzoo/11|--000-02-01-S066.01-8610-FB_AO.01|Max 29-31
+-0.5,value,leipzigzoo,leipzigzoo/11|--000-02-01-S066.02-8610-FB_AO.01|Min 29-31
+2.7,value,leipzigzoo,leipzigzoo/11|--000-02-01-S066.03-8610-FB_AO.01|Max 30-32
+-0.5,value,leipzigzoo,leipzigzoo/11|--000-02-01-S066.04-8610-FB_AO.01|Min 30-32
+2,value,leipzigzoo,leipzigzoo/11|--000-02-01-S066.05-8610-FB_AO.01|Max 31-33
+0.3,value,leipzigzoo,leipzigzoo/11|--000-02-01-S066.06-8610-FB_AO.01|Min 31-33
+1.25,value,leipzigzoo,leipzigzoo/11|--000-02-01-S083.01-2152-FB_AI.01|q 29-31
+0.98,value,leipzigzoo,leipzigzoo/11|--000-02-01-S083.02-2152-FB_AI.01|q 30-32
+1.07,value,leipzigzoo,leipzigzoo/11|--000-02-01-S083.03-2152-FB_AI.01|q 31-33
+500,value,leipzigzoo,leipzigzoo/11|--000-02-01-T.01-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-01-T.02-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-01-T.03-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-01-T.04-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-01-T.05-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-01-T.06-Ton-FB_AO.01|Einschaltverzög!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-02-M.01-6-FB_BI.01|Störung 32!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-02-M.02-6-FB_BI.01|Störung 34!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-02-M.03-6-FB_BI.01|Störung 33!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-02-M.04-6-FB_BI.01|Störung 35!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-02-M.05-6-FB_BI.01|Störung 34!
+0,value,leipzigzoo,leipzigzoo/11|--000-02-02-M.06-6-FB_BI.01|Störung 36!
+2.5,value,leipzigzoo,leipzigzoo/11|--000-02-02-S066.01-8610-FB_AO.01|Max 32-34
+0.5,value,leipzigzoo,leipzigzoo/11|--000-02-02-S066.02-8610-FB_AO.01|Min 32-34
+1.4,value,leipzigzoo,leipzigzoo/11|--000-02-02-S066.03-8610-FB_AO.01|Max 33-35
+0.3,value,leipzigzoo,leipzigzoo/11|--000-02-02-S066.04-8610-FB_AO.01|Min 33-35
+1.4,value,leipzigzoo,leipzigzoo/11|--000-02-02-S066.05-8610-FB_AO.01|Max 34-36
+0.3,value,leipzigzoo,leipzigzoo/11|--000-02-02-S066.06-8610-FB_AO.01|Min 34-36
+0.99,value,leipzigzoo,leipzigzoo/11|--000-02-02-S083.01-2152-FB_AI.01|q 32-34
+0.47,value,leipzigzoo,leipzigzoo/11|--000-02-02-S083.02-2152-FB_AI.01|q 33-35
+0.91,value,leipzigzoo,leipzigzoo/11|--000-02-02-S083.03-2152-FB_AI.01|q 34-36
+500,value,leipzigzoo,leipzigzoo/11|--000-02-02-T.01-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-02-T.02-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-02-T.03-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-02-T.04-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-02-T.05-Ton-FB_AO.01|Einschaltverzög!
+500,value,leipzigzoo,leipzigzoo/11|--000-02-02-T.06-Ton-FB_AO.01|Einschaltverzög!
+158.67,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.01-4839-FB_AI.01|cushion pressure
+180,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.01-8610-FB_AO.01|master fan: cushion pressure &lt;180 Pa
+30,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.01-8612-FB_AO.01|differential gap
+150,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.02-8610-FB_AO.01|slave fan: cushion pressure &lt;150 Pa
+30,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.02-8612-FB_AO.01|differential gap
+120,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.03-8610-FB_AO.01|cushion pressure &lt;120 Pa
+30,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.03-8612-FB_AO.01|differential gap
+10,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.04-8610-FB_AO.01|minimum alarm: cushion pressure &lt;10 Pa
+2,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.04-8612-FB_AO.01|differential gap
+350,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.05-8610-FB_AO.01|maximum alarm: cushion pressure &gt;350 Pa
+100,value,leipzigzoo,leipzigzoo/12|--000-01-01-S066.05-8612-FB_AO.01|differential gap
+57.2,value,leipzigzoo,leipzigzoo/12|--000-01-01-S083.01-2146-FB_AI.01|cushion temperature
+1.28,value,leipzigzoo,leipzigzoo/12|--000-01-01-S083.02-2146-FB_AI.01|Durchfluss 19
+24.03,value,leipzigzoo,leipzigzoo/12|--000-01-01-S083.02-2146-FB_AI.01|cushion humidity
+0,value,leipzigzoo,leipzigzoo/12|--000-01-01-S083.02-2147-FB_AI.01|flow rate 1
+0,value,leipzigzoo,leipzigzoo/12|--000-01-01-S083.02-2148-FB_AI.01|flow rate 2
+1.79,value,leipzigzoo,leipzigzoo/12|--000-01-01-S083.03-2147-FB_AI.01|Durchfluss 2
+0.42,value,leipzigzoo,leipzigzoo/12|--000-01-01-S083.03-2148-FB_AI.01|Durchfluss 35
+0.41,value,leipzigzoo,leipzigzoo/12|--000-01-01-S083.03-2149-FB_AI.01|Durchfluss 36
+19.55,value,leipzigzoo,leipzigzoo/12|--000-01-01-S325.01-1-FB_AI.01|Kissentemperatur 1
+253.91,value,leipzigzoo,leipzigzoo/12|--000-01-01-S325.01-2-FB_AI.01|Kissendruck 1
+26.25,value,leipzigzoo,leipzigzoo/12|--000-01-01-S325.01-3-FB_AI.01|Kissenfeuchte 1
+209.96,value,leipzigzoo,leipzigzoo/12|--000-01-01-S325.01-5-FB_AI.01|Kissendruck 2
+28.93,value,leipzigzoo,leipzigzoo/12|--000-01-01-S325.01-6-FB_AI.01|Kissenfeuchte 2
+1717,value,leipzigzoo,leipzigzoo/12|--000-01-30-H601.01-6-FB_AI.01|Betriebsstunden
+1717,value,leipzigzoo,leipzigzoo/12|--000-01-31-H601.01-6-FB_AI.01|Betriebsstunden
+1,value,leipzigzoo,leipzigzoo/12|--000-01-32-T.01-t-FB_BI.01|delay require fan 1-2
+0,value,leipzigzoo,leipzigzoo/12|--000-01-32-T.02-t-FB_BI.01|delay require fan 2-1
+0,value,leipzigzoo,leipzigzoo/12|--000-01-80-M.02-6-FB_BI.01|motor contactor 1 initiated
+0,value,leipzigzoo,leipzigzoo/12|--000-01-80-M.04-6-FB_BI.01|motor contactor 2 initiated
+0,value,leipzigzoo,leipzigzoo/12|--000-01-80-M.06-6-FB_BI.01|cushion pressure &lt; 120 Pa
+0,value,leipzigzoo,leipzigzoo/12|--000-01-80-M.08-6-FB_BI.01|control unit failure
+0,value,leipzigzoo,leipzigzoo/12|--000-01-80-M.10-6-FB_BI.01|system error
+0,value,leipzigzoo,leipzigzoo/12|--000-01-80-M.14-6-FB_BI.01|minimum alarm: cushion pressure &lt; 10 Pa
+0,value,leipzigzoo,leipzigzoo/12|--000-01-80-M.15-6-FB_BI.01|maximum alarm: cushion pressure &gt; 350 Pa
+1,value,leipzigzoo,leipzigzoo/12|--000-01-90-M.01-6-FB_BI.01|fan 1 on
+1,value,leipzigzoo,leipzigzoo/12|--000-01-90-M.02-6-FB_BI.01|fan 2 on
+0,value,leipzigzoo,leipzigzoo/12|--000-02-02-M.03-6-FB_BI.01|Störung 33!
+0,value,leipzigzoo,leipzigzoo/12|--000-02-02-M.04-6-FB_BI.01|Störung 35!
+0,value,leipzigzoo,leipzigzoo/12|--000-02-02-M.05-6-FB_BI.01|Störung 34!
+0,value,leipzigzoo,leipzigzoo/12|--000-02-02-M.06-6-FB_BI.01|Störung 36!
+2.5,value,leipzigzoo,leipzigzoo/12|--000-02-02-S066.01-8610-FB_AO.01|Max 32-34
+0,value,leipzigzoo,leipzigzoo/20|--000-01-01-M.01-6-FB_BI.01|Schneesensor 1
+0,value,leipzigzoo,leipzigzoo/20|--000-01-01-S083.02-2147-FB_AI.01|wind direction
+25.29,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-1-FB_AI.01|Kissentemperatur 1
+20.38,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-1-FB_AI.01|Kissentemperatur 3
+239.26,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-2-FB_AI.01|Kissendruck 1
+206.3,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-2-FB_AI.01|Kissendruck 3
+30.76,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-3-FB_AI.01|Kissenfeuchte 1
+0.63,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-3-FB_AI.01|Kissenfeuchte 3
+33.83,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-4-FB_AI.01|Kissentemperatur 2
+18.33,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-4-FB_AI.01|Kissentemperatur 4
+201.42,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-5-FB_AI.01|Kissendruck 2
+200.2,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-5-FB_AI.01|Kissendruck 4
+24.41,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-6-FB_AI.01|Kissenfeuchte 2
+21.48,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.01-6-FB_AI.01|Kissenfeuchte 4
+2.25,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 11
+0.72,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 3
+0.08,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 12
+0.09,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 4
+0,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 13
+0.22,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 5
+0.61,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-4-FB_AI.01|Durchfluss 6
+0.34,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-5-FB_AI.01|Durchfluss 7
+0.64,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-6-FB_AI.01|Durchfluss 8
+4.29,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-7-FB_AI.01|Durchfluss 9
+1.43,value,leipzigzoo,leipzigzoo/20|--000-01-01-S325.02-8-FB_AI.01|Durchfluss 10
+1,value,leipzigzoo,leipzigzoo/20|--000-01-32-T.01-t-FB_BI.01|delay require fan 1-2
+0,value,leipzigzoo,leipzigzoo/20|--000-01-32-T.02-t-FB_BI.01|delay require fan 2-1
+0,value,leipzigzoo,leipzigzoo/20|--000-01-80-M.08-6-FB_BI.01|control unit failure
+0,value,leipzigzoo,leipzigzoo/20|--000-01-80-M.14-6-FB_BI.01|minimum alarm: cushion pressure &lt; 10 Pa
+0,value,leipzigzoo,leipzigzoo/20|--000-01-80-M.15-6-FB_BI.01|maximum alarm: cushion pressure &gt; 350 Pa
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-M.01-6-FB_BI.01|Störung 1!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-M.02-6-FB_BI.01|Störung 2!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-M.03-6-FB_BI.01|Störung 2!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-M.04-6-FB_BI.01|Störung 3!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-M.05-6-FB_BI.01|Störung 3!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-M.06-6-FB_BI.01|Störung 4!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-S066.01-8610-FB_AO.01|Max 1-2
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-S066.02-8610-FB_AO.01|Min 1-2
+3,value,leipzigzoo,leipzigzoo/20|--000-02-01-S066.03-8610-FB_AO.01|Max 2-3
+0.15,value,leipzigzoo,leipzigzoo/20|--000-02-01-S066.04-8610-FB_AO.01|Min 2-3
+25,value,leipzigzoo,leipzigzoo/20|--000-02-01-S066.05-8610-FB_AO.01|Max 3-4
+0.15,value,leipzigzoo,leipzigzoo/20|--000-02-01-S066.06-8610-FB_AO.01|Min 3-4
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-S083.01-2152-FB_AI.01|q 1-2
+0,value,leipzigzoo,leipzigzoo/20|--000-02-01-S083.02-2152-FB_AI.01|q 2-3
+19,value,leipzigzoo,leipzigzoo/20|--000-02-01-S083.03-2152-FB_AI.01|q 3-4
+660,value,leipzigzoo,leipzigzoo/20|--000-02-01-T.01-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-01-T.02-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-01-T.03-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-01-T.04-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-01-T.05-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-01-T.06-Ton-FB_AO.01|Einschaltverzög!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-02-M.01-6-FB_BI.01|Störung 4!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-02-M.02-6-FB_BI.01|Störung 5!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-02-M.03-6-FB_BI.01|Störung 5!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-02-M.04-6-FB_BI.01|Störung 6!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-02-M.05-6-FB_BI.01|Störung 6!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-02-M.06-6-FB_BI.01|Störung 7!
+1.5,value,leipzigzoo,leipzigzoo/20|--000-02-02-S066.01-8610-FB_AO.01|Max 4-5
+0.05,value,leipzigzoo,leipzigzoo/20|--000-02-02-S066.02-8610-FB_AO.01|Min 4-5
+3.1,value,leipzigzoo,leipzigzoo/20|--000-02-02-S066.03-8610-FB_AO.01|Max 5-6
+0.15,value,leipzigzoo,leipzigzoo/20|--000-02-02-S066.04-8610-FB_AO.01|Min 5-6
+1.3,value,leipzigzoo,leipzigzoo/20|--000-02-02-S066.05-8610-FB_AO.01|Max 6-7
+0.05,value,leipzigzoo,leipzigzoo/20|--000-02-02-S066.06-8610-FB_AO.01|Min 6-7
+0.17,value,leipzigzoo,leipzigzoo/20|--000-02-02-S083.01-2152-FB_AI.01|q 4-5
+0.36,value,leipzigzoo,leipzigzoo/20|--000-02-02-S083.02-2152-FB_AI.01|q 5-6
+1.83,value,leipzigzoo,leipzigzoo/20|--000-02-02-S083.03-2152-FB_AI.01|q 6-7
+660,value,leipzigzoo,leipzigzoo/20|--000-02-02-T.01-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-02-T.02-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-02-T.03-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-02-T.04-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-02-T.05-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-02-T.06-Ton-FB_AO.01|Einschaltverzög!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-03-M.01-6-FB_BI.01|Störung 7!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-03-M.02-6-FB_BI.01|Störung 9!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-03-M.03-6-FB_BI.01|Störung 8!
+0,value,leipzigzoo,leipzigzoo/20|--000-02-03-M.04-6-FB_BI.01|Störung 10!
+1.35,value,leipzigzoo,leipzigzoo/20|--000-02-03-S066.01-8610-FB_AO.01|Max 1-2
+0.4,value,leipzigzoo,leipzigzoo/20|--000-02-03-S066.02-8610-FB_AO.01|Min 7-9
+1.6,value,leipzigzoo,leipzigzoo/20|--000-02-03-S066.03-8610-FB_AO.01|Max 8-10
+0.5,value,leipzigzoo,leipzigzoo/20|--000-02-03-S066.04-8610-FB_AO.01|Min 8-10
+0.08,value,leipzigzoo,leipzigzoo/20|--000-02-03-S083.01-2152-FB_AI.01|q 7-9
+0.45,value,leipzigzoo,leipzigzoo/20|--000-02-03-S083.02-2152-FB_AI.01|q 8-10
+660,value,leipzigzoo,leipzigzoo/20|--000-02-03-T.01-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-03-T.02-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-03-T.03-Ton-FB_AO.01|Einschaltverzög!
+660,value,leipzigzoo,leipzigzoo/20|--000-02-03-T.04-Ton-FB_AO.01|Einschaltverzög!
+0,value,leipzigzoo,leipzigzoo/20|--000-03-01-M.01-6-FB_BI.01|!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+0,value,leipzigzoo,leipzigzoo/21|--000-01-01-M.01-6-FB_BI.01|Schneesensor 2
+261.62,value,leipzigzoo,leipzigzoo/21|--000-01-01-S066.01-4839-FB_AI.01|cushion pressure
+0,value,leipzigzoo,leipzigzoo/21|--000-01-01-S083.01-2146-FB_AI.01|cushion temperature
+0.18,value,leipzigzoo,leipzigzoo/21|--000-01-01-S083.02-2148-FB_AI.01|flow rate 2
+0,value,leipzigzoo,leipzigzoo/21|--000-01-01-S083.02-2149-FB_AI.01|weatherstation humidity
+20.45,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.01-1-FB_AI.01|Kissentemperatur 3
+241.7,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.01-2-FB_AI.01|Kissendruck 3
+0.88,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.01-3-FB_AI.01|Kissenfeuchte 3
+26.88,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.01-4-FB_AI.01|Kissentemperatur 4
+305.18,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.01-5-FB_AI.01|Kissendruck 4
+25.88,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.01-6-FB_AI.01|Kissenfeuchte 4
+5.27,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 11
+2.26,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 12
+4.38,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 13
+2.73,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.02-4-FB_AI.01|Durchfluss 14
+5.93,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.02-5-FB_AI.01|Durchfluss 15
+3.43,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.02-6-FB_AI.01|Durchfluss 16
+4.26,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.02-7-FB_AI.01|Durchfluss 17
+2.54,value,leipzigzoo,leipzigzoo/21|--000-01-01-S325.02-8-FB_AI.01|Durchfluss 18
+888,value,leipzigzoo,leipzigzoo/21|--000-01-30-H601.01-6-FB_AI.01|Betriebsstunden
+919,value,leipzigzoo,leipzigzoo/21|--000-01-31-H601.01-6-FB_AI.01|Betriebsstunden
+0,value,leipzigzoo,leipzigzoo/21|--000-02-02-M.02-6-FB_BI.01|Störung 5!
+0,value,leipzigzoo,leipzigzoo/21|--000-02-02-M.05-6-FB_BI.01|Störung 6!
+0,value,leipzigzoo,leipzigzoo/21|--000-02-02-M.06-6-FB_BI.01|Störung 7!
+0,value,leipzigzoo,leipzigzoo/21|--000-02-03-M.01-6-FB_BI.01|Störung 7!
+0,value,leipzigzoo,leipzigzoo/21|--000-02-03-M.02-6-FB_BI.01|Störung 9!
+0,value,leipzigzoo,leipzigzoo/21|--000-02-03-M.03-6-FB_BI.01|Störung 8!
+0,value,leipzigzoo,leipzigzoo/21|--000-02-03-M.04-6-FB_BI.01|Störung 10!
+203.48,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.01-4839-FB_AI.01|cushion pressure
+180,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.01-8610-FB_AO.01|master fan: cushion pressure &lt;180 Pa
+30,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.01-8612-FB_AO.01|differential gap
+150,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.02-8610-FB_AO.01|slave fan: cushion pressure &lt;150 Pa
+30,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.02-8612-FB_AO.01|differential gap
+120,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.03-8610-FB_AO.01|cushion pressure &lt;120 Pa
+30,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.03-8612-FB_AO.01|differential gap
+10,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.04-8610-FB_AO.01|minimum alarm: cushion pressure &lt;10 Pa
+2,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.04-8612-FB_AO.01|differential gap
+350,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.05-8610-FB_AO.01|maximum alarm: cushion pressure &gt;350 Pa
+100,value,leipzigzoo,leipzigzoo/22|--000-01-01-S066.05-8612-FB_AO.01|differential gap
+0,value,leipzigzoo,leipzigzoo/22|--000-01-01-S083.01-2146-FB_AI.01|cushion temperature
+0,value,leipzigzoo,leipzigzoo/22|--000-01-01-S083.01-2147-FB_AI.01|weatherstation temperature
+0,value,leipzigzoo,leipzigzoo/22|--000-01-01-S083.01-2148-FB_AI.01|cushion humidity
+0,value,leipzigzoo,leipzigzoo/22|--000-01-01-S083.02-2147-FB_AI.01|wind direction
+0.21,value,leipzigzoo,leipzigzoo/22|--000-01-01-S083.02-2148-FB_AI.01|flow rate 2
+0,value,leipzigzoo,leipzigzoo/22|--000-01-01-S083.02-2149-FB_AI.01|weatherstation humidity
+0.11,value,leipzigzoo,leipzigzoo/22|--000-01-01-S325.02-1-FB_AI.01|Durchfluss 11
+0.11,value,leipzigzoo,leipzigzoo/22|--000-01-01-S325.02-2-FB_AI.01|Durchfluss 12
+4.78,value,leipzigzoo,leipzigzoo/22|--000-01-01-S325.02-3-FB_AI.01|Durchfluss 13
+1.29,value,leipzigzoo,leipzigzoo/22|--000-01-01-S325.02-4-FB_AI.01|Durchfluss 14
+0.92,value,leipzigzoo,leipzigzoo/22|--000-01-01-S325.02-7-FB_AI.01|Durchfluss 17
+937,value,leipzigzoo,leipzigzoo/22|--000-01-30-H601.01-6-FB_AI.01|Betriebsstunden
+937,value,leipzigzoo,leipzigzoo/22|--000-01-31-H601.01-6-FB_AI.01|Betriebsstunden
+1,value,leipzigzoo,leipzigzoo/22|--000-01-32-T.01-t-FB_BI.01|delay require fan 1-2
+0,value,leipzigzoo,leipzigzoo/22|--000-01-32-T.02-t-FB_BI.01|delay require fan 2-1
+0,value,leipzigzoo,leipzigzoo/22|--000-01-80-M.02-6-FB_BI.01|motor contactor 1 initiated
+0,value,leipzigzoo,leipzigzoo/22|--000-01-80-M.04-6-FB_BI.01|motor contactor 2 initiated
+0,value,leipzigzoo,leipzigzoo/22|--000-01-80-M.06-6-FB_BI.01|cushion pressure &lt; 120 Pa
+0,value,leipzigzoo,leipzigzoo/22|--000-01-80-M.08-6-FB_BI.01|control unit failure
+0,value,leipzigzoo,leipzigzoo/22|--000-01-80-M.10-6-FB_BI.01|system error
+0,value,leipzigzoo,leipzigzoo/22|--000-01-80-M.14-6-FB_BI.01|minimum alarm: cushion pressure &lt; 10 Pa
+0,value,leipzigzoo,leipzigzoo/22|--000-01-80-M.15-6-FB_BI.01|maximum alarm: cushion pressure &gt; 350 Pa
+1,value,leipzigzoo,leipzigzoo/22|--000-01-90-M.01-6-FB_BI.01|fan 1 on
+1,value,leipzigzoo,leipzigzoo/22|--000-01-90-M.02-6-FB_BI.01|fan 2 on
+0,value,leipzigzoo,leipzigzoo/22|--000-02-03-M.02-6-FB_BI.01|Störung 9!
+4.112,AI-01,leipzigzoo,leipzigzoo/icpdas01
+2.704,AI-02,leipzigzoo,leipzigzoo/icpdas01
+3.122,AI-03,leipzigzoo,leipzigzoo/icpdas01
+3.998,AI-04,leipzigzoo,leipzigzoo/icpdas01
+2.547,AI-05,leipzigzoo,leipzigzoo/icpdas01
+3.039,AI-06,leipzigzoo,leipzigzoo/icpdas01
+0.735,AI-07,leipzigzoo,leipzigzoo/icpdas01
+0.598,AI-08,leipzigzoo,leipzigzoo/icpdas01
+0.484,AI-09,leipzigzoo,leipzigzoo/icpdas01
+0.399,AI-10,leipzigzoo,leipzigzoo/icpdas01
+2.04,AI-11,leipzigzoo,leipzigzoo/icpdas01
+1.238,AI-12,leipzigzoo,leipzigzoo/icpdas01
+3.835,AI-13,leipzigzoo,leipzigzoo/icpdas01
+1.805,AI-14,leipzigzoo,leipzigzoo/icpdas01
+2.28,AI-15,leipzigzoo,leipzigzoo/icpdas01
+2.04,AI-16,leipzigzoo,leipzigzoo/icpdas01

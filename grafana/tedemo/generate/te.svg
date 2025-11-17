@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" width="60mm" height="120mm" version="1.1" id="svgAirflowM1">
+  <defs>
+    <filter id="blur-effect" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+    </filter>
+    <style>
+      :root {
+        --color-power-black: #000000;
+        --color-power-off: #555555;
+        --color-power-on: #00FF00;
+      }
+      
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      
+      @keyframes pulse-brightness {
+        0% { opacity: 0.6; }
+        50% { opacity: 1.0; }
+        100% { opacity: 0.6; }
+      }
+      
+      /* --- Styles for Fan 1 --- */
+      #power-fan1 {
+        --power-color: var(--color-power-off); /* Default 'off' state */
+        cursor: pointer;
+      }
+      #power-fan1.power-on {
+        --power-color: var(--color-power-on); /* 'on' state */
+      }
+      #power-fan1 .intermediate-disk {
+        fill: #333333;
+      }
+      #power-fan1 .power-bg-disk {
+        fill: var(--color-power-black);
+      }
+      #power-fan1 .bg-animated-disk {
+        fill: #000000;
+      }
+      #power-fan1.power-on .bg-animated-disk {
+        fill: url(#animated-bg-gradient);
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      #power-fan1 .rotor-disk {
+        fill: #808080;
+      }
+      #power-fan1 .fan-blades {
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      #power-fan1.power-on .fan-blades {
+        animation: spin 2s linear infinite;
+      }
+      #power-fan1 .fan-blade {
+        fill: #666666;
+        stroke: #404040;
+        stroke-width: 0.2;
+      }
+      #power-fan1 .power-line {
+        fill: var(--power-color); 
+        stroke: none;
+      }
+      #power-fan1 .power-arc {
+        stroke: var(--power-color); 
+        fill: none;
+        stroke-width: 0.75;
+        stroke-linecap: round;
+      }
+
+      /* --- Styles for Fan 2 --- */
+      #power-fan2 {
+        --power-color: var(--color-power-off); /* Default 'off' state */
+        cursor: pointer;
+      }
+      #power-fan2.power-on {
+        --power-color: var(--color-power-on); /* 'on' state */
+      }
+      #power-fan2 .intermediate-disk {
+        fill: #333333;
+      }
+      #power-fan2 .power-bg-disk {
+        fill: var(--color-power-black);
+      }
+      #power-fan2 .bg-animated-disk {
+        fill: #000000;
+      }
+      #power-fan2.power-on .bg-animated-disk {
+        fill: url(#animated-bg-gradient);
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      #power-fan2 .rotor-disk {
+        fill: #808080;
+      }
+      #power-fan2 .fan-blades {
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      #power-fan2.power-on .fan-blades {
+        animation: spin 2s linear infinite;
+      }
+      #power-fan2 .fan-blade {
+        fill: #666666;
+        stroke: #404040;
+        stroke-width: 0.2;
+      }
+      #power-fan2 .power-line {
+        fill: var(--power-color); 
+        stroke: none;
+      }
+      #power-fan2 .power-arc {
+        stroke: var(--power-color); 
+        fill: none;
+        stroke-width: 0.75;
+        stroke-linecap: round;
+      }
+
+      .gauge-arc {
+        fill: none;
+        stroke: #666666;
+        stroke-width: 2.25; /* scaled */
+        stroke-linecap: round;
+      }
+      .gauge-arc-extra {
+        fill: none;
+        stroke-linecap: round;
+      }
+      .gauge-value-arc {
+        fill: none;
+        stroke: #00FF00;
+        stroke-width: 0.75; /* scaled */
+        stroke-linecap: round;
+      }
+      .gauge-tick {
+        stroke: black;
+        stroke-width: 0.375;
+      }
+      .gauge-label {
+        fill: black;
+        font-size: 3px;
+        font-family: Arial, sans-serif;
+      }
+      .gauge-indicator {
+        fill: #000000;
+        stroke: #000000;
+        stroke-width: 0.3;
+      }
+      .rpm-text {
+        fill: #000000;
+        font-size: 5px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+      }
+      .rpm-value {
+        fill: #000000;
+        font-size: 4.5px;
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+      }
+      .rpm-unit {
+        fill: #000000;
+        font-size: 2.5px;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+      }
+      .pressure-unit {
+        fill: #000000;
+        font-size: 3.5px;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+      }
+      /* Fan labels and counters */
+      .fan-label {
+        fill: #000000;
+        font-size: 4px;
+        font-weight: bold;
+        font-family: 'Roboto', Arial, sans-serif;
+      }
+      .fan-number {
+        fill: #000000;
+        font-size: 4px;
+        font-family: monospace, monospace;
+      }
+      .fan-units {
+        fill: #000000;
+        font-size: 3px;
+        font-weight: bold;
+        font-family: 'Roboto', Arial, sans-serif;
+      }
+      .fan-status-symbol {
+        fill: gray;
+      }
+      .status-active {
+        animation: pulse-brightness 3s ease-in-out infinite;
+        filter: url(#glow-filter);
+      }
+      .status-label {
+        fill: #000000;
+        font-size: 3px;
+        font-family: Arial, sans-serif;
+        text-anchor: middle;
+      }
+      .pulsating-disk {
+        animation: pulsate-red 2s ease-in-out infinite;
+      }
+      @keyframes pulsate-red {
+        0% { opacity: 0.6; }
+        50% { opacity: 1.0; }
+        100% { opacity: 0.6; }
+      }
+
+      /* ===== NEW ANIMATION STYLES ===== */
+      @keyframes exhaust-plume {
+        0% {
+          r: 2;
+          opacity: 0.7;
+          transform: translateY(0px);
+        }
+        100% {
+          r: 10; /* Grow */
+          opacity: 0;
+          transform: translateY(20px); /* Move down 20 units */
+        }
+      }
+      
+      .plume-particle {
+        fill: #ADD8E6; /* Light blueish-white */
+        filter: url(#blur-effect);
+        animation-name: exhaust-plume;
+        /* duration and delay set by JS */
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+    </style>
+    <radialGradient id="animated-bg-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#B0E0E6;stop-opacity:1.0" />
+      <stop offset="50%" style="stop-color:#87CEEB;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#4682B4;stop-opacity:0.9" />
+    </radialGradient>
+    <radialGradient id="disk-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1.0" />
+      <stop offset="70%" style="stop-color:#F0F0F0;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#DADADA;stop-opacity:1.0" />
+    </radialGradient>
+    <radialGradient id="red-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#800000;stop-opacity:1.0" />
+    </radialGradient>
+    <radialGradient id="status-red-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FF0000;stop-opacity:1.0" />
+      <stop offset="100%" style="stop-color:#800000;stop-opacity:1.0" />
+    </radialGradient>
+    <marker id="arrowhead" markerWidth="3" markerHeight="3" refX="1.5" refY="1.5" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0 0, 3 1.5, 0 3" fill="black" />
+    </marker>
+  </defs>
+  <rect x="0" y="-50" width="80" height="160" fill="#000011" />
+  <g id="exhaust-container-1">
+    <circle class="plume-particle" cx="13.499507718144399" cy="77.03758145297391" r="2" style="animation-delay: -2.7420986726619354s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="15.692079461389742" cy="78.9402227015867" r="2" style="animation-delay: -2.4134690403903996s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="14.06483959424209" cy="78.44313671507754" r="2" style="animation-delay: -2.6375671576951736s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="16.59553257998514" cy="78.86993688452993" r="2" style="animation-delay: -2.9856905096064583s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="15.523284507389047" cy="78.2478204612917" r="2" style="animation-delay: -1.489549780925929s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="16.808287326783354" cy="77.96588928687466" r="2" style="animation-delay: -0.32017224559949187s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="16.860148475169456" cy="78.44148158433335" r="2" style="animation-delay: -2.238935743764295s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="16.033629498841574" cy="77.45702772943676" r="2" style="animation-delay: -0.05751820373737948s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="15.545807206169153" cy="78.00211568987748" r="2" style="animation-delay: -2.93126312332926s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="15.038286555466849" cy="77.32822858776682" r="2" style="animation-delay: -2.083816634311809s; animation-duration: 3s;" />
+  </g>
+  <g id="exhaust-container-2">
+    <circle class="plume-particle" cx="64.62404892649381" cy="78.67545280568645" r="2" style="animation-delay: -1.4090996892604921s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="66.13470786631058" cy="77.52743076006736" r="2" style="animation-delay: -2.264051563015286s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="63.55857077196973" cy="77.40970584476342" r="2" style="animation-delay: -0.007805624448770532s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="65.49257327258228" cy="77.16009283637398" r="2" style="animation-delay: -0.8545753390150287s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="65.21926791623463" cy="78.54934049892827" r="2" style="animation-delay: -2.95758304142112s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="65.32010697788967" cy="77.86623028137102" r="2" style="animation-delay: -2.221227348766754s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="63.683642483551374" cy="77.20211704388255" r="2" style="animation-delay: -1.0481203027238144s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="64.88062523257389" cy="78.02286688235984" r="2" style="animation-delay: -1.0142524110838158s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="66.5452720828512" cy="78.49916114183407" r="2" style="animation-delay: -1.5931835537525678s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="63.56339551031745" cy="78.52488642549663" r="2" style="animation-delay: -2.163264720989579s; animation-duration: 3s;" />
+  </g>
+  <g id="exhaust-container-center">
+    <circle class="plume-particle" cx="38.89017510458137" cy="78.75007402795588" r="2" style="animation-delay: -0.29888335655317233s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="39.51674978386724" cy="77.68955906680213" r="2" style="animation-delay: -1.8426713789121414s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.56699010884124" cy="77.8536372603945" r="2" style="animation-delay: -1.9015302471318296s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="38.1196533394051" cy="77.87105968732523" r="2" style="animation-delay: -0.22401581980315244s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="39.837173752863684" cy="78.6231698403674" r="2" style="animation-delay: -2.8241478013287615s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="38.013474461238204" cy="78.5574986065008" r="2" style="animation-delay: -1.579869215903158s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.49677377475487" cy="77.93939869039224" r="2" style="animation-delay: -2.043358806949634s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="39.58636865824533" cy="78.1236278603816" r="2" style="animation-delay: -1.3688583588113463s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.68614590944775" cy="77.00200657126089" r="2" style="animation-delay: -0.36511643102921365s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="38.68001324003325" cy="77.3503066411633" r="2" style="animation-delay: -0.8630760299496646s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.68371430347748" cy="77.11946287663449" r="2" style="animation-delay: -2.5855954137824817s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="39.17622443206716" cy="77.74030134934087" r="2" style="animation-delay: -0.45914962771370527s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="39.08826522412165" cy="77.90619710470085" r="2" style="animation-delay: -2.6157180479738327s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="40.82159455432259" cy="77.55555349014652" r="2" style="animation-delay: -2.069413307034889s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="39.441992538343186" cy="78.15705888693975" r="2" style="animation-delay: -2.905373247288349s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="40.70027325431724" cy="78.68331604082982" r="2" style="animation-delay: -2.384806563550704s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.44324074498347" cy="77.79011055256598" r="2" style="animation-delay: -1.4600227504972125s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.84082740881702" cy="77.19016380148513" r="2" style="animation-delay: -1.8111450108704172s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.65655265943249" cy="77.10625616008508" r="2" style="animation-delay: -0.2234589939667594s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="39.99430414295536" cy="78.99580485145326" r="2" style="animation-delay: -0.9436178680618661s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.66978228315299" cy="78.41429772478372" r="2" style="animation-delay: -0.23931232766965838s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="41.065602126322815" cy="78.59173048718601" r="2" style="animation-delay: -0.44391019772351037s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="39.139352646243175" cy="77.72803208474849" r="2" style="animation-delay: -0.9827956690470581s; animation-duration: 3s;" />
+    <circle class="plume-particle" cx="38.57587013985714" cy="78.22842304520363" r="2" style="animation-delay: -0.7389796349686989s; animation-duration: 3s;" />
+  </g>
+  <g id="starfield-container">
+    <line x1="3.100105226063199" x2="3.100105226063199" stroke="white" stroke-width="0.3939779859565198" opacity="0.7759433002097005">
+      <animate attributeName="y1" from="-50" to="110" dur="2.881724546408687s" begin="3.552588987346727s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.15670938869311" to="110.84329061130688" dur="2.881724546408687s" begin="3.552588987346727s" repeatCount="indefinite" />
+    </line>
+    <line x1="18.719951601752925" x2="18.719951601752925" stroke="white" stroke-width="0.37902411352138843" opacity="0.45256783256327154">
+      <animate attributeName="y1" from="-50" to="110" dur="4.98138859882838s" begin="2.58011281521868s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.47125552836061" to="111.52874447163938" dur="4.98138859882838s" begin="2.58011281521868s" repeatCount="indefinite" />
+    </line>
+    <line x1="29.86944509703674" x2="29.86944509703674" stroke="white" stroke-width="0.1585144141947061" opacity="0.5809753023448113">
+      <animate attributeName="y1" from="-50" to="110" dur="2.592678345314714s" begin="4.030921336646895s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.8519435105285" to="111.1480564894715" dur="2.592678345314714s" begin="4.030921336646895s" repeatCount="indefinite" />
+    </line>
+    <line x1="51.9035885884709" x2="51.9035885884709" stroke="white" stroke-width="0.3392524719254276" opacity="0.34325198885136815">
+      <animate attributeName="y1" from="-50" to="110" dur="2.0061333727252064s" begin="3.525653877552195s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.57323085366685" to="111.42676914633314" dur="2.0061333727252064s" begin="3.525653877552195s" repeatCount="indefinite" />
+    </line>
+    <line x1="82.22713446435199" x2="82.22713446435199" stroke="white" stroke-width="0.16086549429515323" opacity="0.4273892491847566">
+      <animate attributeName="y1" from="-50" to="110" dur="3.6842749056914688s" begin="2.0854164243419078s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.13962201267352" to="110.86037798732649" dur="3.6842749056914688s" begin="2.0854164243419078s" repeatCount="indefinite" />
+    </line>
+    <line x1="23.837882644943942" x2="23.837882644943942" stroke="white" stroke-width="0.1534868652950974" opacity="0.6300227446962116">
+      <animate attributeName="y1" from="-50" to="110" dur="4.897205092227281s" begin="0.6245649098347883s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.408336694919086" to="110.59166330508091" dur="4.897205092227281s" begin="0.6245649098347883s" repeatCount="indefinite" />
+    </line>
+    <line x1="84.45221296316322" x2="84.45221296316322" stroke="white" stroke-width="0.31883804726502407" opacity="0.4629983644406176">
+      <animate attributeName="y1" from="-50" to="110" dur="3.893842316647782s" begin="2.4901127168502186s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.16421839726986" to="111.83578160273014" dur="3.893842316647782s" begin="2.4901127168502186s" repeatCount="indefinite" />
+    </line>
+    <line x1="35.68065522595726" x2="35.68065522595726" stroke="white" stroke-width="0.3175233683210832" opacity="0.40753420948260716">
+      <animate attributeName="y1" from="-50" to="110" dur="2.518391784302776s" begin="0.9771297480122698s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.0472892000606" to="110.9527107999394" dur="2.518391784302776s" begin="0.9771297480122698s" repeatCount="indefinite" />
+    </line>
+    <line x1="95.10287066780661" x2="95.10287066780661" stroke="white" stroke-width="0.1690386036770992" opacity="0.44371114477473855">
+      <animate attributeName="y1" from="-50" to="110" dur="4.459280234425732s" begin="4.976305157670842s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.032778300606694" to="111.9672216993933" dur="4.459280234425732s" begin="4.976305157670842s" repeatCount="indefinite" />
+    </line>
+    <line x1="11.892049265491721" x2="11.892049265491721" stroke="white" stroke-width="0.35290147335540634" opacity="0.5081103948381387">
+      <animate attributeName="y1" from="-50" to="110" dur="2.6342462048630892s" begin="1.820804511866554s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.77464252054235" to="111.22535747945764" dur="2.6342462048630892s" begin="1.820804511866554s" repeatCount="indefinite" />
+    </line>
+    <line x1="28.43165370268239" x2="28.43165370268239" stroke="white" stroke-width="0.1702205355663497" opacity="0.7284849913233071">
+      <animate attributeName="y1" from="-50" to="110" dur="2.9588134260105043s" begin="1.7611080080774688s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.55359835143973" to="112.44640164856027" dur="2.9588134260105043s" begin="1.7611080080774688s" repeatCount="indefinite" />
+    </line>
+    <line x1="82.95022565673958" x2="82.95022565673958" stroke="white" stroke-width="0.31134142507704876" opacity="0.5789636687657174">
+      <animate attributeName="y1" from="-50" to="110" dur="2.7653081196238056s" begin="2.641556386079995s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.27894542680093" to="111.72105457319907" dur="2.7653081196238056s" begin="2.641556386079995s" repeatCount="indefinite" />
+    </line>
+    <line x1="17.16269897111583" x2="17.16269897111583" stroke="white" stroke-width="0.32408942418031145" opacity="0.35925129616405466">
+      <animate attributeName="y1" from="-50" to="110" dur="2.542477555015963s" begin="1.7349151568689618s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.46226481608113" to="111.53773518391887" dur="2.542477555015963s" begin="1.7349151568689618s" repeatCount="indefinite" />
+    </line>
+    <line x1="38.19378121438288" x2="38.19378121438288" stroke="white" stroke-width="0.29850003966295574" opacity="0.3388376399003061">
+      <animate attributeName="y1" from="-50" to="110" dur="2.185190426071105s" begin="4.259165143135838s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.74927475953024" to="112.25072524046976" dur="2.185190426071105s" begin="4.259165143135838s" repeatCount="indefinite" />
+    </line>
+    <line x1="23.815691809513805" x2="23.815691809513805" stroke="white" stroke-width="0.3243462545577134" opacity="0.6926197925298961">
+      <animate attributeName="y1" from="-50" to="110" dur="2.447970408930494s" begin="2.1103896693294066s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.345315953724494" to="110.6546840462755" dur="2.447970408930494s" begin="2.1103896693294066s" repeatCount="indefinite" />
+    </line>
+    <line x1="80.23455920199778" x2="80.23455920199778" stroke="white" stroke-width="0.2652619346983849" opacity="0.5451096299973401">
+      <animate attributeName="y1" from="-50" to="110" dur="2.9673695794995183s" begin="4.596693009733674s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.14698332532984" to="111.85301667467016" dur="2.9673695794995183s" begin="4.596693009733674s" repeatCount="indefinite" />
+    </line>
+    <line x1="4.504533983674852" x2="4.504533983674852" stroke="white" stroke-width="0.20376669430165315" opacity="0.7327204766535487">
+      <animate attributeName="y1" from="-50" to="110" dur="2.976399719790388s" begin="4.290958439881755s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.06084506852949" to="110.93915493147051" dur="2.976399719790388s" begin="4.290958439881755s" repeatCount="indefinite" />
+    </line>
+    <line x1="33.768945073909805" x2="33.768945073909805" stroke="white" stroke-width="0.32719921244963257" opacity="0.437873268617138">
+      <animate attributeName="y1" from="-50" to="110" dur="3.3630144950779925s" begin="2.970192024719778s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.52363748073144" to="112.47636251926856" dur="3.3630144950779925s" begin="2.970192024719778s" repeatCount="indefinite" />
+    </line>
+    <line x1="14.576185682587505" x2="14.576185682587505" stroke="white" stroke-width="0.21062708785603695" opacity="0.3414135669445032">
+      <animate attributeName="y1" from="-50" to="110" dur="2.284668033728881s" begin="2.355588190891921s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.05321877307033" to="111.94678122692967" dur="2.284668033728881s" begin="2.355588190891921s" repeatCount="indefinite" />
+    </line>
+    <line x1="12.613216510076896" x2="12.613216510076896" stroke="white" stroke-width="0.35470668397406824" opacity="0.727966010409517">
+      <animate attributeName="y1" from="-50" to="110" dur="3.174686650257958s" begin="0.9029091932449285s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.5078893347138" to="112.49211066528619" dur="3.174686650257958s" begin="0.9029091932449285s" repeatCount="indefinite" />
+    </line>
+    <line x1="19.525603181210805" x2="19.525603181210805" stroke="white" stroke-width="0.16861713646202134" opacity="0.39264450306144627">
+      <animate attributeName="y1" from="-50" to="110" dur="2.990163801278542s" begin="0.8053004256500124s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.05294756695458" to="110.94705243304541" dur="2.990163801278542s" begin="0.8053004256500124s" repeatCount="indefinite" />
+    </line>
+    <line x1="93.08306827989641" x2="93.08306827989641" stroke="white" stroke-width="0.18102740868137518" opacity="0.5868557312617708">
+      <animate attributeName="y1" from="-50" to="110" dur="4.409331508045952s" begin="0.8322698633840048s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.502050366425586" to="112.49794963357442" dur="4.409331508045952s" begin="0.8322698633840048s" repeatCount="indefinite" />
+    </line>
+    <line x1="0.5575607250666637" x2="0.5575607250666637" stroke="white" stroke-width="0.24978968195935092" opacity="0.4944798917226521">
+      <animate attributeName="y1" from="-50" to="110" dur="3.3297047444486214s" begin="1.9835957732533367s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.99152810315517" to="111.00847189684482" dur="3.3297047444486214s" begin="1.9835957732533367s" repeatCount="indefinite" />
+    </line>
+    <line x1="44.83018460247682" x2="44.83018460247682" stroke="white" stroke-width="0.32158466066164126" opacity="0.6489280447524083">
+      <animate attributeName="y1" from="-50" to="110" dur="2.5771762881300546s" begin="3.4446853669769717s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.800979960167275" to="112.19902003983272" dur="2.5771762881300546s" begin="3.4446853669769717s" repeatCount="indefinite" />
+    </line>
+    <line x1="10.231653272107533" x2="10.231653272107533" stroke="white" stroke-width="0.11834060338372393" opacity="0.41334961389847985">
+      <animate attributeName="y1" from="-50" to="110" dur="3.7257098101980093s" begin="3.0069217044890575s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.598409648869975" to="111.40159035113003" dur="3.7257098101980093s" begin="3.0069217044890575s" repeatCount="indefinite" />
+    </line>
+    <line x1="32.75668066640067" x2="32.75668066640067" stroke="white" stroke-width="0.2758129492307187" opacity="0.6715547572995789">
+      <animate attributeName="y1" from="-50" to="110" dur="2.581488227438495s" begin="4.092220303213294s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.47019594296321" to="111.52980405703678" dur="2.581488227438495s" begin="4.092220303213294s" repeatCount="indefinite" />
+    </line>
+    <line x1="86.38073415281212" x2="86.38073415281212" stroke="white" stroke-width="0.291620789948289" opacity="0.3627073944257397">
+      <animate attributeName="y1" from="-50" to="110" dur="4.526456924932223s" begin="0.9218252461898707s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.687175880307684" to="112.31282411969231" dur="4.526456924932223s" begin="0.9218252461898707s" repeatCount="indefinite" />
+    </line>
+    <line x1="43.711447873011814" x2="43.711447873011814" stroke="white" stroke-width="0.3393512423256082" opacity="0.3849389207056793">
+      <animate attributeName="y1" from="-50" to="110" dur="3.3723509488251047s" begin="1.008819341626006s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.51525225003391" to="112.48474774996609" dur="3.3723509488251047s" begin="1.008819341626006s" repeatCount="indefinite" />
+    </line>
+    <line x1="44.04567726707395" x2="44.04567726707395" stroke="white" stroke-width="0.17540219496238224" opacity="0.3103578249844074">
+      <animate attributeName="y1" from="-50" to="110" dur="4.972088815641777s" begin="4.321019979432673s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.02704926963994" to="111.97295073036007" dur="4.972088815641777s" begin="4.321019979432673s" repeatCount="indefinite" />
+    </line>
+    <line x1="98.75484385626196" x2="98.75484385626196" stroke="white" stroke-width="0.36580316115426037" opacity="0.7521607199020865">
+      <animate attributeName="y1" from="-50" to="110" dur="2.0771502895624305s" begin="1.5336083641013432s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.934720036046464" to="112.06527996395353" dur="2.0771502895624305s" begin="1.5336083641013432s" repeatCount="indefinite" />
+    </line>
+    <line x1="13.495034493729218" x2="13.495034493729218" stroke="white" stroke-width="0.14451799260278364" opacity="0.7703126201062497">
+      <animate attributeName="y1" from="-50" to="110" dur="2.4902593575267553s" begin="3.338773467196514s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.69569501237559" to="112.3043049876244" dur="2.4902593575267553s" begin="3.338773467196514s" repeatCount="indefinite" />
+    </line>
+    <line x1="2.9171950175508776" x2="2.9171950175508776" stroke="white" stroke-width="0.15454902265693252" opacity="0.5567673193296487">
+      <animate attributeName="y1" from="-50" to="110" dur="4.52468310425835s" begin="3.764502038512067s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.96129858033902" to="111.03870141966098" dur="4.52468310425835s" begin="3.764502038512067s" repeatCount="indefinite" />
+    </line>
+    <line x1="83.5181469350561" x2="83.5181469350561" stroke="white" stroke-width="0.1340906270128795" opacity="0.34964291404679365">
+      <animate attributeName="y1" from="-50" to="110" dur="4.774565501900499s" begin="3.9403258805027486s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.97330209236993" to="111.02669790763007" dur="4.774565501900499s" begin="3.9403258805027486s" repeatCount="indefinite" />
+    </line>
+    <line x1="59.99598383908643" x2="59.99598383908643" stroke="white" stroke-width="0.2331891451875358" opacity="0.6636075239459516">
+      <animate attributeName="y1" from="-50" to="110" dur="2.652770973249106s" begin="3.848663446236606s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.052496930145324" to="110.94750306985468" dur="2.652770973249106s" begin="3.848663446236606s" repeatCount="indefinite" />
+    </line>
+    <line x1="92.8786103152273" x2="92.8786103152273" stroke="white" stroke-width="0.3931174006379127" opacity="0.5566906449242963">
+      <animate attributeName="y1" from="-50" to="110" dur="3.939949906895249s" begin="0.14950368324797292s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.92701707956094" to="112.07298292043906" dur="3.939949906895249s" begin="0.14950368324797292s" repeatCount="indefinite" />
+    </line>
+    <line x1="2.383023073389212" x2="2.383023073389212" stroke="white" stroke-width="0.2016143717664995" opacity="0.7535737459890866">
+      <animate attributeName="y1" from="-50" to="110" dur="3.0294803617657777s" begin="3.484136013194619s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.43580136939162" to="111.56419863060837" dur="3.0294803617657777s" begin="3.484136013194619s" repeatCount="indefinite" />
+    </line>
+    <line x1="81.87416053690455" x2="81.87416053690455" stroke="white" stroke-width="0.3518701438973828" opacity="0.5307124145690998">
+      <animate attributeName="y1" from="-50" to="110" dur="4.570101284333531s" begin="3.647955911641352s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.213011850561095" to="111.7869881494389" dur="4.570101284333531s" begin="3.647955911641352s" repeatCount="indefinite" />
+    </line>
+    <line x1="14.287124123190598" x2="14.287124123190598" stroke="white" stroke-width="0.39113994172461264" opacity="0.39420544422223325">
+      <animate attributeName="y1" from="-50" to="110" dur="4.47642349677183s" begin="1.6588090380684017s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.869920438467744" to="111.13007956153226" dur="4.47642349677183s" begin="1.6588090380684017s" repeatCount="indefinite" />
+    </line>
+    <line x1="15.474738812996636" x2="15.474738812996636" stroke="white" stroke-width="0.1541941105905668" opacity="0.6764462103347506">
+      <animate attributeName="y1" from="-50" to="110" dur="4.8075402055022165s" begin="2.918843707318692s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.598646389217876" to="112.40135361078212" dur="4.8075402055022165s" begin="2.918843707318692s" repeatCount="indefinite" />
+    </line>
+    <line x1="18.810581134432745" x2="18.810581134432745" stroke="white" stroke-width="0.3787069795934741" opacity="0.6335910847178539">
+      <animate attributeName="y1" from="-50" to="110" dur="3.437896589136516s" begin="3.491985532491478s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.516212787153286" to="111.4837872128467" dur="3.437896589136516s" begin="3.491985532491478s" repeatCount="indefinite" />
+    </line>
+    <line x1="59.46385133004417" x2="59.46385133004417" stroke="white" stroke-width="0.28662208103092435" opacity="0.30037890423891306">
+      <animate attributeName="y1" from="-50" to="110" dur="3.0924960524864042s" begin="1.7669723077768917s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.32158265433193" to="110.67841734566807" dur="3.0924960524864042s" begin="1.7669723077768917s" repeatCount="indefinite" />
+    </line>
+    <line x1="74.17069256065314" x2="74.17069256065314" stroke="white" stroke-width="0.2679152726776114" opacity="0.6322563177607701">
+      <animate attributeName="y1" from="-50" to="110" dur="3.240526451846364s" begin="3.592587403434738s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.58183713367164" to="111.41816286632836" dur="3.240526451846364s" begin="3.592587403434738s" repeatCount="indefinite" />
+    </line>
+    <line x1="97.48740283396712" x2="97.48740283396712" stroke="white" stroke-width="0.2966283014227082" opacity="0.7097237311531053">
+      <animate attributeName="y1" from="-50" to="110" dur="3.462858992337707s" begin="1.3315517979311986s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.53558672096321" to="112.46441327903679" dur="3.462858992337707s" begin="1.3315517979311986s" repeatCount="indefinite" />
+    </line>
+    <line x1="56.941548971028666" x2="56.941548971028666" stroke="white" stroke-width="0.1550428246634331" opacity="0.4928708949429692">
+      <animate attributeName="y1" from="-50" to="110" dur="3.5448840809078725s" begin="1.3945206290401668s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.98356181895333" to="111.01643818104667" dur="3.5448840809078725s" begin="1.3945206290401668s" repeatCount="indefinite" />
+    </line>
+    <line x1="98.48430271540903" x2="98.48430271540903" stroke="white" stroke-width="0.31603014148876785" opacity="0.5701808150003891">
+      <animate attributeName="y1" from="-50" to="110" dur="4.63544299090965s" begin="0.38679564346431883s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.814619345288556" to="111.18538065471144" dur="4.63544299090965s" begin="0.38679564346431883s" repeatCount="indefinite" />
+    </line>
+    <line x1="46.485171193999406" x2="46.485171193999406" stroke="white" stroke-width="0.34752898379304253" opacity="0.7093244962271916">
+      <animate attributeName="y1" from="-50" to="110" dur="2.5330346553015097s" begin="0.8241615871860408s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.80931804219196" to="112.19068195780804" dur="2.5330346553015097s" begin="0.8241615871860408s" repeatCount="indefinite" />
+    </line>
+    <line x1="52.42697776573958" x2="52.42697776573958" stroke="white" stroke-width="0.30401662961028325" opacity="0.45335087175872557">
+      <animate attributeName="y1" from="-50" to="110" dur="2.04387371589451s" begin="0.6714445159057786s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.79926458470799" to="112.200735415292" dur="2.04387371589451s" begin="0.6714445159057786s" repeatCount="indefinite" />
+    </line>
+    <line x1="30.934027421995125" x2="30.934027421995125" stroke="white" stroke-width="0.20894668373550665" opacity="0.3500356811557906">
+      <animate attributeName="y1" from="-50" to="110" dur="4.419799269858518s" begin="3.906503686613401s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.46851670101535" to="111.53148329898465" dur="4.419799269858518s" begin="3.906503686613401s" repeatCount="indefinite" />
+    </line>
+    <line x1="49.53930939640148" x2="49.53930939640148" stroke="white" stroke-width="0.13859790261471028" opacity="0.6324488270702702">
+      <animate attributeName="y1" from="-50" to="110" dur="2.668012486186959s" begin="4.185280366073908s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.261061593368595" to="111.7389384066314" dur="2.668012486186959s" begin="4.185280366073908s" repeatCount="indefinite" />
+    </line>
+    <line x1="60.96399933328785" x2="60.96399933328785" stroke="white" stroke-width="0.38392109594734203" opacity="0.3424739611145189">
+      <animate attributeName="y1" from="-50" to="110" dur="4.654317558853364s" begin="3.78812529801007s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.56325202330244" to="112.43674797669756" dur="4.654317558853364s" begin="3.78812529801007s" repeatCount="indefinite" />
+    </line>
+    <line x1="25.830750596718577" x2="25.830750596718577" stroke="white" stroke-width="0.26604098393328746" opacity="0.7711477962032124">
+      <animate attributeName="y1" from="-50" to="110" dur="4.963997144999862s" begin="1.188366679857481s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.62019045558865" to="111.37980954441134" dur="4.963997144999862s" begin="1.188366679857481s" repeatCount="indefinite" />
+    </line>
+    <line x1="7.435670657592086" x2="7.435670657592086" stroke="white" stroke-width="0.2562320598261385" opacity="0.6021856409749899">
+      <animate attributeName="y1" from="-50" to="110" dur="2.1612183556957585s" begin="0.9058052294486763s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.09982240013837" to="111.90017759986162" dur="2.1612183556957585s" begin="0.9058052294486763s" repeatCount="indefinite" />
+    </line>
+    <line x1="31.961861787312717" x2="31.961861787312717" stroke="white" stroke-width="0.37291787220584394" opacity="0.6144823365865608">
+      <animate attributeName="y1" from="-50" to="110" dur="3.08809732755059s" begin="2.9945793676260672s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.04271576078289" to="110.9572842392171" dur="3.08809732755059s" begin="2.9945793676260672s" repeatCount="indefinite" />
+    </line>
+    <line x1="3.2069923250073074" x2="3.2069923250073074" stroke="white" stroke-width="0.28491293641604154" opacity="0.33337735109199423">
+      <animate attributeName="y1" from="-50" to="110" dur="4.585377674446905s" begin="3.15781570674649s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.193329623161084" to="111.80667037683892" dur="4.585377674446905s" begin="3.15781570674649s" repeatCount="indefinite" />
+    </line>
+    <line x1="21.81932374868576" x2="21.81932374868576" stroke="white" stroke-width="0.34419950303922364" opacity="0.6500551467563543">
+      <animate attributeName="y1" from="-50" to="110" dur="2.6172379787622653s" begin="1.5492882202283713s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.06083185252837" to="111.93916814747162" dur="2.6172379787622653s" begin="1.5492882202283713s" repeatCount="indefinite" />
+    </line>
+    <line x1="15.397021622233364" x2="15.397021622233364" stroke="white" stroke-width="0.17522118435084616" opacity="0.706440905402163">
+      <animate attributeName="y1" from="-50" to="110" dur="4.257326571183789s" begin="4.380797832433588s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.71516575952584" to="112.28483424047417" dur="4.257326571183789s" begin="4.380797832433588s" repeatCount="indefinite" />
+    </line>
+    <line x1="53.324025066851796" x2="53.324025066851796" stroke="white" stroke-width="0.17414261470861442" opacity="0.7935126301652817">
+      <animate attributeName="y1" from="-50" to="110" dur="2.587980951219461s" begin="0.18920954873282825s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.39421722849071" to="111.60578277150928" dur="2.587980951219461s" begin="0.18920954873282825s" repeatCount="indefinite" />
+    </line>
+    <line x1="85.77150916459247" x2="85.77150916459247" stroke="white" stroke-width="0.21649878592873822" opacity="0.6761485690526523">
+      <animate attributeName="y1" from="-50" to="110" dur="4.7039543739647565s" begin="2.4662055720394944s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.4910034628437" to="111.50899653715629" dur="4.7039543739647565s" begin="2.4662055720394944s" repeatCount="indefinite" />
+    </line>
+    <line x1="21.3266219748092" x2="21.3266219748092" stroke="white" stroke-width="0.1948689298774397" opacity="0.6570408983932917">
+      <animate attributeName="y1" from="-50" to="110" dur="2.471607296314058s" begin="3.044092632574453s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.662562454949054" to="111.33743754505095" dur="2.471607296314058s" begin="3.044092632574453s" repeatCount="indefinite" />
+    </line>
+    <line x1="99.83170618768266" x2="99.83170618768266" stroke="white" stroke-width="0.1991972602287282" opacity="0.3520082973497887">
+      <animate attributeName="y1" from="-50" to="110" dur="3.0956151461482824s" begin="2.5943953351768285s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.408710318396885" to="111.59128968160312" dur="3.0956151461482824s" begin="2.5943953351768285s" repeatCount="indefinite" />
+    </line>
+    <line x1="61.65312232343266" x2="61.65312232343266" stroke="white" stroke-width="0.3204632602533677" opacity="0.7003126101832124">
+      <animate attributeName="y1" from="-50" to="110" dur="2.4722103052112914s" begin="1.166188798646134s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.99843145197245" to="112.00156854802755" dur="2.4722103052112914s" begin="1.166188798646134s" repeatCount="indefinite" />
+    </line>
+    <line x1="48.15294083822749" x2="48.15294083822749" stroke="white" stroke-width="0.29022507280956855" opacity="0.3582851338861018">
+      <animate attributeName="y1" from="-50" to="110" dur="3.4557626103131724s" begin="4.805304489608066s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.431804388378886" to="111.5681956116211" dur="3.4557626103131724s" begin="4.805304489608066s" repeatCount="indefinite" />
+    </line>
+    <line x1="9.253992135795407" x2="9.253992135795407" stroke="white" stroke-width="0.3605542908920505" opacity="0.6200793902988286">
+      <animate attributeName="y1" from="-50" to="110" dur="4.358158598944904s" begin="2.986508290912617s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.79264250951429" to="112.2073574904857" dur="4.358158598944904s" begin="2.986508290912617s" repeatCount="indefinite" />
+    </line>
+    <line x1="50.056107083617555" x2="50.056107083617555" stroke="white" stroke-width="0.16307911121619378" opacity="0.7412692394129807">
+      <animate attributeName="y1" from="-50" to="110" dur="4.752662890727251s" begin="4.755836778993836s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.375347124452055" to="111.62465287554795" dur="4.752662890727251s" begin="4.755836778993836s" repeatCount="indefinite" />
+    </line>
+    <line x1="34.67392108381119" x2="34.67392108381119" stroke="white" stroke-width="0.2547304377154497" opacity="0.40498172594716575">
+      <animate attributeName="y1" from="-50" to="110" dur="4.623977018773585s" begin="3.7995042694420404s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.571115533774574" to="111.42888446622543" dur="4.623977018773585s" begin="3.7995042694420404s" repeatCount="indefinite" />
+    </line>
+    <line x1="15.251598483016238" x2="15.251598483016238" stroke="white" stroke-width="0.1995531270384207" opacity="0.7487144740218921">
+      <animate attributeName="y1" from="-50" to="110" dur="3.6796100319776546s" begin="1.8184691824901633s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.850380902312175" to="111.14961909768782" dur="3.6796100319776546s" begin="1.8184691824901633s" repeatCount="indefinite" />
+    </line>
+    <line x1="41.36522416462674" x2="41.36522416462674" stroke="white" stroke-width="0.1715907897306112" opacity="0.7953673025353669">
+      <animate attributeName="y1" from="-50" to="110" dur="4.84536047703501s" begin="4.671336194967638s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-47.75370729455195" to="112.24629270544804" dur="4.84536047703501s" begin="4.671336194967638s" repeatCount="indefinite" />
+    </line>
+    <line x1="9.771048809764194" x2="9.771048809764194" stroke="white" stroke-width="0.3184311150860878" opacity="0.40482377123071034">
+      <animate attributeName="y1" from="-50" to="110" dur="3.933657859924508s" begin="0.6929735811183646s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.726856818457335" to="111.27314318154266" dur="3.933657859924508s" begin="0.6929735811183646s" repeatCount="indefinite" />
+    </line>
+    <line x1="80.0008937428205" x2="80.0008937428205" stroke="white" stroke-width="0.31685584702736314" opacity="0.3868879063883278">
+      <animate attributeName="y1" from="-50" to="110" dur="2.561019620924911s" begin="0.6551274122237122s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.00980978165581" to="111.9901902183442" dur="2.561019620924911s" begin="0.6551274122237122s" repeatCount="indefinite" />
+    </line>
+    <line x1="75.45709471376647" x2="75.45709471376647" stroke="white" stroke-width="0.3187300399072486" opacity="0.48244252528223314">
+      <animate attributeName="y1" from="-50" to="110" dur="2.6255082701268257s" begin="3.09292072484703s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.011722713795564" to="111.98827728620444" dur="2.6255082701268257s" begin="3.09292072484703s" repeatCount="indefinite" />
+    </line>
+    <line x1="93.8682727897448" x2="93.8682727897448" stroke="white" stroke-width="0.10537146922811585" opacity="0.5109468804026477">
+      <animate attributeName="y1" from="-50" to="110" dur="4.302508087879142s" begin="0.7187175462196194s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.32235322174919" to="110.6776467782508" dur="4.302508087879142s" begin="0.7187175462196194s" repeatCount="indefinite" />
+    </line>
+    <line x1="56.98256446726467" x2="56.98256446726467" stroke="white" stroke-width="0.11187469816727215" opacity="0.46209366428895937">
+      <animate attributeName="y1" from="-50" to="110" dur="2.6808519718885435s" begin="3.7885188904324307s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.32667082676237" to="111.67332917323763" dur="2.6808519718885435s" begin="3.7885188904324307s" repeatCount="indefinite" />
+    </line>
+    <line x1="63.6004915661382" x2="63.6004915661382" stroke="white" stroke-width="0.3983744536677477" opacity="0.48029113616209984">
+      <animate attributeName="y1" from="-50" to="110" dur="4.732684823661092s" begin="3.127588240979113s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.07529682385928" to="110.92470317614071" dur="4.732684823661092s" begin="3.127588240979113s" repeatCount="indefinite" />
+    </line>
+    <line x1="38.33726284182822" x2="38.33726284182822" stroke="white" stroke-width="0.10521301565244862" opacity="0.6470502467007273">
+      <animate attributeName="y1" from="-50" to="110" dur="4.307435159370236s" begin="4.332557310090925s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-49.34361470566208" to="110.65638529433792" dur="4.307435159370236s" begin="4.332557310090925s" repeatCount="indefinite" />
+    </line>
+    <line x1="96.69676710631332" x2="96.69676710631332" stroke="white" stroke-width="0.16636042289569955" opacity="0.769832252540456">
+      <animate attributeName="y1" from="-50" to="110" dur="4.023028473128031s" begin="4.590365060157666s" repeatCount="indefinite" />
+      <animate attributeName="y2" from="-48.277985154678035" to="111.72201484532197" dur="4.023028473128031s" begin="4.590365060157666s" repeatCount="indefinite" />
+    </line>
+  </g>
+  <g id="system-indicator">
+    <rect x="15.4" y="-37.9" width="49.5" height="100" rx="5" ry="5" fill="silver" stroke="silver" stroke-width="1" />
+    <text x="32" y="36" class="fan-label">SYSTEM</text>
+    <circle cx="40" cy="47.75" r="8" fill="white" stroke="black" stroke-width="1" id="no-errors-bg" />
+    <circle cx="40" cy="47.75" r="8" fill="green" class="status-active" id="no-errors-disc" />
+    <text x="40" y="48.75" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="bold" id="no-errors-symbol">✓</text>
+  </g>
+  <rect id="rect-behind-pressure-value" x="18" y="-39" width="44" height="35" fill="url(#disk-gradient)" />
+  <rect id="rect-behind-speed-value" x="20" y="17" width="40" height="10" fill="url(#disk-gradient)" />
+  <g id="fanspeed-container">
+    <g class="rpm-gauge" id="fanspeed" data-cx="40" data-cy="18">
+      <path id="fanspeed-disk-path" d="M 40 18 L 18.541 24.766 A 22.5 22.5 0 1 1 61.459 24.766 Z" fill="url(#disk-gradient)" class="gauge-disk" />
+      <path d="M 25.000 18.000 A 15 15 0 0 1 55.000 18.000" class="gauge-arc" />
+      <path id="fanspeed-value-arc" class="gauge-value-arc" />
+      <line x1="29.0" y1="18.0" x2="27.0" y2="18.0" class="gauge-tick" />
+      <text x="22.0" y="18.0" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(270.0, 22.0, 18.0)">0</text>
+      <line x1="32.22182540694798" y1="10.221825406947978" x2="30.80761184457488" y2="8.807611844574879" class="gauge-tick" />
+      <text x="27.27207793864214" y="5.272077938642141" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(-45.0, 27.27207793864214, 5.272077938642141)">1000</text>
+      <line x1="40.0" y1="7.0" x2="40.0" y2="5.0" class="gauge-tick" />
+      <text x="40.0" y="0.0" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(0.0, 40.0, 0.0)">2000</text>
+      <line x1="47.77817459305202" y1="10.221825406947978" x2="49.19238815542512" y2="8.807611844574879" class="gauge-tick" />
+      <text x="52.72792206135786" y="5.272077938642141" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(45.0, 52.72792206135786, 5.272077938642141)">3000</text>
+      <line x1="51.0" y1="18.0" x2="53.0" y2="18.0" class="gauge-tick" />
+      <text x="58.0" y="17.999999999999996" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(89.99999999999999, 58.0, 17.999999999999996)">4000</text>
+      <g class="rpm-indicator">
+        <polygon id="fanspeed-indicator" points="0,0 0,0 0,0" class="gauge-indicator" />
+      </g>
+      <text id="fanspeed-value" x="40" y="21.75" class="rpm-value" text-anchor="middle" dominant-baseline="middle">0</text>
+      <text x="40" y="25.5" class="rpm-unit" text-anchor="middle" dominant-baseline="middle">RPM</text>
+    </g>
+  </g>
+  <g id="pressure-container">
+    <g class="pressure-gauge" id="pressure" data-cx="40" data-cy="-13">
+      <path id="pressure-disk-path" d="M 40 -13 L 10.101 7.936 A 36.5 36.5 0 1 1 69.899 7.936 Z" fill="url(#disk-gradient)" class="gauge-disk" />
+      <path d="M 26.351 -6.780 A 15 15 0 1 1 53.649 -6.780" class="gauge-arc" />
+      <path id="pressure-value-arc" class="gauge-value-arc" />
+      <path d="M 12.049 -23.898 A 30 30 0 0 1 18.493 -33.915" stroke="yellow" stroke-width="11" fill="none" stroke-linecap="round" id="pressure-yellow-low-arc" />
+      <path d="M 12.701 -0.559 A 30 30 0 0 1 12.049 -23.898" stroke="red" stroke-width="11" fill="none" stroke-linecap="round" id="pressure-low-arc" />
+      <path d="M 14.521 -1.389 A 28 28 0 0 1 13.913 -23.171" id="pressure-low-text-path" opacity="0" />
+      <path d="M 18.493 -33.915 A 30 30 0 0 1 61.507 -33.915" stroke="green" stroke-width="11" fill="none" stroke-linecap="round" id="pressure-green-arc" />
+      <path d="M 17.776 -34.612 A 31.0 31.0 0 0 1 62.224 -34.612" id="pressure-normal-text-path" opacity="0" />
+      <path d="M 61.507 -33.915 A 30 30 0 0 1 67.299 -0.559" stroke="yellow" stroke-width="11" fill="none" stroke-linecap="round" id="pressure-yellow-high-arc" />
+      <path d="M 61.507 -33.915 A 30 30 0 0 1 67.299 -0.559" stroke="yellow" stroke-width="11" fill="none" stroke-linecap="round" id="pressure-yellow-high-arc" />
+      <path d="M 60.073 -32.521 A 28 28 0 0 1 65.479 -1.389" id="pressure-high-text-path" opacity="0" />
+      <text fill="black" font-size="4px">
+        <textPath href="#pressure-low-text-path" startOffset="50%" text-anchor="middle" id="pressure-low-label">LOW 100</textPath>
+      </text>
+      <text fill="black" font-size="4px">
+        <textPath href="#pressure-normal-text-path" startOffset="50%" text-anchor="middle" id="pressure-normal-label">NORMAL 250</textPath>
+      </text>
+      <path d="M 30.077 -36.490 A 25.5 25.5 0 0 1 49.923 -36.490" id="pressure-set-text-path" opacity="0" />
+      <text fill="black" font-size="4px">
+        <textPath href="#pressure-set-text-path" startOffset="50%" text-anchor="middle" id="pressure-set-label">SET 250</textPath>
+      </text>
+      <text fill="black" font-size="4px">
+        <textPath href="#pressure-high-text-path" startOffset="50%" text-anchor="middle" id="pressure-high-label">HIGH 350</textPath>
+      </text>
+      <line x1="29.990426020358022" y1="-8.438374330781372" x2="28.170503478604942" y2="-7.608987845468892" class="gauge-tick" />
+      <text x="23.620697124222218" y="-5.535521632187699" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(245.50000000000003, 23.620697124222218, -5.535521632187699)">0</text>
+      <line x1="29.75139649655896" y1="-16.995763535202762" x2="27.888014041387862" y2="-17.722265996148717" class="gauge-tick" />
+      <text x="23.22955790346012" y="-19.53852214851361" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(-68.69999999999999, 23.22955790346012, -19.53852214851361)">100</text>
+      <line x1="35.71963654845773" y1="-23.133039461222932" x2="34.941388648177316" y2="-24.975410272354374" class="gauge-tick" />
+      <text x="32.99576889747629" y="-29.58133730018298" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(-22.900000000000006, 32.99576889747629, -29.58133730018298)">200</text>
+      <line x1="44.28036345154227" y1="-23.133039461222936" x2="45.05861135182268" y2="-24.975410272354374" class="gauge-tick" />
+      <text x="47.00423110252371" y="-29.581337300182984" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(22.89999999999999, 47.00423110252371, -29.581337300182984)">300</text>
+      <line x1="50.24860350344104" y1="-16.995763535202762" x2="52.11198595861214" y2="-17.72226599614872" class="gauge-tick" />
+      <text x="56.77044209653988" y="-19.53852214851361" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(68.69999999999999, 56.77044209653988, -19.53852214851361)">400</text>
+      <line x1="50.00957397964198" y1="-8.438374330781372" x2="51.82949652139506" y2="-7.608987845468892" class="gauge-tick" />
+      <text x="56.37930287577778" y="-5.535521632187699" class="gauge-label" text-anchor="middle" dominant-baseline="middle" transform="rotate(114.49999999999999, 56.37930287577778, -5.535521632187699)">500</text>
+      <line x1="29.0042887345561" y1="-12.692861974040742" x2="28.004678619515744" y2="-12.664940335317173" class="gauge-tick" />
+      <line x1="32.11398331584469" y1="-20.66881613140021" x2="31.39707270819421" y2="-21.365981234254775" class="gauge-tick" />
+      <line x1="40.0" y1="-24.0" x2="40.0" y2="-25.0" class="gauge-tick" />
+      <line x1="47.88601668415531" y1="-20.66881613140021" x2="48.60292729180579" y2="-21.365981234254775" class="gauge-tick" />
+      <line x1="50.9957112654439" y1="-12.692861974040747" x2="51.995321380484256" y2="-12.66494033531718" class="gauge-tick" />
+      <g class="pressure-indicator">
+        <polygon id="pressure-indicator" points="0,0 0,0 0,0" class="gauge-indicator" />
+      </g>
+      <text id="pressure-value" x="40" y="-7.75" class="rpm-value" text-anchor="middle" dominant-baseline="middle">0</text>
+      <text x="40" y="-13.5" class="pressure-unit" text-anchor="middle" dominant-baseline="middle">Pa</text>
+      <g class="low-pressure-indicator" id="pressure-low-pressure-indicator" transform="translate(36.5, -23.5) scale(0.5)" opacity="0">
+        <path d="M 4 2 C 3 4, 5 6, 4 8 C 3 10, 5 12, 4 14" marker-end="url(#arrowhead)" stroke="black" stroke-width="1" fill="none" />
+        <path d="M 7 2 C 6 4, 8 6, 7 8 C 6 10, 8 12, 7 14" marker-end="url(#arrowhead)" stroke="black" stroke-width="1" fill="none" />
+        <line x1="11.5" y1="2" x2="11.5" y2="14" stroke="black" stroke-width="1" />
+        <line x1="9.5" y1="2" x2="11.5" y2="2" stroke="black" stroke-width="1" />
+        <line x1="9.5" y1="5" x2="11.5" y2="5" stroke="black" stroke-width="1" />
+        <line x1="9.5" y1="8" x2="11.5" y2="8" stroke="black" stroke-width="1" />
+        <line x1="9.5" y1="11" x2="11.5" y2="11" stroke="black" stroke-width="1" />
+        <line x1="9.5" y1="14" x2="11.5" y2="14" stroke="black" stroke-width="1" />
+      </g>
+    </g>
+  </g>
+  <g id="status-indicators-fan1">
+    <g id="fuse-fan1">
+      <rect x="5" y="25" width="20" height="51" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1" />
+      <circle cx="10" cy="71" r="4" fill="black" />
+      <circle id="status-Fuse_Fan1" cx="10" cy="71" r="3" fill="#00FF00" class="status-active" />
+      <rect x="8.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5" />
+      <line x1="7.5" y1="71" x2="12.5" y2="71" stroke="black" stroke-width="0.5" />
+    </g>
+    <g id="feedback-k1">
+      <circle cx="20" cy="71" r="4" fill="black" />
+      <circle id="status-Feedback_K1" cx="20" cy="71" r="3" fill="#00FF00" class="status-active" />
+      <path d="M 22 70 L 21.5 71 L 22.5 71 Z" fill="black" />
+      <path d="M 22 71 A 2 2 0 1 1 21.732 70" stroke="black" fill="none" stroke-width="0.5" />
+    </g>
+  </g>
+  <g id="dryer-indicator">
+    <rect x="25" y="60" width="30" height="17" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1" />
+    <text x="34" y="65" class="fan-label">DRYER</text>
+    <g id="fuse-dryer">
+      <circle cx="35" cy="71" r="4" fill="black" />
+      <circle id="status-Fuse_Dryer" cx="35" cy="71" r="3" fill="#FF0000" class="status-active" />
+      <rect x="33.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5" />
+      <line x1="32.5" y1="71" x2="37.5" y2="71" stroke="black" stroke-width="0.5" />
+    </g>
+    <g id="feedback-watchdog">
+      <circle cx="45" cy="71" r="4" fill="black" />
+      <circle id="status-FeedbackPipeWatchdog" cx="45" cy="71" r="3" fill="#00FF00" class="status-active" />
+      <path d="M 47 70 L 46.5 71 L 47.5 71 Z" fill="black" />
+      <path d="M 47 71 A 2 2 0 1 1 46.732 70" stroke="black" fill="none" stroke-width="0.5" />
+    </g>
+  </g>
+  <g id="status-indicators-fan2">
+    <g id="fuse-fan2">
+      <rect x="55" y="25" width="20" height="51" rx="5" ry="5" fill="silver" stroke="black" stroke-width="1" />
+      <circle cx="60" cy="71" r="4" fill="black" />
+      <circle id="status-Fuse_Fan2" cx="60" cy="71" r="3" fill="gray" />
+      <rect x="58.5" y="70" width="3" height="2" fill="transparent" stroke="black" stroke-width="0.5" />
+      <line x1="57.5" y1="71" x2="62.5" y2="71" stroke="black" stroke-width="0.5" />
+    </g>
+    <g id="feedback-k2">
+      <circle cx="70" cy="71" r="4" fill="black" />
+      <circle id="status-Feedback_K2" cx="70" cy="71" r="3" fill="gray" />
+      <path d="M 72 70 L 71.5 71 L 72.5 71 Z" fill="black" />
+      <path d="M 72 71 A 2 2 0 1 1 71.732 70" stroke="black" fill="none" stroke-width="0.5" />
+    </g>
+  </g>
+  <g id="power-fan1-container">
+    <g id="power-fan1" class="power-on">
+      <circle class="power-bg-disk" cx="15.0" cy="55.0" r="11" />
+      <circle class="bg-animated-disk" cx="15.0" cy="55.0" r="10" />
+      <g class="fan-blades">
+        <path d="M 16.910672978251213 54.40895958667732 L 25.031033135818863 51.897037830055936 L 25.031033135818863 58.102962169944064 L 16.910672978251213 55.59104041332268 Z" class="fan-blade" />
+        <path d="M 16.152543257456934 56.63451645439578 L 21.050852101648903 63.58121138557786 L 15.148667318563596 65.49894747240842 L 15.028317584488304 56.999799518553985 Z" class="fan-blade" />
+        <path d="M 13.801637928361693 56.60122713731024 L 8.708599123898892 63.40644247087876 L 5.0608483200697485 58.385744214104136 L 13.106828251441858 55.64490365982936 Z" class="fan-blade" />
+        <path d="M 13.106828251441856 54.35509634017064 L 5.060848320069747 51.614255785895864 L 8.708599123898889 46.59355752912124 L 13.801637928361693 53.39877286268976 Z" class="fan-blade" />
+        <path d="M 15.028317584488304 53.000200481446015 L 15.148667318563595 44.50105252759158 L 21.0508521016489 46.41878861442214 L 16.152543257456934 53.36548354560422 Z" class="fan-blade" />
+      </g>
+      <circle class="intermediate-disk" cx="15.0" cy="55.0" r="6" />
+      <circle class="rotor-disk" cx="15.0" cy="55.0" r="5" />
+      <rect class="power-line" x="14.625" y="50" width="0.75" height="5.0" rx="0.375" />
+      <path class="power-arc" d="M 18.270 51.730 A 4.625 4.625 0 1 1 11.730 51.730" />
+    </g>
+    <text x="15.0" y="30.0" class="fan-label" text-anchor="middle" dominant-baseline="middle">FAN1</text>
+    <text x="15.0" y="36.0" class="fan-units" text-anchor="middle" dominant-baseline="middle">Hours</text>
+    <text id="fan1-hours" x="15.0" y="40.0" class="fan-number" text-anchor="middle" dominant-baseline="middle">000000</text>
+  </g>
+  <g id="power-fan2-container">
+    <g id="power-fan2">
+      <circle class="power-bg-disk" cx="65.0" cy="55.0" r="11" />
+      <circle class="bg-animated-disk" cx="65.0" cy="55.0" r="10" />
+      <g class="fan-blades">
+        <path d="M 66.91067297825121 54.40895958667732 L 75.03103313581886 51.897037830055936 L 75.03103313581886 58.102962169944064 L 66.91067297825121 55.59104041332268 Z" class="fan-blade" />
+        <path d="M 66.15254325745694 56.63451645439578 L 71.0508521016489 63.58121138557786 L 65.1486673185636 65.49894747240842 L 65.0283175844883 56.999799518553985 Z" class="fan-blade" />
+        <path d="M 63.80163792836169 56.60122713731024 L 58.70859912389889 63.40644247087876 L 55.06084832006975 58.385744214104136 L 63.106828251441854 55.64490365982936 Z" class="fan-blade" />
+        <path d="M 63.106828251441854 54.35509634017064 L 55.060848320069745 51.614255785895864 L 58.70859912389889 46.59355752912124 L 63.80163792836169 53.39877286268976 Z" class="fan-blade" />
+        <path d="M 65.0283175844883 53.000200481446015 L 65.1486673185636 44.50105252759158 L 71.0508521016489 46.41878861442214 L 66.15254325745693 53.36548354560422 Z" class="fan-blade" />
+      </g>
+      <circle class="intermediate-disk" cx="65.0" cy="55.0" r="6" />
+      <circle class="rotor-disk" cx="65.0" cy="55.0" r="5" />
+      <rect class="power-line" x="64.625" y="50" width="0.75" height="5.0" rx="0.375" />
+      <path class="power-arc" d="M 68.270 51.730 A 4.625 4.625 0 1 1 61.730 51.730" />
+    </g>
+    <text x="65.0" y="30.0" class="fan-label" text-anchor="middle" dominant-baseline="middle">FAN2</text>
+    <text x="65.0" y="36.0" class="fan-units" text-anchor="middle" dominant-baseline="middle">Hours</text>
+    <text id="fan2-hours" x="65.0" y="40.0" class="fan-number" text-anchor="middle" dominant-baseline="middle">000000</text>
+  </g>
+</svg>
