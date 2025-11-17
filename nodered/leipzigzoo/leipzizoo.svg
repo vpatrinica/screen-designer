@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 1100 650"
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0" y="0" viewBox="0 0 1200 650"
   width="100%" height="100%" id="main-svg" preserveAspectRatio="xMidYMid meet">
   <rect id="svgEditorBackground" x="0" y="0" width="1100" height="650" style="fill:none;stroke:none" />
   <defs>
@@ -237,8 +237,8 @@
       }
     </style>
   </defs>
-  <g id="mapLayer" transform="translate(0,0) scale(1.01)">
-    <image x="0" y="0" width="900" height="850" href="https://monitor.in-si.de/nodered/uimedia/img/Karte.png" />
+  <g id="mapLayer">
+    <image x="-100" y="0" width="1100" height="850" href="https://monitor.in-si.de/nodered/uimedia/img/Karte.png" />
     <g id="region-labels" opacity="0.4" font-family="Inter, sans-serif" font-size="4rem" font-weight="bold"
       fill="#d9534f" text-anchor="middle">
       <text x="525" y="190" class="region-label" onclick="window.setView('1')">1</text>
@@ -696,7 +696,7 @@
       const sensorConfig = [{"id":"f1","displayId":"1","type":"flow","x":523,"y":52,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f1_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f1_status"},{"id":"f2","displayId":"2","type":"flow","x":561,"y":87,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f2_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f2_status"},{"id":"f3","displayId":"3","type":"flow","x":589,"y":125,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f3_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f3_status"},{"id":"f4","displayId":"4","type":"flow","x":615,"y":170,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f4_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f4_status"},{"id":"f5","displayId":"5","type":"flow","x":642,"y":217,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f5_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f5_status"},{"id":"f6","displayId":"6","type":"flow","x":670,"y":260,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f6_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f6_status"},{"id":"f7","displayId":"7","type":"flow","x":691,"y":316,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f7_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f7_status"},{"id":"f8","displayId":"8","type":"flow","x":565,"y":332,"region":1,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f8_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f8_status"},{"id":"f9","displayId":"9","type":"flow","x":710,"y":380,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f9_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f9_status"},{"id":"f10","displayId":"10","type":"flow","x":565,"y":381,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f10_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f10_status"},{"id":"f11","displayId":"11","type":"flow","x":727,"y":423,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f11_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f11_status"},{"id":"f12","displayId":"12","type":"flow","x":564,"y":422,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f12_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f12_status"},{"id":"f13","displayId":"13","type":"flow","x":748,"y":463,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f13_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f13_status"},{"id":"f14","displayId":"14","type":"flow","x":564,"y":469,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f14_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f14_status"},{"id":"f15","displayId":"15","type":"flow","x":760,"y":511,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f15_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f15_status"},{"id":"f16","displayId":"16","type":"flow","x":562,"y":516,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f16_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f16_status"},{"id":"f17","displayId":"17","type":"flow","x":767,"y":560,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f17_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f17_status"},{"id":"f18","displayId":"18","type":"flow","x":563,"y":561,"region":2,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f18_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f18_status"},{"id":"f19","displayId":"19","type":"flow","x":377,"y":47,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f19_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f19_status"},{"id":"f20","displayId":"20","type":"flow","x":338,"y":80,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f20_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f20_status"},{"id":"f21","displayId":"21","type":"flow","x":306,"y":123,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f21_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f21_status"},{"id":"f22","displayId":"22","type":"flow","x":277,"y":159,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f22_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f22_status"},{"id":"f23","displayId":"23","type":"flow","x":246,"y":207,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f23_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f23_status"},{"id":"f24","displayId":"24","type":"flow","x":211,"y":256,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f24_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f24_status"},{"id":"f25","displayId":"25","type":"flow","x":183,"y":312,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f25_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f25_status"},{"id":"f26","displayId":"26","type":"flow","x":282,"y":321,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f26_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f26_status"},{"id":"f27","displayId":"27","type":"flow","x":164,"y":367,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f27_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f27_status"},{"id":"f28","displayId":"28","type":"flow","x":281,"y":366,"region":3,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f28_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f28_status"},{"id":"f29","displayId":"29","type":"flow","x":146,"y":410,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f29_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f29_status"},{"id":"f30","displayId":"30","type":"flow","x":280,"y":411,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f30_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f30_status"},{"id":"f31","displayId":"31","type":"flow","x":130,"y":456,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f31_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f31_status"},{"id":"f32","displayId":"32","type":"flow","x":280,"y":460,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f32_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f32_status"},{"id":"f33","displayId":"33","type":"flow","x":115,"y":504,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f33_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f33_status"},{"id":"f34","displayId":"34","type":"flow","x":280,"y":514,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f34_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f34_status"},{"id":"f35","displayId":"35","type":"flow","x":113,"y":550,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f35_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f35_status"},{"id":"f36","displayId":"36","type":"flow","x":277,"y":561,"region":4,"label":"Durchfluss","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f36_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_f36_status"},{"id":"p1","displayId":"1","type":"pressure","x":489,"y":17,"region":1,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p1_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p1_value"},{"id":"p2","displayId":"2","type":"pressure","x":482,"y":370,"region":2,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p2_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p2_value"},{"id":"p3","displayId":"3","type":"pressure","x":480,"y":421,"region":2,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p3_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p3_value"},{"id":"p4","displayId":"4","type":"pressure","x":505,"y":580,"region":2,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p4_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p4_value"},{"id":"p5","displayId":"5","type":"pressure","x":441,"y":583,"region":2,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p5_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p5_value"},{"id":"p6","displayId":"6","type":"pressure","x":408,"y":582,"region":4,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p6_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p6_value"},{"id":"p7","displayId":"7","type":"pressure","x":323,"y":580,"region":4,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p7_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p7_value"},{"id":"p8","displayId":"8","type":"pressure","x":367,"y":387,"region":4,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p8_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p8_value"},{"id":"p9","displayId":"9","type":"pressure","x":440,"y":232,"region":1,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p9_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p9_value"},{"id":"p10","displayId":"10","type":"pressure","x":419,"y":15,"region":3,"status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p10_status","label":"Druck","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_p10_value"},{"id":"s1","displayId":"1","type":"snow","x":632,"y":82,"region":1,"label":"Schnee","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s1_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s1_status"},{"id":"s2","displayId":"2","type":"snow","x":544,"y":592,"region":2,"label":"Schnee","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s2_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s2_status"},{"id":"s3","displayId":"3","type":"snow","x":187,"y":591,"region":4,"label":"Schnee","value":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s3_value","status":"/data/lib/ui-media/lib/shared-state/leipzigtoo_s3_status"}];
 
       // --- Original UI variables --- let dx = 135, dy = 80;
-      const viewBoxes = {"1":[530,280,400,300],"2":[380,580,400,300],"3":[380,280,400,300],"4":[0,280,400,300],"full":[200,300,450,480]}; /* [cite: 108] */
+      const viewBoxes = {"1":[530,280,400,300],"2":[380,580,400,300],"3":[280,80,400,300],"4":[0,280,400,300],"full":[200,300,450,480]}; /* [cite: 108] */
       let currentView = "full"; /* [cite: 108] */
       let currentFilter = "all"; /* [cite: 108] */
       const svgRoot = document.getElementById("main-svg"); /* [cite: 108] */
@@ -1113,8 +1113,59 @@
             tooltipFO.style.visibility = "visible"; /* [cite: 141] */
           }); /* [cite: 142] */
           group.addEventListener("mouseleave", function(){ tooltipFO.style.visibility = "hidden"; }); /* [cite: 142] */
-          group.addEventListener("mousemove", function(e){ var p = getSVGPoint(e.clientX, e.clientY); tooltipFO.setAttribute("x", p.x+15); tooltipFO.setAttribute("y", p.y+15); }); /* [cite: 142] */
+          group.addEventListener("mousemove", function(e) {
+            // 1. Get the cursor position in SVG coordinates
+            var p = getSVGPoint(e.clientX, e.clientY);
+
+            // --- Configuration ---
+
+            // 2. Define your tooltip's *approximate* size (in SVG units/pixels)
+            // You said "20 chars wide" (e.g., ~180px) and "2 lines high" (e.g., ~40px)
+            // !! Adjust these values to match your tooltip's actual size !!
+            const tooltipEstWidth = 180;
+            const tooltipEstHeight = 40;
+
+            // 3. Define the offsets from your prompt
+            const defaultOffsetX = 15;
+            const defaultOffsetY = 15;
+            const flipOffsetX = -25; // "x-25" -> places it 25px to the left of the cursor
+            const flipOffsetY = -15; // "y-15" -> places it 15px above the cursor
+
+            // 4. Get the SVG container's boundaries
+            const svg = group.ownerSVGElement;
+            // Use the viewBox for scaling, or fallback to width/height attributes
+            const viewWidth = svg.viewBox.baseVal.width || svg.width.baseVal.value;
+            const viewHeight = svg.viewBox.baseVal.height || svg.height.baseVal.value;
+
+            // --- Logic ---
+
+            let finalX, finalY;
+
+            // Check X-axis:
+            // If the cursor's X + default offset + tooltip width is > the SVG's width
+            if (p.x + defaultOffsetX + tooltipEstWidth > viewWidth) {
+                // It's "too big" (near the right edge), use the flipped offset
+                finalX = p.x + flipOffsetX; // p.x - 25
+            } else {
+                // Use the default offset
+                finalX = p.x + defaultOffsetX; // p.x + 15
+            }
+
+            // Check Y-axis:
+            // If the cursor's Y + default offset + tooltip height is > the SVG's height
+            if (p.y + defaultOffsetY + tooltipEstHeight > viewHeight) {
+                // It's "too big" (near the bottom edge), use the flipped offset
+                finalY = p.y + flipOffsetY; // p.y - 15
+            } else {
+                // Use the default offset
+                finalY = p.y + defaultOffsetY; // p.y + 15
+            }
+
+            // 5. Apply the calculated coordinates
+            tooltipFO.setAttribute("x", finalX);
+            tooltipFO.setAttribute("y", finalY);
         });
+          });
       } /* [cite: 143] */
       
       // --- Original Event Listeners (unchanged) ---
